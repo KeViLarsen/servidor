@@ -1,0 +1,71 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{titulo_f}}</h5>
+
+
+      <body class="bg-theme bg-theme1">
+        <form action="{% url 'modprovee' pro_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+          {% csrf_token %}
+
+
+          <div class="forma">
+            <label for="ingresar-nombre">Añadir Nombre Del Proveedor</label>
+            <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
+              value="{{ datos_act.nombre_proveedor }}">
+
+            <label for="ingresar-telefono">Añadir Telefono del Proveedor</label>
+            <input type="text" class="form-control" id="formGroupExampleInput4" name='telefono'
+              value="{{ datos_act.telefono_proveedor }}">
+
+            <label for="ingresar-ruc">Añadir Ruc</label>
+            <input type="text" class="form-control" id="formGroupExampleInput5" name='ruc'
+              value="{{ datos_act.ruc_proveedor }}">
+
+            <label for="Seleccionar-Nacionalidad">Seleccionar Nacionalidad</label>
+            <select class="custom-select custom-select-sm form-control form-control-sm" name='nacionalidad'>
+              {%for lista in listanacionalidades%}
+              <option value="{{lista.codigo_nacionalidad}}" {%if datos_act.nacionalidad_id == lista.codigo_nacionalidad %} selected {%endif%} >
+                {{lista.nacionalidad}}
+              </option>
+              {%endfor%}
+            </select>
+
+            <label for="Seleccionar-ciudad">Seleccionar Ciudad</label>
+            <select class="custom-select custom-select-sm form-control form-control-sm" name='ciudad'>
+              {%for lista in listaciudad%}
+              <option value="{{lista.codigo_ciudad}}" {%if datos_act.ciudad_id == lista.codigo_ciudad %} selected {%endif%} >
+                {{lista.ciudad}}
+              </option>
+              {%endfor%}
+            </select>
+
+          </div>
+
+          <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">
+
+            <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
+              Guardar
+            </button>
+            <a href="{% url 'proveedor' %}">
+              <span>Volver</span>
+            </a>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+
+{%endblock%}
+{%block extra%}
+{%endblock%}

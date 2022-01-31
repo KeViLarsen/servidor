@@ -1,0 +1,109 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Lista De Clientes
+        <a href="{%url 'modcliente' 0 %}" class="guardar-producto">
+          <i class="fas fa-plus-square"></i>
+        </a>
+      </h5>
+      <div class="table-responsive">
+        <table class="table" id="datos">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>RUC</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Telefono</th>
+              <th>Nacionalidad</th>
+              <th>Ciudad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lista in listatabla %}
+
+            <tr>
+              <td>{{ lista.codigo_cliente }}</td>
+              <td>{{ lista.ruc_cliente }}</td>
+              <td>{{ lista.nombre_cliente }}</td>
+              <td>{{ lista.apellido_cliente }}</td>
+              <td>{{ lista.telefono_cliente }}</td>
+              {% for nacio in listanacionalidades %}
+              {% if nacio.codigo_nacionalidad == lista.nacionalidad_id %}
+              <td>{{ nacio.nacionalidad }}</td>
+              {%endif%}
+              {%endfor%}
+
+              {% for ciu in listaciudad %}
+              {% if ciu.codigo_ciudad == lista.ciudad_id %}
+              <td>{{ ciu.ciudad }}</td>
+              {%endif%}
+              {%endfor%}
+
+              <th data-sortable="" style="width:11.125%;">
+                <a href="{% url 'modcliente' lista.codigo_cliente %}" data-toggle="tooltip"
+                  data-original-title="Editar cliente">
+                  <i class="far fa-edit"></i>
+                  <a href="{% url 'borcliente' lista.codigo_cliente %}" data-toggle="tooltip"
+                    data-original-title="Borrar cliente"  onclick="return confirm('Esta seguro que quiere eleminiar el registor')">
+                    <i class="far fa-trash-alt"></i>
+                  </a>
+                </a></td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="{% static 'assets/js/sweetalert2.all.min.js' %}"></script>
+
+<script>
+  function alerta() {
+    if (sessionStorage.getItem('1') == 1) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Aviso',
+        text: 'Registro guardado existosamente.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+      })
+      sessionStorage.setItem('1', 0)
+    }
+  }
+  window.onload = alerta()
+</script>
+</body>
+{%endblock%}
+
+{%block extra%}
+{% if deletconf %}
+<script>
+  Swal.fire({
+    icon: 'error',
+    title: 'Aviso',
+    text: 'Registro Eliminado existosamente.',
+    showConfirmButton: false,
+    timer: 2000
+  }).then(() => {
+    location.href = '{% url 'vercliente' %}'
+  })
+</script>
+{% endif %}
+{%endblock%}

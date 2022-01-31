@@ -1,0 +1,58 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Lista De Usuarios
+        <a href="{%url 'modusuario' 0 %}">
+          <button class="guardar-producto">
+              Agregar Nuevo
+          </button>
+        </a> 
+      </h5>
+      <div class="table-responsive">
+          <table class="table" id="datos">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Nombre Completo</th>
+                <th>Tipo de Usuario</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+              <tbody>
+                {% for lista in listatabla %}
+                <tr>
+                  <td>{{ lista.codigo_usuario }}</td>
+                  <td>{{ lista.nombre_usuario }}</td>
+                  <td>{{ lista.nombre_completo_usuario }}</td>
+                  <td>{{ lista.tipo_usuario }}</td>
+                  <th data-sortable="" style="width:11.125%;"><a href="{% url 'modusuario' lista.codigo_usuario %}" data-toggle="tooltip" data-original-title="Editar usuario">
+                    Editar
+                    <a href="{% url 'borusuario' lista.codigo_usuario %}" data-toggle="tooltip" data-original-title="Borrar usuario">
+                        Borrar
+                      </a>
+                  </a></td>
+                </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+
+	
+</body>
+
+{%endblock%}

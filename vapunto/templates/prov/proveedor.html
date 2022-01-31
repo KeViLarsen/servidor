@@ -1,0 +1,106 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Lista De Proveedores
+        <a href="{%url 'modprovee' 0 %}" class="guardar-producto">
+          <i class="fas fa-plus-square"></i>
+        </a>
+      </h5>
+      <div class="table-responsive">
+        <table class="table" id="datos">
+          <thead>
+            <tr>
+              <th>Codigo</th>
+              <th>Nombre</th>
+              <th>Ruc</th>
+              <th>Telefono</th>
+              <th>Nacionalidad</th>
+              <th>Ciudad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lista in listatabla %}
+
+            <tr>
+              <td>{{ lista.codigo_proveedor }}</td>
+              <td>{{ lista.nombre_proveedor }}</td>
+              <td>{{ lista.ruc_proveedor }}</td>
+              <td>{{ lista.telefono_proveedor }}</td>
+              {% for nacio in listanacionalidades %}
+              {% if nacio.codigo_nacionalidad == lista.nacionalidad_id %}
+              <td>{{ nacio.nacionalidad }}</td>
+              {%endif%}
+              {%endfor%}
+
+              {% for ciu in listaciudad %}
+              {% if ciu.codigo_ciudad == lista.ciudad_id %}
+              <td>{{ ciu.ciudad }}</td>
+              {%endif%}
+              {%endfor%}
+
+              <th data-sortable="" style="width:11.125%;">
+                <a href="{% url 'modprovee' lista.codigo_proveedor %}" data-toggle="tooltip"
+                  data-original-title="Editar Proveedor">
+                  <i class="far fa-edit"></i>
+                  <a href="{% url 'borprovee' lista.codigo_proveedor %}" data-toggle="tooltip"
+                    data-original-title="Borrar Proveedor" onclick="return confirm('Esta seguro que quiere eleminiar el registor')">
+                    <i class="far fa-trash-alt"></i>
+                  </a>
+                </a></td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="{% static 'assets/js/sweetalert2.all.min.js' %}"></script>
+
+<script>
+  function alerta() {
+    if (sessionStorage.getItem('1') == 1) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Aviso',
+        text: 'Registro guardado existosamente.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+      })
+      sessionStorage.setItem('1', 0)
+    }
+  }
+  window.onload = alerta()
+</script>
+</body>
+{%endblock%}
+
+{%block extra%}
+{% if deletconf %}
+<script>
+  Swal.fire({
+    icon: 'error',
+    title: 'Aviso',
+    text: 'Registro Eliminado existosamente.',
+    showConfirmButton: false,
+    timer: 2000
+  }).then(() => {
+    location.href = '{% url 'proveedor' %}'
+  })
+</script>
+{% endif %}
+{%endblock%}

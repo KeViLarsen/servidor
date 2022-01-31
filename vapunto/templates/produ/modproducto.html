@@ -1,0 +1,65 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{titulo_f}}</h5>
+
+
+      <body class="bg-theme bg-theme1">
+        <form action="{% url 'modproducto' prod_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+          {% csrf_token %}
+
+
+          <div class="forma">
+            <label for="ingresar-nombre">Añadir nombre del producto</label>
+            <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
+              value="{{ datos_act.nombre_productos }}">
+
+            <label for="ingresar-codigo">Añadir codigo del producto</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2" name='codigo'
+              value="{{ datos_act.codigo_productos }}">
+
+            <label for="ingresar-precio-compra">Añadir precio de compra</label>
+            <input type="text" class="form-control" id="formGroupExampleInput3" name='costo'
+              value="{{ datos_act.preciocompra_productos }}">
+
+            <label for="ingresar-precio-compra">Añadir precio de venta</label>
+            <input type="text" class="form-control" id="formGroupExampleInput4" name='venta'
+              value="{{ datos_act.precioventa_productos }}">
+
+            <label for="ingresar-cantidad">Añadir categoria</label>
+            <input type="text" class="form-control" id="formGroupExampleInput5" name='categoria'
+              value="{{ datos_act.categoria_productos }}">
+
+            <label for="ingresar-cantidad">Añadir cantidad</label>
+            <input type="text" class="form-control" id="formGroupExampleInput5" name='cantidad'
+              value="{{ datos_act.cantidad_productos }}">
+
+          </div>
+
+          <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">
+
+            <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
+              Guardar
+            </button>
+            <a href="{% url 'product' %}">
+              <span>Volver</span>
+            </a>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+
+{%endblock%}
+{%block extra%}
+
+{%endblock%}
