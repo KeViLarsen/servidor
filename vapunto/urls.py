@@ -2,6 +2,7 @@ from django.urls import path
 from vapunto import views
 
 urlpatterns = [
+    path('', views.login, name='login'),
     path('inicio', views.inicio, name='inicio'),
     path('product', views.product, name='product'),
     path('modproducto/<int:prod_actual>', views.modproducto, name="modproducto"),
