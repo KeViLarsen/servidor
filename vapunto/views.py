@@ -7,10 +7,10 @@ from vapunto.models import producto
 
 def login(request):
     if request.method == "GET":
-        if request.session.get("nombre_usuario"):
-            return redirect("index.html")
+        if request.session.get("codigo_usuario"):
+            return redirect("inicio")
         else: 
-            return render(request, 'inicio')
+            return render(request, 'login.html')
     if request.method == "POST":
         nusuario = request.POST.get("Usuario")
         pusuario = request.POST.get("Password")
@@ -24,20 +24,19 @@ def login(request):
                 request.session["tipo_usuario"]=getattr(datos_usuario, "tipo_usuario")
                 return redirect("inicio")
             else:
-                return render(request, 'loging.html', {"mensaje_error":"Contraseña ingresada es incorrecta."})
+                return render(request, 'login.html', {"mensaje_error":"Contraseña ingresada es incorrecta."})
         else:
-            return render(request, 'loging.html', {"mensaje_error":"Usuario ingresado no existe."})
+            return render(request, 'login.html', {"mensaje_error":"Usuario ingresado no existe."})
 
 def inicio(request):
-
-    if request.session.get("nombredelusuario"):
+    if request.session.get("codigo_usuario"):
         return render(request, 'index.html', {"nombre_usuario": request.session.get("nombre_completo_usuario")})
     else:
-        return render(request, 'login.html')
+        return redirect('login')
 
 def salir(request):
     request.session.flush()
-    return redirect('login.html')
+    return redirect('./')
     
 def tabla(request):
     return render(request,'tables.html')
@@ -51,7 +50,7 @@ def product(request):
         listatabla=producto.objects.all()
         return render(request,"produ/product.html",{"listatabla":listatabla})
     else:
-         return redirect("login.html")
+         return redirect("login")
 
 def modproducto(request, prod_actual = 0):
     if request.session.get("codigo_usuario"):
@@ -86,7 +85,8 @@ def modproducto(request, prod_actual = 0):
                 
             return redirect("../product")
     else:
-         return redirect("login.html")
+         return redirect("login")
+
 def borrproducto(request, prod_actual):
         listatabla=producto.objects.all()
         producto.objects.filter(codigo_productos=prod_actual).delete() 
@@ -151,7 +151,7 @@ def vercliente(request):
         listaciudad = Ciudad.objects.all()
         return render(request,"cliente/vercliente.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
     else:
-         return redirect("login.html")
+         return redirect("login")
     
 def modcliente(request, cli_actual = 0):
     listanacionalidades = Nacionalidad.objects.all()
@@ -205,7 +205,7 @@ def modcliente(request, cli_actual = 0):
 
         return redirect("../vercliente")
     else:
-        return redirect("login.html")
+        return redirect("login")
         
 def borcliente(request, cli_actual):
     listatabla=Clientes.objects.all()
@@ -221,7 +221,7 @@ def proveedor(request):
         listaciudad = Ciudad.objects.all()
         return render(request,"prov/proveedor.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
     else:
-        return redirect("login.html")
+        return redirect("login")
 
 def modprovee(request, pro_actual = 0):
     listanacionalidades = Nacionalidad.objects.all()
@@ -260,7 +260,7 @@ def modprovee(request, pro_actual = 0):
             
         return redirect("../proveedor")
     else:
-        return redirect("login.html")
+        return redirect("login")
     
 def borprovee(request, pro_actual):
     listatabla=Proveedor.objects.all()
@@ -274,7 +274,7 @@ def pais(request):
         listatabla=Nacionalidad.objects.all()
         return render(request,"direccion/pais.html",{"listatabla":listatabla})
     else:
-            return redirect("login.html")
+            return redirect("login")
 def modpais(request, pai_actual = 0):
     listanacionalidades = Nacionalidad.objects.all()
     if request.session.get("codigo_usuario"):
@@ -302,7 +302,7 @@ def modpais(request, pai_actual = 0):
             
         return redirect("../pais")
     else:
-        return redirect("login.html")
+        return redirect("login")
 
 def borpais(request, pai_actual):
     listatabla=Nacionalidad.objects.all()
@@ -314,7 +314,7 @@ def ciudad(request):
         listatabla=Ciudad.objects.all()
         return render(request,"direccion/ciudad.html",{"listatabla":listatabla})
     else:
-        return redirect("login.html")
+        return redirect("login")
 def modciudad(request, ciu_actual = 0):
     listaciudades = Ciudad.objects.all()
     if request.session.get("codigo_usuario"):
@@ -342,7 +342,7 @@ def modciudad(request, ciu_actual = 0):
             
         return redirect("../ciudad")
     else:
-        return redirect("login.html")
+        return redirect("login")
 
 def borciudad(request, ciu_actual):
     listatabla=Ciudad.objects.all()
