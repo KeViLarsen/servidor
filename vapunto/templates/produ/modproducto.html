@@ -11,34 +11,34 @@
 
 
       <body class="bg-theme bg-theme1">
-        <form action="{% url 'modproducto' prod_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+        <form action="{% url 'modproducto' parameters.prod_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
           {% csrf_token %}
 
 
           <div class="forma">
             <label for="ingresar-nombre">Añadir nombre del producto</label>
             <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
-              value="{{ datos_act.nombre_productos }}">
+              value="{{ parameters.datos_act.nombre_productos }}">
 
             <label for="ingresar-codigo">Añadir codigo del producto</label>
             <input type="text" class="form-control" id="formGroupExampleInput2" name='codigo'
-              value="{{ datos_act.codigo_productos }}">
+              value="{{ parameters.datos_act.codigo_productos }}">
 
             <label for="ingresar-precio-compra">Añadir precio de compra</label>
             <input type="text" class="form-control" id="formGroupExampleInput3" name='costo'
-              value="{{ datos_act.preciocompra_productos }}">
+              value="{{ parameters.datos_act.preciocompra_productos }}">
 
             <label for="ingresar-precio-compra">Añadir precio de venta</label>
             <input type="text" class="form-control" id="formGroupExampleInput4" name='venta'
-              value="{{ datos_act.precioventa_productos }}">
+              value="{{ parameters.datos_act.precioventa_productos }}">
 
             <label for="ingresar-cantidad">Añadir categoria</label>
             <input type="text" class="form-control" id="formGroupExampleInput5" name='categoria'
-              value="{{ datos_act.categoria_productos }}">
+              value="{{ parameters.datos_act.categoria_productos }}">
 
             <label for="ingresar-cantidad">Añadir cantidad</label>
             <input type="text" class="form-control" id="formGroupExampleInput5" name='cantidad'
-              value="{{ datos_act.cantidad_productos }}">
+              value="{{ parameters.datos_act.cantidad_productos }}">
 
           </div>
 

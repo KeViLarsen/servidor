@@ -1,0 +1,72 @@
+{% load static %}
+{% block menu_admin %}
+
+
+  <li>
+
+    <a href="{%url 'inicio' %}">
+      <span>Inicio</span>
+    </a>
+  </li>
+
+  <li class="sidebar-menu  has-sub">
+    <a href="#" class='sidebar-link'>
+      <i class="far fa-clipboard"></i>
+      <span>Registrar</span>
+    </a>
+
+    <ul class="sidebar-submenu ">
+
+      <li>
+        <a href="{%url 'proveedor' %}">Proveedor</a>
+      </li>
+      <li>
+        <a href="{%url 'pais' %}">Pais</a>
+      </li>
+      <li>
+        <a href="{% url 'vercliente' %}">Cliente</a>
+      </li>
+      <li>
+        <a href="{% url 'ciudad' %}">Ciudad</a>
+      </li>
+      
+    </ul>
+
+  </li>
+
+  <li>
+    <a href="{%url 'product'%}">
+      <i class="fas fa-wind"></i>
+      <span>Producto</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="{%url 'venta' %}">
+      <i class="fas fa-cart-arrow-down"></i>
+      <span>Ventas</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="{%url 'tabla' %}">
+
+      <span>Tablas</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="profile.html">
+      <span>Profile</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="{% url 'verusuario' %}">
+      <i class="fas fa-user"></i>
+      <span>Usuarios</span>
+    </a>
+  </li>
+
+
+{%endblock%}

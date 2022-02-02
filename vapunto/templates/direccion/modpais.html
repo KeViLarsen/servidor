@@ -11,14 +11,14 @@
 
 
       <body class="bg-theme bg-theme1">
-        <form action="{% url 'modpais' pai_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+        <form action="{% url 'modpais' parameters.pai_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
           {% csrf_token %}
 
 
           <div class="forma">
             <label for="ingresar-nombre">Agregar Pais</label>
             <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
-              value="{{ datos_act.nacionalidad }}">
+              value="{{ parameters.datos_act.nacionalidad }}">
 
 
           </div>

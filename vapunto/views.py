@@ -30,7 +30,7 @@ def login(request):
 
 def inicio(request):
     if request.session.get("codigo_usuario"):
-        return render(request, 'index.html', {"nombre_usuario": request.session.get("nombre_completo_usuario")})
+        return validar(request, 'index.html', {"nombre_usuario": request.session.get("nombre_completo_usuario")})
     else:
         return redirect('login')
 
@@ -39,16 +39,16 @@ def salir(request):
     return redirect('./')
     
 def tabla(request):
-    return render(request,'tables.html')
+    return validar(request,'tables.html')
 
 def venta(request):
     listatabla=producto.objects.all()
-    return render(request,'venta.html',{"listatabla":listatabla})
+    return validar(request,'venta.html',{"listatabla":listatabla})
     
 def product(request):
     if request.session.get("codigo_usuario"):
         listatabla=producto.objects.all()
-        return render(request,"produ/product.html",{"listatabla":listatabla})
+        return validar(request,"produ/product.html",{"listatabla":listatabla})
     else:
          return redirect("login")
 
@@ -58,10 +58,10 @@ def modproducto(request, prod_actual = 0):
                 producto_actual=producto.objects.filter(codigo_productos=prod_actual).exists()
                 if producto_actual:
                     datos_producto=producto.objects.filter(codigo_productos=prod_actual).first()
-                    return render(request, 'produ/modproducto.html',
+                    return validar(request, 'produ/modproducto.html',
                     {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto"})
                 else:
-                    return render(request, "produ/modproducto.html", {"titulo_f":"Cargar nuevo Producto","prod_actual": prod_actual})
+                    return validar(request, "produ/modproducto.html", {"titulo_f":"Cargar nuevo Producto","prod_actual": prod_actual})
 
             if request.method=="POST":
                 if prod_actual==0:
@@ -101,14 +101,14 @@ def modusuario(request,usu_actual=0):
             usuario_actual=Usuariosid.objects.filter(codigo_usuario=usu_actual).exists()
             if usuario_actual:
                 datos_usuario=Usuariosid.objects.filter(codigo_usuario=usu_actual).first()
-                return render(request, "user/modusuario.html", 
+                return validar(request, "user/modusuario.html", 
                 {"nombre_completo_usuario":request.session.get("nombre_completo_usuario"), 
                 "titulo_s":"Modificar Usuario", 
                 "subtitulo_s":"Vuleva a escribir los datos que desea modificar", 
                 "datos_act":datos_usuario, 
                 "usu_actual":usu_actual})
             else:
-                return render(request, "user/modusuario.html", {"nombre_completo_usuario":request.session.get("nombre_completo_usuario"), 
+                return validar(request, "user/modusuario.html", {"nombre_completo_usuario":request.session.get("nombre_completo_usuario"), 
                 "titulo_s":"Nuevo Usuario", "subtitulo_s":"Por favor complete todos los datos solicitados", "usu_actual":usu_actual})
 
         if request.method=="POST":
@@ -134,7 +134,7 @@ def modusuario(request,usu_actual=0):
 def verusuario(request):
     if request.session.get("codigo_usuario"):
         listatabla=Usuariosid.objects.all()
-        return render(request, "user/verusuario.html", {"nombre_completo_usuario":request.session.get("nombre_completo_usuario"),
+        return validar(request, "user/verusuario.html", {"nombre_completo_usuario":request.session.get("nombre_completo_usuario"),
          "titulo_s":"Usuarios", "subtitulo_s":"Listado de Usuarios registrados", "listatabla":listatabla})
     else:
         return redirect("login")
@@ -149,7 +149,7 @@ def vercliente(request):
         listatabla=Clientes.objects.all()
         listanacionalidades = Nacionalidad.objects.all()
         listaciudad = Ciudad.objects.all()
-        return render(request,"cliente/vercliente.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
+        return validar(request,"cliente/vercliente.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
     else:
          return redirect("login")
     
@@ -161,10 +161,10 @@ def modcliente(request, cli_actual = 0):
             cliente_actual=Clientes.objects.filter(codigo_cliente=cli_actual).exists()
             if cliente_actual:
                 datos_cliente=Clientes.objects.filter(codigo_cliente=cli_actual).first()
-                return render(request, 'cliente/modcliente.html',
+                return validar(request, 'cliente/modcliente.html',
                 {"datos_act":datos_cliente, "cli_actual":cli_actual, "titulo_f":"Editar un Cliente", "listanacionalidades":listanacionalidades, "listaciudad":listaciudad} )
             else:
-                return render(request, "cliente/modcliente.html", {"titulo_f":"Cargar nuevo Cliente","cli_actual": cli_actual, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
+                return validar(request, "cliente/modcliente.html", {"titulo_f":"Cargar nuevo Cliente","cli_actual": cli_actual, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
 
         if request.method=="POST":
             if cli_actual==0:
@@ -219,7 +219,7 @@ def proveedor(request):
         listatabla=Proveedor.objects.all()
         listanacionalidades = Nacionalidad.objects.all()
         listaciudad = Ciudad.objects.all()
-        return render(request,"prov/proveedor.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
+        return validar(request,"prov/proveedor.html",{"listatabla":listatabla, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
     else:
         return redirect("login")
 
@@ -231,10 +231,10 @@ def modprovee(request, pro_actual = 0):
             proveedor_actual=Proveedor.objects.filter(codigo_proveedor=pro_actual).exists()
             if proveedor_actual:
                 datos_proveedor=Proveedor.objects.filter(codigo_proveedor=pro_actual).first()
-                return render(request, 'prov/modprovee.html',
+                return validar(request, 'prov/modprovee.html',
                 {"datos_act":datos_proveedor, "pro_actual":pro_actual, "titulo_f":"Editar un Proveedor", "listanacionalidades":listanacionalidades, "listaciudad":listaciudad} )
             else:
-                return render(request, "prov/modprovee.html", {"titulo_f":"Cargar nuevo Proveedor","pro_actual": pro_actual, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
+                return validar(request, "prov/modprovee.html", {"titulo_f":"Cargar nuevo Proveedor","pro_actual": pro_actual, "listanacionalidades":listanacionalidades, "listaciudad":listaciudad})
 
         if request.method=="POST":
             if pro_actual==0:
@@ -272,7 +272,7 @@ def borprovee(request, pro_actual):
 def pais(request):
     if request.session.get("codigo_usuario"):
         listatabla=Nacionalidad.objects.all()
-        return render(request,"direccion/pais.html",{"listatabla":listatabla})
+        return validar(request,"direccion/pais.html",{"listatabla":listatabla})
     else:
             return redirect("login")
 def modpais(request, pai_actual = 0):
@@ -282,10 +282,10 @@ def modpais(request, pai_actual = 0):
             pais_actual=Nacionalidad.objects.filter(codigo_nacionalidad=pai_actual).exists()
             if pais_actual:
                 datos_pais=Nacionalidad.objects.filter(codigo_nacionalidad=pai_actual).first()
-                return render(request, 'direccion/modpais.html',
+                return validar(request, 'direccion/modpais.html',
                 {"datos_act":datos_pais, "pai_actual":pai_actual, "titulo_f":"Editar un Pais", "listanacionalidades":listanacionalidades})
             else:
-                return render(request, "direccion/modpais.html", {"titulo_f":"Cargar nuevo Pais","pai_actual": pai_actual, "listanacionalidades":listanacionalidades})
+                return validar(request, "direccion/modpais.html", {"titulo_f":"Cargar nuevo Pais","pai_actual": pai_actual, "listanacionalidades":listanacionalidades})
 
         if request.method=="POST":
             if pai_actual==0:
@@ -312,7 +312,7 @@ def borpais(request, pai_actual):
 def ciudad(request):
     if request.session.get("codigo_usuario"):
         listatabla=Ciudad.objects.all()
-        return render(request,"direccion/ciudad.html",{"listatabla":listatabla})
+        return validar(request,"direccion/ciudad.html",{"listatabla":listatabla})
     else:
         return redirect("login")
 def modciudad(request, ciu_actual = 0):
@@ -322,10 +322,10 @@ def modciudad(request, ciu_actual = 0):
             ciudad_actual=Ciudad.objects.filter(codigo_ciudad=ciu_actual).exists()
             if ciudad_actual:
                 datos_ciudad=Ciudad.objects.filter(codigo_ciudad=ciu_actual).first()
-                return render(request, 'direccion/modciudad.html',
+                return validar(request, 'direccion/modciudad.html',
                 {"datos_act":datos_ciudad, "ciu_actual":ciu_actual, "titulo_f":"Editar una Ciudad", "listaciudades":listaciudades})
             else:
-                return render(request, "direccion/modciudad.html", {"titulo_f":"Cargar nueva Ciudad","ciu_actual": ciu_actual, "listaciudades":listaciudades})
+                return validar(request, "direccion/modciudad.html", {"titulo_f":"Cargar nueva Ciudad","ciu_actual": ciu_actual, "listaciudades":listaciudades})
 
         if request.method=="POST":
             if ciu_actual==0:
@@ -347,7 +347,15 @@ def modciudad(request, ciu_actual = 0):
 def borciudad(request, ciu_actual):
     listatabla=Ciudad.objects.all()
     Ciudad.objects.filter(codigo_ciudad=ciu_actual).delete()
-    return render(request,"direccion/ciudad.html",{"listatabla":listatabla,"deletconf":"eliminado"})
+    return validar(request,"direccion/ciudad.html",{"listatabla":listatabla,"deletconf":"eliminado"})
 
+def validar(request, pageSuccess, parameters={}):
+    if request.session.get("codigo_usuario"):
+        if (request.session.get("tipo_usuario") == 2) and ((pageSuccess == 'user/verusuario.html') or (pageSuccess == 'prov/proveedor.html') or (pageSuccess == 'direccion/pais.html') or (pageSuccess == 'direccion/ciudad.html')):
+            return render(request, "index.html", {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "mensaje": "Este usuario no cuenta con los privilegios suficientes"})
+        else: 
+            return render(request, pageSuccess, {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "parameters": parameters})
+    else:
+        return render(request, 'login.html')
 
 # Create your views here.
