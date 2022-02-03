@@ -48,6 +48,15 @@ class Clientes(models.Model):
     nacionalidad = models.ForeignKey(Nacionalidad ,on_delete=models.CASCADE,null=True)
     ciudad = models.ForeignKey(Ciudad ,on_delete=models.CASCADE,null=True)
 
+class Caja(models.Model):
+    codigo_caja=models.AutoField(primary_key=True)
+    fecha_caja=models.DateField()
+    hora_caja=models.TimeField()
+    motivo_caja=models.CharField(max_length = 50, null=True)
+    entrada_caja=models.CharField(max_length = 50, null=True)
+    salida_caja=models.CharField(max_length = 50, null=True)
+    nombre_usuario = models.ForeignKey(Usuariosid ,on_delete=models.CASCADE,null=True)
+
 class Clientes2(models.Model):
     codigo_cliente = models.AutoField(primary_key = True)
     ruc_cliente = models.CharField(max_length = 50)

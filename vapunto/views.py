@@ -58,6 +58,7 @@ def modproducto(request, prod_actual = 0):
                 producto_actual=producto.objects.filter(codigo_productos=prod_actual).exists()
                 if producto_actual:
                     datos_producto=producto.objects.filter(codigo_productos=prod_actual).first()
+                    datos_producto.fecha_productos=str(datos_producto.fecha_productos)
                     return validar(request, 'produ/modproducto.html',
                     {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto"})
                 else:
@@ -401,5 +402,62 @@ def validar(request, pageSuccess, parameters={}):
             return render(request, pageSuccess, {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "parameters": parameters})
     else:
         return render(request, 'login.html')
+
+
+
+def abrir_caja(request, caja_actual=0):
+    listacaja=Caja.objects.all()
+    listausuario=Usuariosid.objects.all()
+    if request.method=="GET":
+        caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
+        if caj_actual:
+            datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
+            return render(request, 'abrir_caja.html',
+            {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja,"listausuario":listausuario})
+        else:
+            return render(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja,"listausuario":listausuario})
+
+    if request.method=="POST":
+        datos_usuario=Usuariosid.objects.filter(nombre_usuario=request.POST.get('nombredelusuario')).first()
+
+        if caja_actual==0:
+            caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+            nombre_usuario_id=getattr(datos_usuario, "cod_usuario"),
+            motivo_caja=request.POST.get('motivo_caja'),
+            fecha_caja=request.POST.get('fecha_caja'),
+            hora_caja=request.POST.get('hora_caja'),
+            entrada_caja=request.POST.get('entrada_caja'),
+            salida_caja=request.POST.get('salida_caja'))
+            caja_nuevo.save()
+
+        return redirect("../movimiento_caja")
+
+
+def retirar_caja(request, caja_actual=0):
+    listacaja=Caja.objects.all()
+    listausuario=Usuariosid.objects.all()
+    if request.method=="GET":
+        caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
+        if caj_actual:
+            datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
+            return render(request, 'retirar_caja.html',
+            {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja,"listausuario":listausuario})
+        else:
+            return render(request, "retirar_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja,"listausuario":listausuario})
+
+    if request.method=="POST":
+        datos_usuario=Usuariosid.objects.filter(nombre_usuario=request.POST.get('nombredelusuario')).first()
+
+        if caja_actual==0:
+            caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+            nombre_usuario_id=getattr(datos_usuario, "cod_usuario"),
+            motivo_caja=request.POST.get('motivo_caja'),
+            fecha_caja=request.POST.get('fecha_caja'),
+            hora_caja=request.POST.get('hora_caja'),
+            entrada_caja=request.POST.get('entrada_caja'),
+            salida_caja=request.POST.get('salida_caja'))
+            caja_nuevo.save()
+
+        return redirect("../movimiento_caja")
 
 # Create your views here.
