@@ -28,6 +28,7 @@ class Proveedor(models.Model):
     nacionalidad = models.ForeignKey(Nacionalidad ,on_delete=models.CASCADE,null=True)
     ciudad = models.ForeignKey(Ciudad ,on_delete=models.CASCADE,null=True)
 
+
 class producto(models.Model):
     codigo_productos=models.IntegerField(primary_key=True)
     nombre_productos= models.CharField(max_length = 50)
@@ -35,9 +36,9 @@ class producto(models.Model):
     precioventa_productos= models.IntegerField()
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
-    
+    fecha_productos=models.DateField()
     proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
-    
+
 class Clientes(models.Model):
     codigo_cliente = models.AutoField(primary_key = True)
     ruc_cliente = models.CharField(max_length = 50)

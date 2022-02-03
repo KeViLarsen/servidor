@@ -70,6 +70,7 @@ def modproducto(request, prod_actual = 0):
                     preciocompra_productos=request.POST.get("costo"),
                     precioventa_productos=request.POST.get("venta"),
                     categoria_productos=request.POST.get("categoria"),
+                    fecha_productos=request.POST.get('fecha'),
                     cantidad_productos=request.POST.get("cantidad"),
                             
                     )
@@ -91,6 +92,7 @@ def modproducto(request, prod_actual = 0):
                     producto_actual.preciocompra_productos=request.POST.get("costo")
                     producto_actual.precioventa_productos=request.POST.get("venta")
                     producto_actual.categoria_productos=request.POST.get("categoria")
+                    producto_actual.fecha_productos=request.POST.get('fecha')
                     producto_actual.cantidad_productos=request.POST.get("cantidad")
                     producto_actual.save()
 
