@@ -35,6 +35,7 @@ class producto(models.Model):
     precioventa_productos= models.IntegerField()
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
+    
     proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
     
 class Clientes(models.Model):

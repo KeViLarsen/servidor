@@ -31,8 +31,16 @@
               value="{{ parameters.datos_act.nombre_completo_usuario }}">
 
             <label for="ingresar-cantidad">Que tipo de Usuario sera ?</label>
-            <input type="text" class="form-control" id="formGroupExampleInput5" name='tipo_usuario'
-              value="{{ parameters.datos_act.tipo_usuario }}">
+            
+            <select class="custom-select custom-select-sm form-control form-control-sm" name='tipo_usuario'>
+              {%if parameters.datos_act.tipo_usuario == 1 %}
+              <option value="1" id="opcion_select" selected>Administrador</option>
+              <option value="2" id="opcion_select">Empleado</option>
+              {% else %}
+              <option value="1" id="opcion_select">Administrador</option>
+              <option value="2" id="opcion_select" selected>Empleado</option>
+              {% endif %}
+            </select>
 
           </div>
 
