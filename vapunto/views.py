@@ -75,6 +75,17 @@ def modproducto(request, prod_actual = 0):
                     )
                     producto_nuevo.save()
                 else:
+                    datos_usuario=producto.objects.filter(codigo_productos=prod_actual).first()
+                    producto_nueva=producto2(nombre_productos = datos_usuario.nombre_productos,
+                    preciocompra_productos=datos_usuario.preciocompra_productos,
+                    codigo_usuario=request.session.get("codigo_usuario"),
+                    nombre_usuario=request.session.get("nombre_completo_usuario"),
+                    precioventa_productos=datos_usuario.precioventa_productos,
+                    categoria_productos=datos_usuario.categoria_productos,
+                    cantidad_productos=datos_usuario.cantidad_productos,
+                    codigo_productos=datos_usuario.codigo_productos)
+                    producto_nueva.save()
+
                     producto_actual=producto.objects.get(codigo_productos=prod_actual)
                     producto_actual.nombre_productos=request.POST.get("nombre")
                     producto_actual.preciocompra_productos=request.POST.get("costo")
@@ -82,7 +93,8 @@ def modproducto(request, prod_actual = 0):
                     producto_actual.categoria_productos=request.POST.get("categoria")
                     producto_actual.cantidad_productos=request.POST.get("cantidad")
                     producto_actual.save()
-                
+
+            
             return redirect("../product")
     else:
          return redirect("login")
@@ -179,14 +191,6 @@ def modcliente(request, cli_actual = 0):
                 )
                 cliente_nuevo.save()
             else:
-                cliente_actual=Clientes.objects.get(codigo_cliente=cli_actual)
-                cliente_actual.nombre_cliente=request.POST.get("nombre")
-                cliente_actual.apellido_cliente=request.POST.get("apellido")
-                cliente_actual.ruc_cliente=request.POST.get("ruc")
-                cliente_actual.telefono_cliente=request.POST.get("telefono")
-                cliente_actual.nacionalidad_id=request.POST.get("nacionalidad")
-                cliente_actual.ciudad_id=request.POST.get("ciudad")
-                
                 datos_usuario=Clientes.objects.filter(codigo_cliente=cli_actual).first()
                 cliente_nueva=Clientes2(nombre_cliente = datos_usuario.nombre_cliente,
                 ruc_cliente=datos_usuario.ruc_cliente,
@@ -196,10 +200,16 @@ def modcliente(request, cli_actual = 0):
                 telefono_cliente=datos_usuario.telefono_cliente,
                 nacionalidad=datos_usuario.nacionalidad,
                 ciudad=datos_usuario.ciudad)
-
                 cliente_nueva.save()
+                
+                cliente_actual=Clientes.objects.get(codigo_cliente=cli_actual)
+                cliente_actual.nombre_cliente=request.POST.get("nombre")
+                cliente_actual.apellido_cliente=request.POST.get("apellido")
+                cliente_actual.ruc_cliente=request.POST.get("ruc")
+                cliente_actual.telefono_cliente=request.POST.get("telefono")
+                cliente_actual.nacionalidad_id=request.POST.get("nacionalidad")
+                cliente_actual.ciudad_id=request.POST.get("ciudad")
 
-            
             
                 cliente_actual.save()
 
@@ -248,14 +258,26 @@ def modprovee(request, pro_actual = 0):
                 )
                 proveedor_nuevo.save()
             else:
+                datos_usuario=Proveedor.objects.filter(codigo_proveedor=pro_actual).first()
+                proveedor_nueva=Proveedor2(nombre_proveedor = datos_usuario.nombre_proveedor,
+                ruc_proveedor=datos_usuario.ruc_proveedor,
+                codigo_usuario=request.session.get("codigo_usuario"),
+                nombre_usuario=request.session.get("nombre_completo_usuario"),
+                telefono_proveedor=datos_usuario.telefono_proveedor,
+                nacionalidad=datos_usuario.nacionalidad,
+                ciudad=datos_usuario.ciudad,
+                codigo_proveedor=datos_usuario.codigo_proveedor)
+                proveedor_nueva.save()
+
                 proveedor_actual=Proveedor.objects.get(codigo_proveedor=pro_actual)
                 proveedor_actual.nombre_proveedor=request.POST.get("nombre")
                 proveedor_actual.ruc_proveedor=request.POST.get("ruc")
                 proveedor_actual.telefono_proveedor=request.POST.get("telefono")
                 proveedor_actual.nacionalidad_id=request.POST.get("nacionalidad")
-                proveedor_actual.ciudad_id=request.POST.get("ciudad")
+                proveedor_actual.ciudad_id=request.POST.get("ciudad")   
+                    
                 
-                
+
                 proveedor_actual.save()
             
         return redirect("../proveedor")
@@ -295,10 +317,20 @@ def modpais(request, pai_actual = 0):
                 )
                 pais_nuevo.save()
             else:
-                pai_actual=Nacionalidad.objects.get(codigo_nacionalidad=pai_actual)
-                pai_actual.nacionalidad=request.POST.get("nombre")            
+                datos_usuario=Nacionalidad.objects.filter(codigo_nacionalidad=pai_actual).first()
+                pais_nueva=Nacionalidad2(nacionalidad = datos_usuario.nacionalidad,
+                codigo_usuario=request.session.get("codigo_usuario"),
+                nombre_usuario=request.session.get("nombre_completo_usuario"),
+                codigo_nacionalidad=datos_usuario.codigo_nacionalidad)
+                      
+                pais_nueva.save()
                 
-                pai_actual.save()
+                pais_actual=Nacionalidad.objects.get(codigo_nacionalidad=pai_actual)
+                pais_actual.nacionalidad=request.POST.get("nombre")            
+                
+                pais_actual.save()
+
+               
             
         return redirect("../pais")
     else:
@@ -335,10 +367,20 @@ def modciudad(request, ciu_actual = 0):
                 )
                 pais_nuevo.save()
             else:
+                datos_usuario=Ciudad.objects.filter(codigo_ciudad=ciu_actual).first()
+                ciudad_nueva=Ciudad2(ciudad = datos_usuario.ciudad,
+                codigo_usuario=request.session.get("codigo_usuario"),
+                nombre_usuario=request.session.get("nombre_completo_usuario"),
+                codigo_ciudad=datos_usuario.codigo_ciudad)
+                   
+                ciudad_nueva.save()
+                
                 ciu_actual=Ciudad.objects.get(codigo_ciudad=ciu_actual)
-                ciu_actual.Ciudad=request.POST.get("nombre")            
+                ciu_actual.ciudad=request.POST.get("nombre")            
                 
                 ciu_actual.save()
+
+                
             
         return redirect("../ciudad")
     else:
