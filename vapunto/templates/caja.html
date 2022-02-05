@@ -1,0 +1,89 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Lista De Clientes
+                <a href="{% url 'abrir_caja' 0 %}" data-toggle="tooltip" data-original-title="Apertura caja">
+                    <i>Abrir Caja</i>
+                </a>
+                <a href="{% url 'retirar_caja' 0 %}" data-toggle="tooltip" data-original-title="Retirar caja">
+                    <i>Retirar Caja </i>
+                </a>
+                <a href="#" data-toggle="tooltip" data-original-title="Cerrar Caja">
+                    <i> Cerrar Caja</i>
+
+                </a>
+            </h5>
+            <div class="table-responsive">
+                <table class="table" id="datos">
+                    <thead>
+                        <tr>
+                            <th >Usuario</a>
+                            </th>
+                            <th >Fecha</a>
+                            </th>
+                            <th >Hora</a></th>
+    
+                            <th >Motivo</a>
+                            </th>
+                            <th >tipo de mov.</a>
+                            </th>
+                            <th >Entrada</a>
+                            </th>
+                            <th >Salida</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    {%for lista in parameter.listacaja %}
+                        <tr>
+                            
+                            {%for usuario in parameters.listausuario %}
+                            {%if usuario.codigo_usuario == lista.nombre_usuario_id%}
+                            <td>{{usuario.nombre_usuario}}</td>
+                            {%endif%}
+                            {%endfor%}
+                            <td>{{lista.fecha_caja}}</td>
+                            <td>{{lista.hora_caja}}</td>
+                            {% if lista.motivo_caja == null %}
+                            <td>--------</td>
+                            {% else %}
+                            <td>{{lista.motivo_caja}}</td>
+                            {% endif %}
+                            {%if lista.tipo_mov == 1 %}<td>Retirar</td>{% endif %} 
+                            {%if lista.tipo_mov == 2 %}<td>Apertura</td>{% endif %}
+                            {%if lista.tipo_mov == 3 %}<td>Venta</td>{% endif %}
+                            {% if lista.entrada_caja == null %}
+                            <td>--------</td>
+                            {% else %}
+                            <td>{{lista.entrada_caja}}</td>
+                            {% endif %}
+                            {% if lista.salida_caja == null %}
+                            <td>-------</td>
+                            {% else %}
+                            <td>{{lista.salida_caja}}</td>
+                            {% endif %}
+                        </tr> 
+    
+                    {%endfor%} 
+                               
+                   
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%endblock%}
+
+{%block extra%}
+
+{%endblock%}

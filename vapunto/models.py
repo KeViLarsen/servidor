@@ -55,6 +55,7 @@ class Caja(models.Model):
     motivo_caja=models.CharField(max_length = 50, null=True)
     entrada_caja=models.CharField(max_length = 50, null=True)
     salida_caja=models.CharField(max_length = 50, null=True)
+    tipo_mov=models.IntegerField(null=True)
     nombre_usuario = models.ForeignKey(Usuariosid ,on_delete=models.CASCADE,null=True)
 
 class Clientes2(models.Model):

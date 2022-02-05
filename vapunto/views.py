@@ -404,6 +404,13 @@ def validar(request, pageSuccess, parameters={}):
         return render(request, 'login.html')
 
 
+def vercaja(request):     
+    if request.session.get("codigo_usuario"):
+        listacaja = Caja.objects.all()    
+        listausuario=Usuariosid.objects.all()    
+        return render(request, "caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja,"listausuario":listausuario})
+    else:
+        return redirect("login")
 
 def abrir_caja(request, caja_actual=0):
     listacaja=Caja.objects.all()
@@ -427,6 +434,7 @@ def abrir_caja(request, caja_actual=0):
             fecha_caja=request.POST.get('fecha_caja'),
             hora_caja=request.POST.get('hora_caja'),
             entrada_caja=request.POST.get('entrada_caja'),
+            tipo_mov=request.POST.get('tipo_mov'),
             salida_caja=request.POST.get('salida_caja'))
             caja_nuevo.save()
 
@@ -455,6 +463,7 @@ def retirar_caja(request, caja_actual=0):
             fecha_caja=request.POST.get('fecha_caja'),
             hora_caja=request.POST.get('hora_caja'),
             entrada_caja=request.POST.get('entrada_caja'),
+            tipo_mov=request.POST.get('tipo_mov'),
             salida_caja=request.POST.get('salida_caja'))
             caja_nuevo.save()
 
