@@ -24,19 +24,21 @@
               <th>Precio/venta</th>
               <th>Categoria</th>
               <th>Cantidad</th>
+              <th>Fecha</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {% for lista in listatabla %}
+            {% for lista in parameters.listatabla %}
             <tr>
               <td>{{ lista.codigo_productos }}</td>
               <td>{{ lista.nombre_productos }}</td>
               <td>{{ lista.preciocompra_productos }}</td>
               <td>{{ lista.precioventa_productos }}</td>
               <td>{{ lista.categoria_productos }}</td>
-              <td>{{ lista.cantidad_productos }}
-              <th data-sortable="" style="width:11.125%;"><a href="{% url 'modproducto' lista.codigo_productos %}"
+              <td>{{ lista.cantidad_productos }}</td>
+              <td>{{ lista.fecha_productos }}</td>
+              <td data-sortable="" style="width:11.125%;"><a href="{% url 'modproducto' lista.codigo_productos %}"
                   data-toggle="tooltip" data-original-title="Editar producto">
                   <i class="far fa-edit"></i>
                 </a>
@@ -74,6 +76,7 @@
   }
   window.onload = alerta()
 </script>
+
 
 </body>
 

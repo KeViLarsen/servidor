@@ -29,20 +29,21 @@
             </tr>
           </thead>
           <tbody>
-            {% for lista in listatabla %}
+            {% for lista in parameters.listatabla %}
 
             <tr>
               <td>{{ lista.codigo_proveedor }}</td>
               <td>{{ lista.nombre_proveedor }}</td>
               <td>{{ lista.ruc_proveedor }}</td>
               <td>{{ lista.telefono_proveedor }}</td>
-              {% for nacio in listanacionalidades %}
+
+              {% for nacio in parameters.listanacionalidades %}
               {% if nacio.codigo_nacionalidad == lista.nacionalidad_id %}
               <td>{{ nacio.nacionalidad }}</td>
               {%endif%}
               {%endfor%}
 
-              {% for ciu in listaciudad %}
+              {% for ciu in parameters.listaciudad %}
               {% if ciu.codigo_ciudad == lista.ciudad_id %}
               <td>{{ ciu.ciudad }}</td>
               {%endif%}

@@ -26,12 +26,16 @@
               </tr>
             </thead>
               <tbody>
-                {% for lista in listatabla %}
+                {% for lista in parameters.listatabla %}
                 <tr>
                   <td>{{ lista.codigo_usuario }}</td>
                   <td>{{ lista.nombre_usuario }}</td>
                   <td>{{ lista.nombre_completo_usuario }}</td>
-                  <td>{{ lista.tipo_usuario }}</td>
+                  {%if lista.tipo_usuario == 1 %}
+                                        <td>Administrador</td>
+                                        {% else %}
+                                        <td>Empleado</td>
+                                        {% endif %}
                   <th data-sortable="" style="width:11.125%;"><a href="{% url 'modusuario' lista.codigo_usuario %}" data-toggle="tooltip" data-original-title="Editar usuario">
                     <i class="far fa-edit"></i>
                     <a href="{% url 'borusuario' lista.codigo_usuario %}" data-toggle="tooltip" data-original-title="Borrar usuario" onclick="return confirm('Esta seguro que quiere eleminiar el registor')" >
