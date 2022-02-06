@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'servidor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vappunto',
+        'NAME': 'vapunto',
         'USER' : 'root',
         'PASSWORD': '',
         'HOST' : 'localhost',

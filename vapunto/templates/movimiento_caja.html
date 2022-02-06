@@ -10,7 +10,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Lista De Clientes
+            <h5 class="card-title">Lista De Movimiento
                 <a href="{% url 'abrir_caja' 0 %}" data-toggle="tooltip" data-original-title="Apertura caja">
                     <i>Abrir Caja</i>
                 </a>
@@ -34,7 +34,7 @@
     
                             <th >Motivo</a>
                             </th>
-                            <th >tipo de mov.</a>
+                            <th >Tipo de mov.</a>
                             </th>
                             <th >Entrada</a>
                             </th>
@@ -42,7 +42,7 @@
                             </th>
                         </tr>
                     </thead>
-                    {%for lista in parameter.listacaja %}
+                    {%for lista in parameters.listacaja %}
                         <tr>
                             
                             {%for usuario in parameters.listausuario %}

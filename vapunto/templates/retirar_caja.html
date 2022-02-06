@@ -8,9 +8,9 @@
     <div class="card">
         <div class="card-body">
             <form action="{% url 'retirar_caja' caja_actual %}" id="formCliente" method="POST">
+                <div>
                 {% csrf_token %}
                 <input style="display: none;" name="nombredelusuario" value="{{nombre_completo}}">
-                <div>
                     <div class="forma">
                         <label for="ingresar-codigo">Ingresar monto no superior al actual: </label>
                         <input type="text" class="form-control" id="formGroupExampleInput2" name="salida_caja"
@@ -20,23 +20,27 @@
                             value="{{parameters.datos_act.motivo_caja}}">
 
 
-                        {% for lista in listausuario %}
-                        <input value="{{lista.cod_usuario}}" {% if lista.cod_usuario == datos_act.nombre_usuario_id%}
+                        {% for lista in parameters.listausuario %}
+                        <input value="{{lista.codigo_usuario}}" {% if lista.codigo_usuario == parameters.datos_act.nombre_usuario_id%}
                             {{lista.nombre_usuario}} {% endif %} style="visibility: hidden;">
                         </input>
                         {% endfor %}
 
-                        <input type="date" id="fechaActual" name="fecha_caja" value="{{parameters.datos_act.fecha_caja}}"
-                            >
+                        <div class="form-group form-default mb-3">
+                            <label class="float-label">Fecha de Salida</label>
+                           
+                            <input type="date"  id="fecha" name="fecha_caja" class="form-control" value="{{parameters.datos_act.fecha_caja}}">
+                        </div>
                         <input type="text" id="currentTime" name="hora_caja" value="{{parameters.datos_act.hora_caja}}"
                             style="visibility: hidden;">
                         <input style="display: none;" name="tipo_mov" value="1" type="number">
                     </div>
                     <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">
-                        <a href="{% url 'movimiento_caja' %}" style="margin-right: 5px; margin-top: -1px;"
-                            onclick="checker()" type="submit">
+
+                        <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit" onclick="checker()">
                             Retirar
-                        </a>
+                        </button>
+                        
                         <a href="{% url 'movimiento_caja' %}">
                             <span> Volver</span>
                         </a>
@@ -46,18 +50,21 @@
     </div>
 </div>
 <script>
-    window.onload = function () {
+    var inputFecha = "fecha"  //COLOCAR ID DEL INPUT DE FECHA
+    window.onload = completarHoraInicio(document.getElementById(inputFecha))
+  
+    function completarHoraInicio(event){
         var fecha = new Date(); //Fecha actual
-        var mes = fecha.getMonth() + 1; //obteniendo mes
+        var mes = fecha.getMonth()+1; //obteniendo mes
         var dia = fecha.getDate(); //obteniendo dia
-        var ano = fecha.getFullYear(); //obteniendo aÃ±o
-        if (dia < 10)
-            dia = '0' + dia; //agrega cero si el menor de 10
-        if (mes < 10)
-            mes = '0' + mes //agrega cero si el menor de 10
-        document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
-    } 
-</script>
+        var ano = fecha.getFullYear(); //obteniendo año
+        if(dia<10)
+          dia='0'+dia; //agrega cero si el menor de 10
+        if(mes<10)
+          mes='0'+mes //agrega cero si el menor de 10
+        event.value=ano+"-"+mes+"-"+dia;
+    }
+  </script>
 
 <script>
     var today = new Date();

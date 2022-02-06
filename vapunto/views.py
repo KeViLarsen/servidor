@@ -1,8 +1,9 @@
 from collections import namedtuple
+from ssl import AlertDescription
 from django.shortcuts import render, redirect
-from django.db.models import Q
 from vapunto.models import *
 from vapunto.models import producto
+from vapunto.models import Caja
 
 
 def login(request):
@@ -40,11 +41,7 @@ def salir(request):
     
 def tabla(request):
     return validar(request,'tables.html')
-
-def venta(request):
-    listatabla=producto.objects.all()
-    return validar(request,'venta.html',{"listatabla":listatabla})
-    
+  
 def product(request):
     if request.session.get("codigo_usuario"):
         listatabla=producto.objects.all()
@@ -300,6 +297,7 @@ def pais(request):
         return validar(request,"direccion/pais.html",{"listatabla":listatabla})
     else:
             return redirect("login")
+
 def modpais(request, pai_actual = 0):
     listanacionalidades = Nacionalidad.objects.all()
     if request.session.get("codigo_usuario"):
@@ -350,6 +348,7 @@ def ciudad(request):
         return validar(request,"direccion/ciudad.html",{"listatabla":listatabla})
     else:
         return redirect("login")
+
 def modciudad(request, ciu_actual = 0):
     listaciudades = Ciudad.objects.all()
     if request.session.get("codigo_usuario"):
@@ -383,8 +382,6 @@ def modciudad(request, ciu_actual = 0):
                 
                 ciu_actual.save()
 
-                
-            
         return redirect("../ciudad")
     else:
         return redirect("login")
@@ -403,18 +400,17 @@ def validar(request, pageSuccess, parameters={}):
     else:
         return render(request, 'login.html')
 
-
 def vercaja(request):     
     if request.session.get("codigo_usuario"):
         listacaja = Caja.objects.all()    
-        listausuario=Usuariosid.objects.all()    
-        return render(request, "caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja,"listausuario":listausuario})
+        listausuario = Usuariosid.objects.all()    
+        return validar(request, "movimiento_caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja,"listausuario":listausuario})
     else:
         return redirect("login")
 
 def abrir_caja(request, caja_actual=0):
-    listacaja=Caja.objects.all()
-    listausuario=Usuariosid.objects.all()
+    listacaja = Caja.objects.all()
+    listausuario = Usuariosid.objects.all()
     if request.method=="GET":
         caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
         if caj_actual:
@@ -429,7 +425,7 @@ def abrir_caja(request, caja_actual=0):
 
         if caja_actual==0:
             caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-            nombre_usuario_id=getattr(datos_usuario, "cod_usuario"),
+            nombre_usuario_id=getattr(datos_usuario, "codigo_usuario"),
             motivo_caja=request.POST.get('motivo_caja'),
             fecha_caja=request.POST.get('fecha_caja'),
             hora_caja=request.POST.get('hora_caja'),
@@ -439,7 +435,6 @@ def abrir_caja(request, caja_actual=0):
             caja_nuevo.save()
 
         return redirect("../movimiento_caja")
-
 
 def retirar_caja(request, caja_actual=0):
     listacaja=Caja.objects.all()
@@ -457,16 +452,20 @@ def retirar_caja(request, caja_actual=0):
         datos_usuario=Usuariosid.objects.filter(nombre_usuario=request.POST.get('nombredelusuario')).first()
 
         if caja_actual==0:
+            
             caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-            nombre_usuario_id=getattr(datos_usuario, "cod_usuario"),
+            nombre_usuario_id=getattr(datos_usuario, "codigo_usuario"),
             motivo_caja=request.POST.get('motivo_caja'),
             fecha_caja=request.POST.get('fecha_caja'),
             hora_caja=request.POST.get('hora_caja'),
             entrada_caja=request.POST.get('entrada_caja'),
-            tipo_mov=request.POST.get('tipo_mov'),
-            salida_caja=request.POST.get('salida_caja'))
+            salida_caja=request.POST.get('salida_caja'),
+            tipo_mov=request.POST.get('tipo_mov'))
             caja_nuevo.save()
 
         return redirect("../movimiento_caja")
 
+def venta(request):
+    listatabla=producto.objects.all()
+    return validar(request,'venta.html',{"listatabla":listatabla})
 # Create your views here.
