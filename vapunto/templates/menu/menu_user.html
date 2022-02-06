@@ -1,0 +1,46 @@
+{% load static %}
+{% block menu_admin %}
+
+<li>
+
+  <a href="{%url 'inicio' %}">
+    <span>Inicio</span>
+  </a>
+</li>
+
+<li class="sidebar-menu  has-sub">
+  <a href="#" class='sidebar-link'>
+    <i class="far fa-clipboard"></i>
+    <span>Registrar</span>
+  </a>
+
+  <ul class="sidebar-submenu ">
+
+    <li>
+      <a href="{% url 'vercliente' %}">Cliente</a>
+    </li>
+ 
+
+  </ul>
+
+</li>
+
+<li>
+  <a href="{%url 'product'%}">
+    <i class="fas fa-wind"></i>
+    <span>Producto</span>
+  </a>
+</li>
+
+<li>
+  <a href="{%url 'venta' %}">
+    <i class="fas fa-cart-arrow-down"></i>
+    <span>Ventas</span>
+  </a>
+</li>
+
+
+
+
+
+{%endblock%}

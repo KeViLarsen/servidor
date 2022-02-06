@@ -11,31 +11,31 @@
 
 
       <body class="bg-theme bg-theme1">
-        <form action="{% url 'modcliente' cli_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+        <form action="{% url 'modcliente' parameters.cli_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
           {% csrf_token %}
 
 
           <div class="forma">
             <label for="ingresar-nombre">Añadir Nombre Del Cliente</label>
             <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
-              value="{{ datos_act.nombre_cliente }}">
+              value="{{ parameters.datos_act.nombre_cliente }}">
 
             <label for="ingresar-apellido">Añadir Apellido del Cliente</label>
             <input type="text" class="form-control" id="formGroupExampleInput2" name='apellido'
-              value="{{ datos_act.apellido_cliente }}">
+              value="{{ parameters.datos_act.apellido_cliente }}">
 
             <label for="ingresar-telefono">Añadir Telefono del Cliente</label>
             <input type="text" class="form-control" id="formGroupExampleInput4" name='telefono'
-              value="{{ datos_act.telefono_cliente }}">
+              value="{{ parameters.datos_act.telefono_cliente }}">
 
             <label for="ingresar-ruc">Añadir Ruc</label>
             <input type="text" class="form-control" id="formGroupExampleInput5" name='ruc'
-              value="{{ datos_act.ruc_cliente }}">
+              value="{{ parameters.datos_act.ruc_cliente }}">
 
             <label for="Seleccionar-Nacionalidad">Seleccionar Nacionalidad</label>
             <select class="custom-select custom-select-sm form-control form-control-sm" name='nacionalidad'>
-              {%for lista in listanacionalidades%}
-              <option value="{{lista.codigo_nacionalidad}}" {%if datos_act.nacionalidad_id == lista.codigo_nacionalidad %} selected {%endif%} >
+              {%for lista in parameters.listanacionalidades%}
+              <option value="{{lista.codigo_nacionalidad}}" {%if parameters.datos_act.nacionalidad_id == lista.codigo_nacionalidad %} selected {%endif%} >
                 {{lista.nacionalidad}}
               </option>
               {%endfor%}
@@ -43,8 +43,8 @@
 
             <label for="Seleccionar-ciudad">Seleccionar Ciudad</label>
             <select class="custom-select custom-select-sm form-control form-control-sm" name='ciudad'>
-              {%for lista in listaciudad%}
-              <option value="{{lista.codigo_ciudad}}" {%if datos_act.ciudad_id == lista.codigo_ciudad %} selected {%endif%} >
+              {%for lista in parameters.listaciudad%}
+              <option value="{{lista.codigo_ciudad}}" {%if parameters.datos_act.ciudad_id == lista.codigo_ciudad %} selected {%endif%} >
                 {{lista.ciudad}}
               </option>
               {%endfor%}

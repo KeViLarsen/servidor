@@ -22,8 +22,10 @@ urlpatterns = [
     path('pais', views.pais, name='pais'),
     path('modpais/<int:pai_actual>', views.modpais, name="modpais"),
     path('borpais/<int:pai_actual>', views.borpais, name="borpais"),
-     path('ciudad', views.ciudad, name='ciudad'),
+    path('ciudad', views.ciudad, name='ciudad'),
     path('modciudad/<int:ciu_actual>', views.modciudad, name="modciudad"),
-    path('borciudad/<int:ciu_actual>', views.borciudad, name="borciudad")
-
+    path('borciudad/<int:ciu_actual>', views.borciudad, name="borciudad"),
+    path('movimiento_caja', views.vercaja, name='movimiento_caja'),
+    path('retirar_caja/<int:caja_actual>', views.retirar_caja, name="retirar_caja"),
+    path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja")
 ]
