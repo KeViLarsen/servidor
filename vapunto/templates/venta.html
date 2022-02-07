@@ -10,9 +10,14 @@
     <div class="card">
       <div class="card-header">Cliente
         <div class="forma">
-          <label for="ingresar-ruc">Ruc de Cliente</label>
-          <input type="text" class="form-control" id="formGroupExampleInput1" name='ruc' value="{{datos_act.ruc_cliente}}">
-
+        
+          <div>
+            <label for="ingresar-nombre">RUC de cliente </label>
+            <input type="text" class="form-control" onfocusout="traerCliente(this)">
+        </div>
+        <div class="clientept">
+          <label for="ingresar-nombre" id="nombre_cliente">Nombre del Cliente: </label>
+  
         </div>
       </div>
     </div>
@@ -21,53 +26,73 @@
 <!--End topbar header-->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">Productos
-          <div class="table-responsive">
-            <table class="table" id="datos">
-              <thead>
-                <tr>
-                  <th>Codigo</th>
-                  <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for lista in parameters.listatabla %}
-                <tr>
-                  <td>{{ lista.codigo_productos }}</td>
-                  <td>{{ lista.nombre_productos }}</td>
-                  <td>{{ lista.precioventa_productos }}</td>
-                  <td><input id="number" type="number" value="0" style="width: 5em;" class="form-control"></td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+      <div class="col-12 col-lg-6 col-xl-6">
+        <div class="card">
+          <div class="card-header">Productos
+            <div class="table-responsive">
+              <table class="table" id="datos">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Agregar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for producto in parameters.listaproducto %}
+                  <tr>
+                    <td>{{ producto.codigo_productos }}</td>
+                    <td>{{ producto.nombre_productos }}</td>
+                    <td>{{ producto.precioventa_productos }}</td>
+                    <td data-sortable="" style="width:11.125%;"> 
+                    <a href="{% url 'Add' producto.id %}" class="btn btn-primary" data-toggle="tooltip"
+                      data-original-title="Agregar Al Carrito"></a>
+                      <i class="fas fa-plus-square"></i></td>
+                    <!-- <td><input id="number" type="number" value="0" style="width: 5em;" class="form-control"></td> -->
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-12 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">Factura
-          <div class="card-action">
-
-
-
-
-          </div>
+      <div class="col-12 col-lg-6 col-xl-6">
+        <div class="card">
+          
         </div>
       </div>
     </div>
   </div>
 </div>
-</div>
 <!--End wrapper-->
 
 </body>
+<script>
+  function traerCliente(event) { //event es el input donde se carga el valor
+      var flag = false
+      var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
+      {% for cliente in parameters.listacliente %}
+          var r_cliente = "{{cliente.ruc_cliente}}"   //se trae cedula del cliente
+
+          if(event.value == r_cliente) { //se compara si las cedulas de la base de datos coincide con el del input
+              nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}}"   //si coincide se carga el nombre al label
+              flag = true
+          }
+
+          if(!flag) {
+              nCliente.innerHTML = "Nombre del Cliente: No existe ese cliente"//si coincide se muestra el mensaje en el label
+          }
+      {% endfor %}
+
+      if(event.value == '') { //si el input esta vacio el label se vaciara tambien
+          nCliente.innerHTML = "Nombre del Cliente:  "
+      }
+  }
+</script>
 {%endblock%}
 
 {%block extra%}

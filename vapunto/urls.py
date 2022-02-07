@@ -27,5 +27,10 @@ urlpatterns = [
     path('borciudad/<int:ciu_actual>', views.borciudad, name="borciudad"),
     path('movimiento_caja', views.vercaja, name='movimiento_caja'),
     path('retirar_caja/<int:caja_actual>', views.retirar_caja, name="retirar_caja"),
-    path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja")
+    path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja"),
+    path('agregar/<int:codigo_productos>', views.agregar_producto, name="Add"),
+    path('eliminar/<int:codigo_productos>', views.eliminar_producto, name="Del"),
+    path('restar/<int:codigo_productos>', views.restar_producto, name="Sub"),
+    path('limpiar/', views.limpiar_carrito, name="CLS"),
+
 ]

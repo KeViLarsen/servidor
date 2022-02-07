@@ -1,6 +1,7 @@
 from collections import namedtuple
 from ssl import AlertDescription
 from django.shortcuts import render, redirect
+from vapunto.Carrito import Carrito
 from vapunto.models import *
 from vapunto.models import producto
 from vapunto.models import Caja
@@ -466,6 +467,31 @@ def retirar_caja(request, caja_actual=0):
         return redirect("../movimiento_caja")
 
 def venta(request):
-    listatabla=producto.objects.all()
-    return validar(request,'venta.html',{"listatabla":listatabla})
+    listaproducto=producto.objects.all()
+    listacliente=Clientes.objects.all()
+    return render(request,'venta.html',{"listaproducto":listaproducto,"listacliente":listacliente})
+
+
+def agregar_producto(request, codigo_prodctos):
+    carrito = Carrito(request)
+    producto = product.objects.get(id=codigo_prodctos)
+    carrito.agregar(producto)
+    return redirect("venta")
+
+def eliminar_producto(request, codigo_prodctos):
+    carrito = Carrito(request)
+    producto = product.objects.get(id=codigo_prodctos)
+    carrito.eliminar(producto)
+    return redirect("venta")
+
+def restar_producto(request, codigo_prodctos):
+    carrito = Carrito(request)
+    producto = product.objects.get(id=codigo_prodctos)
+    carrito.restar(producto)
+    return redirect("venta")
+
+def limpiar_carrito(request):
+    carrito = Carrito(request)
+    carrito.limpiar()
+    return redirect("venta")
 # Create your views here.
