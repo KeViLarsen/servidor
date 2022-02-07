@@ -56,7 +56,7 @@
 
     <div class="col-12 col-lg-6 col-xl-6">
       <div class="card">
-        <div class="card-header">Factura
+        <div class="card-header">Carrito
           <div class="card-action">
 
 
@@ -80,7 +80,7 @@
           var r_cliente = "{{cliente.ruc_cliente}}"   //se trae cedula del cliente
 
           if(event.value == r_cliente) { //se compara si las cedulas de la base de datos coincide con el del input
-              nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}}"   //si coincide se carga el nombre al label
+              nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}} {{cliente.apellido_cliente}}"   //si coincide se carga el nombre al label
               flag = true
           }
 
