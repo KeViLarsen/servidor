@@ -467,7 +467,7 @@ def retirar_caja(request, caja_actual=0):
 
 def venta(request):
     listatabla=producto.objects.all()
-    listacli=Clientes.objects.all()
-    return validar(request,'venta.html',{"listatabla":listatabla})
+    listacliente=Clientes.objects.all()
+    return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
 
 # Create your views here.
