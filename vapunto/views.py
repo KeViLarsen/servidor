@@ -209,8 +209,6 @@ def modcliente(request, cli_actual = 0):
                 cliente_actual.telefono_cliente=request.POST.get("telefono")
                 cliente_actual.nacionalidad_id=request.POST.get("nacionalidad")
                 cliente_actual.ciudad_id=request.POST.get("ciudad")
-
-            
                 cliente_actual.save()
 
         return redirect("../vercliente")
@@ -408,17 +406,10 @@ def vercaja(request):
         return redirect("login")
 
 def abrir_caja(request, caja_actual=0):
-    listacaja = Caja.objects.all()
     if request.session.get("codigo_usuario"):
+        listacaja = Caja.objects.all()
         if request.method=="GET":
-            caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
-            if caj_actual:
-                datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
-                return render(request, 'abrir_caja.html',
-                {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja})
-            else:
-                return render(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja})
-
+            return validar(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual,"listacaja":listacaja})
         if request.method=="POST":
             if caja_actual==0:
                     caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
@@ -432,24 +423,17 @@ def abrir_caja(request, caja_actual=0):
                     codigo_usuario=request.session.get("codigo_usuario"),
                     nombre_usuario=request.session.get("nombre_completo_usuario"))
                     caja_nuevo.save()
-
             return redirect("../movimiento_caja")
     else:
         return redirect("login")
 
 def retirar_caja(request, caja_actual=0):
-    listacaja=Caja.objects.all()
     if request.session.get("codigo_usuario"):
+        listacaja=Caja.objects.all()
         if request.method=="GET":
-            caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
-            if caj_actual:
-                datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
-                return render(request, 'retirar_caja.html',
-                {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja})
-            else:
-                return render(request, "retirar_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja})
+            return validar(request,'retirar_caja.html',{"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
         if request.method=="POST":
-           if caja_actual==0:
+            if caja_actual==0:
                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
                 motivo_caja=request.POST.get('motivo_caja'),
                 fecha_caja=request.POST.get('fecha'),
@@ -461,7 +445,6 @@ def retirar_caja(request, caja_actual=0):
                 codigo_usuario=request.session.get("codigo_usuario"),
                 nombre_usuario=request.session.get("nombre_completo_usuario"))
                 caja_nuevo.save()
-
         return redirect("../movimiento_caja")
     else:
         return redirect("login")

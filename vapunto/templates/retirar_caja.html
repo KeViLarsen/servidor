@@ -7,7 +7,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
-            <form action="{% url 'retirar_caja' caja_actual %}" id="formCliente" method="POST">
+            <form action="{% url 'retirar_caja' 0 %}" id="formCliente" method="POST">
                 <div>
                 {% csrf_token %}
                 <input style="display: none;" name="nombredelusuario" value="{{nombre_completo}}">
@@ -27,7 +27,6 @@
                         {% endfor %}
 
                         <div class="form-group form-default mb-3">
-                            <label class="float-label">Fecha de Salida</label>
                            
                             <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_caja}}" style="visibility: hidden;">
                         </div>

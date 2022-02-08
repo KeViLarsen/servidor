@@ -11,13 +11,16 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Lista De Movimiento
-                <a href="{% url 'abrir_caja' 0 %}" data-toggle="tooltip" data-original-title="Apertura caja">
-                    <i>Abrir Caja</i>
+                {% csrf_token %}
+                <a class="btn-guardar" style="margin-right: 5px; margin-top: -1px;"href="{% url 'abrir_caja' 0 %}" 
+                data-toggle="tooltip" data-original-title="Apertura De caja">
+                    <i>Apertura De Caja</i>
                 </a>
-                <a href="{% url 'retirar_caja' 0 %}" data-toggle="tooltip" data-original-title="Retirar caja">
-                    <i>Retirar Caja </i>
+                <a class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" href="{% url 'retirar_caja' 0 %}" 
+                data-toggle="tooltip" data-original-title="Retiro de caja">
+                    <i>Retiro de Caja </i>
                 </a>
-                    <form class="abrir-caja-input" action="{% url 'cerrar_caja' 0 %}" id="formCliente"
+                    <form class="cerrar-caja-input" action="{% url 'cerrar_caja' 0 %}" id="formCliente"
                         method="POST">
                         {% csrf_token %}
                         <input type="text" class="form-control" id="formGroupExampleInput2" name="entrada_caja"value="{{parameters.datos_act.entrada_caja}}" style="display:none;">
@@ -27,7 +30,8 @@
                         <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_caja}}"style="display:none;">
                         <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.datos_act.hora_caja}}"style="display:none;">
                         <input style="display: none;" name="tipo_mov" value="3" type="number">
-                        <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit" onclick="checker()">
+                        <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit" onclick="checker()"
+                        data-toggle="tooltip" data-original-title="Cierre de caja">
                             Cerrar
                         </button>
                     </form>
