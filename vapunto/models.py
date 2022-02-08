@@ -1,7 +1,9 @@
 from pickle import TRUE
+from pyexpat import model
 from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields.related import ForeignKey
+from django.forms import IntegerField
 
 # Create your models here.
 
@@ -22,7 +24,7 @@ class Ciudad(models.Model):
     ciudad = models.CharField(max_length = 50)
 
 class Proveedor(models.Model):
-    codigo_proveedor=models.IntegerField(primary_key=True)
+    codigo_proveedor=models.AutoField(primary_key=True)
     nombre_proveedor= models.CharField(max_length = 50)
     ruc_proveedor= models.IntegerField()
     telefono_proveedor= models.IntegerField()
@@ -49,7 +51,7 @@ class Clientes(models.Model):
     ciudad = models.ForeignKey(Ciudad ,on_delete=models.CASCADE,null=True)
 
 class Clientes2(models.Model):
-    codigo_cliente = models.AutoField(primary_key = True)
+    codigo_cliente = IntegerField()
     ruc_cliente = models.CharField(max_length = 50)
     nombre_cliente = models.CharField(max_length = 50)
     apellido_cliente = models.CharField(max_length = 50)
@@ -60,7 +62,7 @@ class Clientes2(models.Model):
     nombre_usuario = models.CharField(max_length = 50)
 
 class producto2(models.Model):
-    codigo_productos=models.IntegerField(primary_key=True)
+    codigo_productos=models.IntegerField()
     nombre_productos= models.CharField(max_length = 50)
     preciocompra_productos= models.IntegerField()
     precioventa_productos= models.IntegerField()
@@ -71,7 +73,7 @@ class producto2(models.Model):
     nombre_usuario = models.CharField(max_length = 50)
 
 class Proveedor2(models.Model):
-    codigo_proveedor=models.IntegerField(primary_key=True)
+    codigo_proveedor=models.IntegerField()
     nombre_proveedor= models.CharField(max_length = 50)
     ruc_proveedor= models.IntegerField()
     telefono_proveedor= models.IntegerField()
@@ -81,13 +83,13 @@ class Proveedor2(models.Model):
     nombre_usuario = models.CharField(max_length = 50)
 
 class Nacionalidad2(models.Model):
-    codigo_nacionalidad = models.IntegerField(primary_key = True)
+    codigo_nacionalidad = models.IntegerField()
     nacionalidad = models.CharField(max_length = 50)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
 
 class Ciudad2(models.Model):
-    codigo_ciudad = models.IntegerField(primary_key = True)
+    codigo_ciudad = models.IntegerField()
     ciudad = models.CharField(max_length = 50)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
@@ -110,4 +112,7 @@ class Carrito(models.Model):
     carrito_producto=models.CharField(max_length=50)
     carrito_precio=models.IntegerField()
     carrito_cantidad=models.IntegerField()
+
+
+
   

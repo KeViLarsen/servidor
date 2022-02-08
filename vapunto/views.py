@@ -472,43 +472,48 @@ def cerrar_caja(request,caja_actual=0):
         return redirect("login")
 
 def venta(request):
-    listatabla=producto.objects.all()
-    listacliente=Clientes.objects.all()
-    listacarrito=Carrito.objects.all()
-    return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listacarrito":listacarrito})
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        listacliente=Clientes.objects.all()
+        listacarrito=Carrito.objects.all()
+        return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listacarrito":listacarrito})
+    else:
+        return redirect("login")
 
 def agregar(request, prod_add):
-    listatabla=producto.objects.all()
-    listacarrito=Carrito.objects.all()
-    if request.method=="GET":
-            prod_actual=producto.objects.filter(codigo_productos=prod_add).exists()
-            if prod_actual:
-                datos_prod=producto.objects.filter(codigo_productos=prod_add).first()
-                return render(request, 'venta.html',
-                {"datos_act":datos_prod, "prod_add":prod_add,"listatabla":listatabla,"listacarrito":listacarrito})
-            else:
-                return render(request, "venta.html", 
-                {"prod_add": prod_add, "listatabla":listatabla,"listacarrito":listacarrito})
-        
-    if request.method=="POST":
-            if prod_add == Carrito.codigo_carrito:
-                datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
-                carrito_nuevo=Carrito(carrito_producto = datos_usuario.nombre_productos,
-                carrito_precio=datos_usuario.precioventa_productos,
-                carrito_cantidad=1,
-                codigo_carrito=datos_usuario.codigo_productos
-                )
-                carrito_nuevo.save()
-            else:
-                datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
-                prod_actual=Carrito.objects.get(carrito_producto=prod_add),
-                prod_actual.carrito_cantidad=+1,
-                prod_actual.carrito_precio=+datos_usuario.precioventa_productos,
-                prod_actual.carrito=request.POST.get("nombre"),
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        listacarrito=Carrito.objects.all()
+        if request.method=="GET":
+                prod_actual=producto.objects.filter(codigo_productos=prod_add).exists()
+                if prod_actual:
+                    datos_prod=producto.objects.filter(codigo_productos=prod_add).first()
+                    return validar(request, 'venta.html',
+                    {"datos_act":datos_prod, "prod_add":prod_add,"listatabla":listatabla,"listacarrito":listacarrito})
+                else:
+                    return validar(request, "venta.html", 
+                    {"prod_add": prod_add, "listatabla":listatabla,"listacarrito":listacarrito})
+            
+        if request.method=="POST":
+                if prod_add == Carrito.codigo_carrito:
+                    datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
+                    carrito_nuevo=Carrito(carrito_producto = datos_usuario.nombre_productos,
+                    carrito_precio=datos_usuario.precioventa_productos,
+                    carrito_cantidad=1,
+                    codigo_carrito=datos_usuario.codigo_productos
+                    )
+                    carrito_nuevo.save()
+                else:
+                    datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
+                    prod_actual=Carrito.objects.get(carrito_producto=prod_add),
+                    prod_actual.carrito_cantidad=+1,
+                    prod_actual.carrito_precio=+datos_usuario.precioventa_productos,
+                    prod_actual.carrito=request.POST.get("nombre"),
 
-                prod_actual.save()
-    return redirect("../venta")
-    
+                    prod_actual.save()
+        return redirect("../venta")
+    else:
+        return redirect("login")
                 
  
 
