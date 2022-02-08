@@ -1,3 +1,4 @@
+from pickle import TRUE
 from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields.related import ForeignKey
@@ -99,4 +100,14 @@ class Caja(models.Model):
     entrada_caja=models.CharField(max_length = 50, null=True)
     salida_caja=models.CharField(max_length = 50, null=True)
     tipo_mov=models.IntegerField(null=True)
-    nombre_usuario = models.ForeignKey(Usuariosid ,on_delete=models.CASCADE,null=True)
+    total_caja=models.CharField(max_length = 50, null=True)
+    nombre_usuario = models.CharField(max_length = 50)
+    codigo_usuario = models.IntegerField()
+    
+class Carrito(models.Model):
+    carrito_id=models.IntegerField(primary_key=True)
+    codigo_carrito=models.IntegerField()
+    carrito_producto=models.CharField(max_length=50)
+    carrito_precio=models.IntegerField()
+    carrito_cantidad=models.IntegerField()
+  

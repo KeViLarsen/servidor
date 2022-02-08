@@ -402,72 +402,132 @@ def validar(request, pageSuccess, parameters={}):
 
 def vercaja(request):     
     if request.session.get("codigo_usuario"):
-        listacaja = Caja.objects.all()    
-        listausuario = Usuariosid.objects.all()    
-        return validar(request, "movimiento_caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja,"listausuario":listausuario})
+        listacaja = Caja.objects.all() 
+        return validar(request, "movimiento_caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
     else:
         return redirect("login")
 
 def abrir_caja(request, caja_actual=0):
     listacaja = Caja.objects.all()
-    listausuario = Usuariosid.objects.all()
-    if request.method=="GET":
-        caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
-        if caj_actual:
-            datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
-            return render(request, 'abrir_caja.html',
-            {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja,"listausuario":listausuario})
-        else:
-            return render(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja,"listausuario":listausuario})
+    if request.session.get("codigo_usuario"):
+        if request.method=="GET":
+            caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
+            if caj_actual:
+                datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
+                return render(request, 'abrir_caja.html',
+                {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja})
+            else:
+                return render(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja})
 
-    if request.method=="POST":
-        datos_usuario=Usuariosid.objects.filter(nombre_usuario=request.POST.get('nombredelusuario')).first()
+        if request.method=="POST":
+            if caja_actual==0:
+                    caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+                    motivo_caja=request.POST.get('motivo_caja'),
+                    fecha_caja=request.POST.get('fecha'),
+                    hora_caja=request.POST.get('hora_caja'),
+                    entrada_caja=request.POST.get('entrada_caja'),
+                    tipo_mov=request.POST.get('tipo_mov'),
+                    salida_caja=request.POST.get('salida_caja'),
+                    total_caja=request.POST.get('total_caja'),
+                    codigo_usuario=request.session.get("codigo_usuario"),
+                    nombre_usuario=request.session.get("nombre_completo_usuario"))
+                    caja_nuevo.save()
 
-        if caja_actual==0:
-            caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-            nombre_usuario_id=getattr(datos_usuario, "codigo_usuario"),
-            motivo_caja=request.POST.get('motivo_caja'),
-            fecha_caja=request.POST.get('fecha_caja'),
-            hora_caja=request.POST.get('hora_caja'),
-            entrada_caja=request.POST.get('entrada_caja'),
-            tipo_mov=request.POST.get('tipo_mov'),
-            salida_caja=request.POST.get('salida_caja'))
-            caja_nuevo.save()
-
-        return redirect("../movimiento_caja")
+            return redirect("../movimiento_caja")
+    else:
+        return redirect("login")
 
 def retirar_caja(request, caja_actual=0):
     listacaja=Caja.objects.all()
-    listausuario=Usuariosid.objects.all()
-    if request.method=="GET":
-        caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
-        if caj_actual:
-            datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
-            return render(request, 'retirar_caja.html',
-            {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja,"listausuario":listausuario})
-        else:
-            return render(request, "retirar_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja,"listausuario":listausuario})
-
-    if request.method=="POST":
-        datos_usuario=Usuariosid.objects.filter(nombre_usuario=request.POST.get('nombredelusuario')).first()
-
-        if caja_actual==0:
-            
-            caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-            nombre_usuario_id=getattr(datos_usuario, "codigo_usuario"),
-            motivo_caja=request.POST.get('motivo_caja'),
-            fecha_caja=request.POST.get('fecha_caja'),
-            hora_caja=request.POST.get('hora_caja'),
-            entrada_caja=request.POST.get('entrada_caja'),
-            salida_caja=request.POST.get('salida_caja'),
-            tipo_mov=request.POST.get('tipo_mov'))
-            caja_nuevo.save()
+    if request.session.get("codigo_usuario"):
+        if request.method=="GET":
+            caj_actual=Caja.objects.filter(codigo_caja=caja_actual).exists()
+            if caj_actual:
+                datos_caja=Caja.objects.filter(codigo_caja=caja_actual).first()
+                return render(request, 'retirar_caja.html',
+                {"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listacaja":listacaja})
+            else:
+                return render(request, "retirar_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual, "titulo":"Cargar Usuario","listacaja":listacaja})
+        if request.method=="POST":
+           if caja_actual==0:
+                caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+                motivo_caja=request.POST.get('motivo_caja'),
+                fecha_caja=request.POST.get('fecha'),
+                hora_caja=request.POST.get('hora_caja'),
+                entrada_caja=request.POST.get('entrada_caja'),
+                tipo_mov=request.POST.get('tipo_mov'),
+                salida_caja=request.POST.get('salida_caja'),
+                total_caja=request.POST.get('total_caja'),
+                codigo_usuario=request.session.get("codigo_usuario"),
+                nombre_usuario=request.session.get("nombre_completo_usuario"))
+                caja_nuevo.save()
 
         return redirect("../movimiento_caja")
+    else:
+        return redirect("login")
+
+def cerrar_caja(request,caja_actual=0):
+    if request.session.get("codigo_usuario"):
+        listacaja=Caja.objects.all()
+        if request.method=="GET":
+            return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
+        if request.method=="POST":
+            if caja_actual==0:
+                caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+                motivo_caja=request.POST.get('motivo_caja'),
+                fecha_caja=request.POST.get('fecha'),
+                hora_caja=request.POST.get('hora_caja'),
+                entrada_caja=request.POST.get('entrada_caja'),
+                tipo_mov=request.POST.get('tipo_mov'),
+                salida_caja=request.POST.get('salida_caja'),
+                total_caja=request.POST.get('total_caja'),
+                codigo_usuario=request.session.get("codigo_usuario"),
+                nombre_usuario=request.session.get("nombre_completo_usuario"))
+                caja_nuevo.save()
+        return redirect("../movimiento_caja")
+    else:
+        return redirect("login")
 
 def venta(request):
     listatabla=producto.objects.all()
     listacliente=Clientes.objects.all()
-    return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
+    listacarrito=Carrito.objects.all()
+    return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listacarrito":listacarrito})
+
+def agregar(request, prod_add):
+    listatabla=producto.objects.all()
+    listacarrito=Carrito.objects.all()
+    if request.method=="GET":
+            prod_actual=producto.objects.filter(codigo_productos=prod_add).exists()
+            if prod_actual:
+                datos_prod=producto.objects.filter(codigo_productos=prod_add).first()
+                return render(request, 'venta.html',
+                {"datos_act":datos_prod, "prod_add":prod_add,"listatabla":listatabla,"listacarrito":listacarrito})
+            else:
+                return render(request, "venta.html", 
+                {"prod_add": prod_add, "listatabla":listatabla,"listacarrito":listacarrito})
+        
+    if request.method=="POST":
+            if prod_add == Carrito.codigo_carrito:
+                datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
+                carrito_nuevo=Carrito(carrito_producto = datos_usuario.nombre_productos,
+                carrito_precio=datos_usuario.precioventa_productos,
+                carrito_cantidad=1,
+                codigo_carrito=datos_usuario.codigo_productos
+                )
+                carrito_nuevo.save()
+            else:
+                datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
+                prod_actual=Carrito.objects.get(carrito_producto=prod_add),
+                prod_actual.carrito_cantidad=+1,
+                prod_actual.carrito_precio=+datos_usuario.precioventa_productos,
+                prod_actual.carrito=request.POST.get("nombre"),
+
+                prod_actual.save()
+    return redirect("../venta")
+    
+                
+ 
+
 
 # Create your views here.

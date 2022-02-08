@@ -29,10 +29,14 @@
                         <div class="form-group form-default mb-3">
                             <label class="float-label">Fecha de Salida</label>
                            
-                            <input type="date"  id="fecha" name="fecha_caja" class="form-control" value="{{parameters.datos_act.fecha_caja}}">
+                            <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_caja}}" style="visibility: hidden;">
                         </div>
                         <input type="text" id="currentTime" name="hora_caja" value="{{parameters.datos_act.hora_caja}}"
                             style="visibility: hidden;">
+                        <input type="text" class="form-control" id="formGroupExampleInput2" name="entrada_caja"
+                            value="-----" style="display: none;">
+                        <input type="text" class="form-control" id="formGroupExampleInput2" name="motivo_caja"
+                            value="-----" style="display: none;">
                         <input style="display: none;" name="tipo_mov" value="1" type="number">
                     </div>
                     <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">

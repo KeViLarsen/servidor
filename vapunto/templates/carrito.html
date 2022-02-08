@@ -1,0 +1,30 @@
+
+
+    <div class="card">
+      <div class="card-header">Carrito
+        <div class="table-responsive">
+          <table class="table" id="">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+                {% for cart in parameters.listacarrito %}
+                <tr>
+                    <td>{{ cart.carrito_productos }}</td>
+                    <td>{{ cart.carrito_precio }}</td>
+                    <td>{{ cart.carrito_cantidad }}</td>
+                    <td><a href="{% url 'Add' cart.codigo_carrito %}" class="badge btn btn-dark badge-dark">+</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
