@@ -39,7 +39,7 @@ class producto(models.Model):
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
     fecha_productos=models.DateField()
-    proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
+    nombre_proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
 
 class Clientes(models.Model):
     codigo_cliente = models.AutoField(primary_key = True)
@@ -68,7 +68,8 @@ class producto2(models.Model):
     precioventa_productos= models.IntegerField()
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
-    proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
+    fecha_productos=models.DateField()
+    nombre_proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
 
@@ -105,7 +106,7 @@ class Caja(models.Model):
     total_caja=models.CharField(max_length = 50, null=True)
     nombre_usuario = models.CharField(max_length = 50)
     codigo_usuario = models.IntegerField()
-    
+
 class Carrito(models.Model):
     carrito_id=models.IntegerField(primary_key=True)
     codigo_carrito=models.IntegerField()

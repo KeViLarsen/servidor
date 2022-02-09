@@ -16,7 +16,7 @@
             
                 {% for cart in parameters.listacarrito %}
                 <tr>
-                    <td>{{ cart.carrito_productos }}</td>
+                    <td>{{ nombre }}</td>
                     <td>{{ cart.carrito_precio }}</td>
                     <td>{{ cart.carrito_cantidad }}</td>
                     <td><a href="{% url 'Add' cart.codigo_carrito %}" class="badge btn btn-dark badge-dark">+</a></td>

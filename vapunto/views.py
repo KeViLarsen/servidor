@@ -45,11 +45,13 @@ def tabla(request):
 def product(request):
     if request.session.get("codigo_usuario"):
         listatabla=producto.objects.all()
-        return validar(request,"produ/product.html",{"listatabla":listatabla})
+        listaproveedor=Proveedor.objects.all()
+        return validar(request,"produ/product.html",{"listatabla":listatabla,"listaproveedor":listaproveedor})
     else:
          return redirect("login")
 
 def modproducto(request, prod_actual = 0):
+    listaproveedor=Proveedor.objects.all()
     if request.session.get("codigo_usuario"):
             if request.method=="GET":
                 producto_actual=producto.objects.filter(codigo_productos=prod_actual).exists()
@@ -57,9 +59,9 @@ def modproducto(request, prod_actual = 0):
                     datos_producto=producto.objects.filter(codigo_productos=prod_actual).first()
                     datos_producto.fecha_productos=str(datos_producto.fecha_productos)
                     return validar(request, 'produ/modproducto.html',
-                    {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto"})
+                    {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto","listaproveedor":listaproveedor})
                 else:
-                    return validar(request, "produ/modproducto.html", {"titulo_f":"Cargar nuevo Producto","prod_actual": prod_actual})
+                    return validar(request, "produ/modproducto.html", {"titulo_f":"Cargar nuevo Producto","prod_actual": prod_actual,"listaproveedor":listaproveedor})
 
             if request.method=="POST":
                 if prod_actual==0:
@@ -70,7 +72,7 @@ def modproducto(request, prod_actual = 0):
                     categoria_productos=request.POST.get("categoria"),
                     fecha_productos=request.POST.get('fecha'),
                     cantidad_productos=request.POST.get("cantidad"),
-                            
+                    nombre_proveedor_id=request.POST.get("proveedor")      
                     )
                     producto_nuevo.save()
                 else:
@@ -82,7 +84,8 @@ def modproducto(request, prod_actual = 0):
                     precioventa_productos=datos_usuario.precioventa_productos,
                     categoria_productos=datos_usuario.categoria_productos,
                     cantidad_productos=datos_usuario.cantidad_productos,
-                    codigo_productos=datos_usuario.codigo_productos)
+                    codigo_productos=datos_usuario.codigo_productos,
+                    nombre_proveedor_id=datos_usuario.nombre_provedor_id)
                     producto_nueva.save()
 
                     producto_actual=producto.objects.get(codigo_productos=prod_actual)
@@ -92,6 +95,7 @@ def modproducto(request, prod_actual = 0):
                     producto_actual.categoria_productos=request.POST.get("categoria")
                     producto_actual.fecha_productos=request.POST.get('fecha')
                     producto_actual.cantidad_productos=request.POST.get("cantidad")
+                    producto_actual.nombre_proveedor_id=request.POST.get("proveedor")
                     producto_actual.save()
 
             
@@ -475,47 +479,22 @@ def venta(request):
     if request.session.get("codigo_usuario"):
         listatabla=producto.objects.all()
         listacliente=Clientes.objects.all()
-        listacarrito=Carrito.objects.all()
-        return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listacarrito":listacarrito})
+        return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
     else:
         return redirect("login")
 
-def agregar(request, prod_add):
+def agregar(request, temp=0):
     if request.session.get("codigo_usuario"):
         listatabla=producto.objects.all()
-        listacarrito=Carrito.objects.all()
         if request.method=="GET":
-                prod_actual=producto.objects.filter(codigo_productos=prod_add).exists()
-                if prod_actual:
-                    datos_prod=producto.objects.filter(codigo_productos=prod_add).first()
-                    return validar(request, 'venta.html',
-                    {"datos_act":datos_prod, "prod_add":prod_add,"listatabla":listatabla,"listacarrito":listacarrito})
-                else:
-                    return validar(request, "venta.html", 
-                    {"prod_add": prod_add, "listatabla":listatabla,"listacarrito":listacarrito})
-            
-        if request.method=="POST":
-                if prod_add == Carrito.codigo_carrito:
-                    datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
-                    carrito_nuevo=Carrito(carrito_producto = datos_usuario.nombre_productos,
-                    carrito_precio=datos_usuario.precioventa_productos,
-                    carrito_cantidad=1,
-                    codigo_carrito=datos_usuario.codigo_productos
-                    )
-                    carrito_nuevo.save()
-                else:
-                    datos_usuario=producto.objects.filter(codigo_productos=prod_add).first()
-                    prod_actual=Carrito.objects.get(carrito_producto=prod_add),
-                    prod_actual.carrito_cantidad=+1,
-                    prod_actual.carrito_precio=+datos_usuario.precioventa_productos,
-                    prod_actual.carrito=request.POST.get("nombre"),
+            return render(request,'venta.html',{"listatabla":listatabla})
+        if temp==0:
+            temp_nuevo=producto(codigo_productos=request.POST.get('codigo'),
+            nombre_productos=request.POST.get('nombre'),
+            precioventa_productos=request.POST.get('precio'),
+            cantidad_productos=request.POST.get('cantidad'),
+            )
 
-                    prod_actual.save()
-        return redirect("../venta")
     else:
         return redirect("login")
                 
- 
-
-
-# Create your views here.

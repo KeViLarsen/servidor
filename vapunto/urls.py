@@ -28,6 +28,7 @@ urlpatterns = [
     path('retirar_caja/<int:caja_actual>', views.retirar_caja, name="retirar_caja"),
     path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja"),
     path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
-    path('venta', views.agregar, name='venta'),
+    path('compras', views.venta, name='compras'),
+    path('venta', views.venta, name='venta'),
     path('agregar/<int:prod_add>', views.agregar, name="Add")
 ]
