@@ -5119,12 +5119,12 @@ a.badge-dark:focus {
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
-    color: #000;
+    color: white;
     text-shadow: 0 1px 0 #fff;
     opacity: .5
 }
 .close:hover {
-    color: #000;
+    color: red;
     text-decoration: none
 }
 .close:not(:disabled):not(.disabled):focus,
@@ -5138,6 +5138,7 @@ button.close {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none
+    
 }
 a.close.disabled {
     pointer-events: none
@@ -5272,7 +5273,7 @@ a.close.disabled {
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #fff;
+    background-color: black;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: .3rem;

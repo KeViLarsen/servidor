@@ -113,6 +113,7 @@ class Carrito(models.Model):
     carrito_producto=models.CharField(max_length=50)
     carrito_precio=models.IntegerField()
     carrito_cantidad=models.IntegerField()
+    
 
 
 

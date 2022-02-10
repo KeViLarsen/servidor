@@ -16,12 +16,11 @@ function addToCartClicked(event) {
 
   const itemTitle = item.querySelector('.item-title').textContent;
   const itemPrice = item.querySelector('.item-price').textContent;
-  const itemImage = item.querySelector('.item-image').src;
 
-  addItemToShoppingCart(itemTitle, itemPrice, itemImage);
+  addItemToShoppingCart(itemTitle, itemPrice);
 }
 
-function addItemToShoppingCart(itemTitle, itemPrice, itemImage) {
+function addItemToShoppingCart(itemTitle, itemPrice) {
   const elementsTitle = shoppingCartItemsContainer.getElementsByClassName(
     'shoppingCartItemTitle'
   );
@@ -44,7 +43,6 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemImage) {
   <div class="row shoppingCartItem">
         <div class="col-6">
             <div class="shopping-cart-item d-flex align-items-center h-100 border-bottom pb-2 pt-3">
-                <img src=${itemImage} class="shopping-cart-image">
                 <h6 class="shopping-cart-item-title shoppingCartItemTitle text-truncate ml-3 mb-0">${itemTitle}</h6>
             </div>
         </div>
@@ -56,7 +54,7 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemImage) {
         <div class="col-4">
             <div
                 class="shopping-cart-quantity d-flex justify-content-between align-items-center h-100 border-bottom pb-2 pt-3">
-                <input class="shopping-cart-quantity-input shoppingCartItemQuantity" type="number"
+                <input class="shopping-cart-quantity-input shoppingCartItemQuantity  form-control" type="number"
                     value="1">
                 <button class="btn btn-danger buttonDelete" type="button">X</button>
             </div>
@@ -87,7 +85,7 @@ function updateShoppingCartTotal() {
       '.shoppingCartItemPrice'
     );
     const shoppingCartItemPrice = Number(
-      shoppingCartItemPriceElement.textContent.replace('€', '')
+      shoppingCartItemPriceElement.textContent.replace('Gs', '')
     );
     const shoppingCartItemQuantityElement = shoppingCartItem.querySelector(
       '.shoppingCartItemQuantity'
@@ -97,7 +95,7 @@ function updateShoppingCartTotal() {
     );
     total = total + shoppingCartItemPrice * shoppingCartItemQuantity;
   });
-  shoppingCartTotal.innerHTML = `${total.toFixed(2)}€`;
+  shoppingCartTotal.innerHTML = `${total.toFixed(0)}Gs`;
 }
 
 function removeShoppingCartItem(event) {
