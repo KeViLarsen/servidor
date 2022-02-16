@@ -85,7 +85,8 @@ def modproducto(request, prod_actual = 0):
                     categoria_productos=datos_usuario.categoria_productos,
                     cantidad_productos=datos_usuario.cantidad_productos,
                     codigo_productos=datos_usuario.codigo_productos,
-                    nombre_proveedor_id=datos_usuario.nombre_provedor_id)
+                    nombre_proveedor_id=datos_usuario.nombre_proveedor_id,
+                    fecha_productos=request.POST.get('fecha'))
                     producto_nueva.save()
 
                     producto_actual=producto.objects.get(codigo_productos=prod_actual)
