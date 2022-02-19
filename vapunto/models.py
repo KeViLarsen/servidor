@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields.related import ForeignKey
 from django.forms import IntegerField
+from datetime import datetime
 
 # Create your models here.
 
@@ -34,8 +35,8 @@ class Proveedor(models.Model):
 class producto(models.Model):
     codigo_productos=models.IntegerField(primary_key=True)
     nombre_productos= models.CharField(max_length = 50)
-    preciocompra_productos= models.IntegerField()
-    precioventa_productos= models.IntegerField()
+    preciocompra_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    precioventa_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
     fecha_productos=models.DateField()
@@ -64,8 +65,8 @@ class Clientes2(models.Model):
 class producto2(models.Model):
     codigo_productos=models.IntegerField()
     nombre_productos= models.CharField(max_length = 50)
-    preciocompra_productos= models.IntegerField()
-    precioventa_productos= models.IntegerField()
+    preciocompra_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    precioventa_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
     fecha_productos=models.DateField()
@@ -100,21 +101,26 @@ class Caja(models.Model):
     fecha_caja=models.DateField()
     hora_caja=models.TimeField()
     motivo_caja=models.CharField(max_length = 50, null=True)
-    entrada_caja=models.CharField(max_length = 50, null=True)
-    salida_caja=models.CharField(max_length = 50, null=True)
+    entrada_caja=models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    salida_caja=models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     tipo_mov=models.IntegerField(null=True)
-    total_caja=models.CharField(max_length = 50, null=True)
-    nombre_usuario = models.CharField(max_length = 50)
-    codigo_usuario = models.IntegerField()
+    nombre_usuario = models.ForeignKey(Usuariosid ,on_delete=models.CASCADE,null=True)
 
-class Carrito(models.Model):
-    carrito_id=models.IntegerField(primary_key=True)
-    codigo_carrito=models.IntegerField()
-    carrito_producto=models.CharField(max_length=50)
-    carrito_precio=models.IntegerField()
-    carrito_cantidad=models.IntegerField()
-    
+class MethodPay(models.Model):
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
 
+class Sale(models.Model):
+    cli = models.ForeignKey(Clientes, on_delete=models.CASCADE)
+    date_joined = models.DateField(default=datetime.now)
+    pay = models.ForeignKey(MethodPay, on_delete=models.CASCADE, verbose_name="Metodo de Pago")
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
-
+class DetSale(models.Model):
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
+    prod = models.ForeignKey(producto, on_delete=models.CASCADE)
+    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    cant = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name="Cantidad")
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
   
