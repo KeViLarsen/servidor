@@ -1,4 +1,12 @@
+from gettext import translation
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from vapunto.form import SaleForm
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView
 from vapunto.models import *
 from vapunto.models import producto
 from vapunto.models import Caja
@@ -508,3 +516,63 @@ def mod_venta(request,venta_actual=0):
         return redirect("../venta")     
     else:
         return redirect("login")
+
+class SaleCreateView(CreateView):
+    model = Sale
+    form_class = SaleForm
+    template_name = 'venta.html'
+    success_url = reverse_lazy('inicio')
+    url_redirect = success_url
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_products':
+                data = []
+                prods = producto.objects.filter(name__icontains=request.POST['term'])[
+                        0:10]  # limitante, mostrar de 0 a 10 pdtos
+                for i in prods:
+                    item = i.toJSON()
+                    item['value'] = i.name  # lo que se va a presentar
+                    data.append(item)
+                    #Guardado
+            elif action == 'add':
+                #Metodo de control de Django
+                with translation.atomic():#si hay un error no se guarda nada
+                    vents = json.loads(request.POST['vents'])#recuperar el valor
+                    # inserciones
+                    sale = Sale()
+                    sale.date_joined = vents['date_joined']
+                    sale.cli_id = vents['cli']
+                    sale.pay_id = vents['pay']
+                    sale.subtotal = float(vents['subtotal'])
+                    sale.iva = float(vents['iva'])
+                    sale.total = float(vents['total'])
+                    sale.save()
+                    #iteracion de los productos
+                    for i in vents['products']:
+                        det = DetSale()
+                        det.sale_id = sale.id #relacióon con la factura
+                        det.prod_id = i['id'] #relaicón del pdto con su id
+                        det.cant = int(i['cant']) #relación con cantidad
+                        det.price = float(i['pvp']) #el price de detalle se relaciona con pvp de pdto
+                        det.subtotal = float(i['subtotal'])
+                        det.save()
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)  # false para poder serializarse
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Creación de una Venta'
+        context['entity'] = 'Ventas'
+        context['list_url'] = self.success_url
+        context['action'] = 'add'
+        return context
