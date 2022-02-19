@@ -1,3 +1,4 @@
+
 const addToShoppingCartButtons = document.querySelectorAll('.addToCart');
 addToShoppingCartButtons.forEach((addToCartButton) => {
   addToCartButton.addEventListener('click', addToCartClicked);
@@ -16,13 +17,14 @@ function addToCartClicked(event) {
 
   const itemTitle = item.querySelector('.item-title').textContent;
   const itemPrice = item.querySelector('.item-price').textContent;
+  const itemid = item.querySelector('.item-id').textContent;
 
-  addItemToShoppingCart(itemTitle, itemPrice);
+  addItemToShoppingCart(itemTitle, itemPrice, itemid);
 }
 
-function addItemToShoppingCart(itemTitle, itemPrice) {
+function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
   const elementsTitle = shoppingCartItemsContainer.getElementsByClassName(
-    'shoppingCartItemTitle'
+    'shoppingCartItemTitle', 'shoppingCartItemid'
   );
   for (let i = 0; i < elementsTitle.length; i++) {
     if (elementsTitle[i].innerText === itemTitle) {
@@ -33,7 +35,7 @@ function addItemToShoppingCart(itemTitle, itemPrice) {
       );
       elementQuantity.value++;
       $('.toast').toast('show');
-      updateShoppingCartsubTotal();
+      
       updateShoppingCartTotal();
       return;
     }
@@ -42,7 +44,12 @@ function addItemToShoppingCart(itemTitle, itemPrice) {
   const shoppingCartRow = document.createElement('div');
   const shoppingCartContent = `
   <div class="row shoppingCartItem">
-        <div class="col-6">
+        <div class="col-2">
+            <div class="shopping-cart-item d-flex align-items-center h-100 border-bottom pb-2 pt-3">
+                <h6 class="shopping-cart-item-title shoppingCartItemid text-truncate ml-3 mb-0">${itemid} </h6>
+            </div>
+        </div>
+        <div class="col-2">
             <div class="shopping-cart-item d-flex align-items-center h-100 border-bottom pb-2 pt-3">
                 <h6 class="shopping-cart-item-title shoppingCartItemTitle text-truncate ml-3 mb-0">${itemTitle}</h6>
             </div>
@@ -72,33 +79,11 @@ function addItemToShoppingCart(itemTitle, itemPrice) {
     .querySelector('.shoppingCartItemQuantity')
     .addEventListener('change', quantityChanged);
 
-  updateShoppingCartsubTotal();  
+    
   updateShoppingCartTotal();
 }
 
-function updateShoppingCartsubTotal() {
-  let subtotal = 0;
-  const shoppingCartsubTotal = document.querySelector('.shoppingCartsubTotal');
 
-  const shoppingCartItems = document.querySelectorAll('.shoppingCartItem');
-
-  shoppingCartItems.forEach((shoppingCartItem) => {
-    const shoppingCartItemPriceElement = shoppingCartItem.querySelector(
-      '.shoppingCartItemPrice'
-    );
-    const shoppingCartItemPrice = Number(
-      shoppingCartItemPriceElement.textContent.replace('Gs', '')
-    );
-    const shoppingCartItemQuantityElement = shoppingCartItem.querySelector(
-      '.shoppingCartItemQuantity'
-    );
-    const shoppingCartItemQuantity = Number(
-      shoppingCartItemQuantityElement.value
-    );
-    subtotal = subtotal + shoppingCartItemPrice * shoppingCartItemQuantity;
-  });
-  shoppingCartsubTotal.innerHTML = `${subtotal.toFixed(0)} Gs`;
-}
 
 
 function updateShoppingCartTotal() {
@@ -129,19 +114,19 @@ function updateShoppingCartTotal() {
 function removeShoppingCartItem(event) {
   const buttonClicked = event.target;
   buttonClicked.closest('.shoppingCartItem').remove();
-  updateShoppingCartsubTotal();
+  
   updateShoppingCartTotal();
 }
 
 function quantityChanged(event) {
   const input = event.target;
   input.value <= 0 ? (input.value = 1) : null;
-  updateShoppingCartsubTotal();
+  
   updateShoppingCartTotal();
 }
 
 function comprarButtonClicked() {
   shoppingCartItemsContainer.innerHTML = '';
-  updateShoppingCartsubTotal();
+  
   updateShoppingCartTotal();
 }

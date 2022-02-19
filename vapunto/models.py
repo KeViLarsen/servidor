@@ -1,9 +1,8 @@
-from pickle import TRUE
-from pyexpat import model
+
 from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields.related import ForeignKey
-from django.forms import IntegerField
+
 from datetime import datetime
 
 # Create your models here.
@@ -36,7 +35,7 @@ class producto(models.Model):
     codigo_productos=models.IntegerField(primary_key=True)
     nombre_productos= models.CharField(max_length = 50)
     preciocompra_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    precioventa_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    precioventa_productos= models.IntegerField()
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
     fecha_productos=models.DateField()
@@ -52,7 +51,7 @@ class Clientes(models.Model):
     ciudad = models.ForeignKey(Ciudad ,on_delete=models.CASCADE,null=True)
 
 class Clientes2(models.Model):
-    codigo_cliente = IntegerField()
+    codigo_cliente = models.IntegerField()
     ruc_cliente = models.CharField(max_length = 50)
     nombre_cliente = models.CharField(max_length = 50)
     apellido_cliente = models.CharField(max_length = 50)
@@ -112,6 +111,7 @@ class MethodPay(models.Model):
 class Sale(models.Model):
     cli = models.ForeignKey(Clientes, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
+    codigo_productos = models.ForeignKey(producto, on_delete=models.CASCADE)
     pay = models.ForeignKey(MethodPay, on_delete=models.CASCADE, verbose_name="Metodo de Pago")
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
