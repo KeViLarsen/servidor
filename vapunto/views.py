@@ -1,5 +1,3 @@
-from collections import namedtuple
-from ssl import AlertDescription
 from django.shortcuts import render, redirect
 from vapunto.models import *
 from vapunto.models import producto
@@ -484,18 +482,3 @@ def venta(request):
     else:
         return redirect("login")
 
-def agregar(request, temp=0):
-    if request.session.get("codigo_usuario"):
-        listatabla=producto.objects.all()
-        if request.method=="GET":
-            return render(request,'venta.html',{"listatabla":listatabla})
-        if temp==0:
-            temp_nuevo=producto(codigo_productos=request.POST.get('codigo'),
-            nombre_productos=request.POST.get('nombre'),
-            precioventa_productos=request.POST.get('precio'),
-            cantidad_productos=request.POST.get('cantidad'),
-            )
-
-    else:
-        return redirect("login")
-                
