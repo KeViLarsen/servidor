@@ -199,6 +199,7 @@ def modcliente(request, cli_actual = 0):
                 ruc_cliente=datos_usuario.ruc_cliente,
                 codigo_usuario=request.session.get("codigo_usuario"),
                 nombre_usuario=request.session.get("nombre_completo_usuario"),
+                codigo_cliente=datos_usuario.codigo_cliente,
                 apellido_cliente=datos_usuario.apellido_cliente,
                 telefono_cliente=datos_usuario.telefono_cliente,
                 nacionalidad=datos_usuario.nacionalidad,
@@ -364,11 +365,11 @@ def modciudad(request, ciu_actual = 0):
 
         if request.method=="POST":
             if ciu_actual==0:
-                pais_nuevo=Ciudad(codigo_ciudad=request.POST.get('codigo'),
+                ciudad_nuevo=Ciudad(codigo_ciudad=request.POST.get('codigo'),
                 ciudad=request.POST.get("nombre")
                         
                 )
-                pais_nuevo.save()
+                ciudad_nuevo.save()
             else:
                 datos_usuario=Ciudad.objects.filter(codigo_ciudad=ciu_actual).first()
                 ciudad_nueva=Ciudad2(ciudad = datos_usuario.ciudad,
@@ -493,18 +494,15 @@ def mod_venta(request,venta_actual=0):
         if request.method=="POST":
             if venta_actual==0:
                 venta_nueva=Sale(id=request.POST.get('codigo_venta'),
-                    codigo_productos=request.POST.get('codigo_productos'),
-                    nombre_productos=request.POST.get('nombre_productos'),
-                    precioventa_productos=request.POST.get('precioventa_productos'),
-                    cantidad_productos=request.POST.get('cantidad_productos'),
-                    total=request.POST.get('resultado'),
-                    codigo_cliente=request.POST.get('codigo_cli'))
+                    codigo_productos=request.POST.get('codigo'),
+                    total=request.POST.get('resultado'))
                 venta_nueva.save()
 
-                request.POST.get('cantidad_productos')
-                stock_actual=producto.objects.get(codigo_productos=request.POST.get('codigo_productos'))
-                stock_actual.cantidad_productos=stock_actual.cantidad_productos - int(request.POST.get('cantidad_productos'))
-                stock_actual.save()
+                detventa=DetSale(sale=request.POST.get('codigo_venta'),
+                price=request.POST.get('precio'),
+                cant=request.POST.get('canti')
+                )
+                detventa.save()
         return redirect("../venta")     
     else:
         return redirect("login")
