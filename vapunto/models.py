@@ -5,6 +5,8 @@ from django.db.models.fields.related import ForeignKey
 
 from datetime import datetime
 
+from django.forms import IntegerField
+
 # Create your models here.
 
    
@@ -108,12 +110,21 @@ class Caja(models.Model):
 class MethodPay(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
 
+
 class Sale(models.Model):
+    sale_id = models.IntegerField(primary_key=True)
+    cli = models.ForeignKey(Clientes ,on_delete=models.CASCADE,null=True)
     date_joined = models.DateField(default=datetime.now)
-    codigo_productos = models.IntegerField()
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+
+class Order (models.Model):
+    order_id = models.IntegerField(primary_key=True)
+    sale_id = models.ForeignKey(Sale ,on_delete=models.CASCADE,null=True)
+    codigo_producto = models.IntegerField()
+    precio = models.IntegerField()
+    cantidad = models.IntegerField()
 
 class DetSale(models.Model):
     sale = models.IntegerField()

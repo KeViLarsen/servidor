@@ -486,23 +486,20 @@ def venta(request):
 def mod_venta(request,venta_actual=0):
     if request.session.get("codigo_usuario"):
         listasale=Sale.objects.all()
+        listaorder=Order.objects.all()
         listatabla=producto.objects.all()
         listacliente=Clientes.objects.all()
         if request.method=="GET":
-            return validar(request, "venta.html",{"listacliente":listacliente,"listasale":listasale,"listatabla":listatabla})
+            return validar(request, "venta.html",{"listaorder":listaorder,"listacliente":listacliente,"listasale":listasale,"listatabla":listatabla})
             
         if request.method=="POST":
             if venta_actual==0:
-                venta_nueva=Sale(id=request.POST.get('codigo_venta'),
+                venta_nueva=Order(order_id=request.POST.get('venta_actual'),
                     codigo_productos=request.POST.get('codigo'),
-                    total=request.POST.get('resultado'))
+                    precio=request.POST.get('precio'),
+                    cantidad=request.POST.get('cant'))
                 venta_nueva.save()
 
-                detventa=DetSale(sale=request.POST.get('codigo_venta'),
-                price=request.POST.get('precio'),
-                cant=request.POST.get('canti')
-                )
-                detventa.save()
         return redirect("../venta")     
     else:
         return redirect("login")
