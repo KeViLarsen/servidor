@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from vapunto.form import SaleForm
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from vapunto.models import *
 from vapunto.models import producto
 from vapunto.models import Caja
@@ -576,3 +576,6 @@ class SaleCreateView(CreateView):
         context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
+
+
+
