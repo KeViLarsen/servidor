@@ -122,6 +122,7 @@ class Sale(models.Model):
 
 class Order (models.Model):
     order_id = models.AutoField(primary_key=True)
+    orden = models.IntegerField()
     sale_id = models.ForeignKey(Sale ,on_delete=models.CASCADE,null=True)
     codigo_producto = models.IntegerField()
     precio = models.IntegerField()

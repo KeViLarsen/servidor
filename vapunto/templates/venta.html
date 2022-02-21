@@ -125,12 +125,13 @@
                     </div>
                   </div>
                 </div>
-                <form action="{% url 'venta' parameters.orden_actual%}" method="post">
+                <form class="venta" action="{% url 'venta' 0 %}" id="formCliente" method="POST">
                   {% csrf_token %}
                   <input type="text" id="resultado" name="resultado" value="resultado" >
                   <input type="text" id="codigo" name="codigo" value="codigo">
                   <input type="text" id="precio" name="precio" value="precio" >
                   <input type="text" id="canti" name="canti" value="canti">
+                  
                   <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
                     Finalizar compra
                   </button>
