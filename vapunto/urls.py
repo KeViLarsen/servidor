@@ -28,6 +28,7 @@ urlpatterns = [
     path('retirar_caja/<int:caja_actual>', views.retirar_caja, name="retirar_caja"),
     path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja"),
     path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
+    path('Auditoria', views.audirep, name='Auditoria'),
     path('compras', views.venta, name='compras'),
     path('venta/<int:orden_actual>', views.mod_venta, name='venta')
 ]
