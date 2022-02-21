@@ -120,7 +120,7 @@ class Sale(models.Model):
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
 class Order (models.Model):
-    order_id = models.IntegerField(primary_key=True)
+    order_id = models.AutoField(primary_key=True)
     sale_id = models.ForeignKey(Sale ,on_delete=models.CASCADE,null=True)
     codigo_producto = models.IntegerField()
     precio = models.IntegerField()

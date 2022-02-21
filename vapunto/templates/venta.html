@@ -31,7 +31,7 @@
   <div class="row">
       <div class="col-12 col-lg-6 col-xl-6">
         <div class="card">
-          {% csrf_token %}
+          
           <div class="item">
             <section class="store">
               <div class="card-header">Productos
@@ -125,13 +125,12 @@
                     </div>
                   </div>
                 </div>
-                <form action="" method="POST" class="form" id="vender">
+                <form action="{% url 'venta' parameters.orden_actual%}" method="post">
                   {% csrf_token %}
-            
-                  <input type="text" id="resultado" name="resultado" >
-                  <input type="text" id="codigo" name="codigo" >
-                  <input type="text" id="precio" name="precio" >
-                  <input type="text" id="canti" name="canti" >
+                  <input type="text" id="resultado" name="resultado" value="resultado" >
+                  <input type="text" id="codigo" name="codigo" value="codigo">
+                  <input type="text" id="precio" name="precio" value="precio" >
+                  <input type="text" id="canti" name="canti" value="canti">
                   <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
                     Finalizar compra
                   </button>
