@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 from gettext import translation
 import json
 from django.http import JsonResponse
