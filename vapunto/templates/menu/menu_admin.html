@@ -42,7 +42,14 @@
   </li>
 
   <li>
-    <a href="{%url 'venta' %}">
+    <a href="{%url 'compras' %}">
+      <i class="fas fa-truck-moving"></i>
+      <span>Compras</span>
+    </a>
+  </li>
+  
+  <li>
+    <a href="{%url 'venta' 0 %}">
       <i class="fas fa-cart-arrow-down"></i>
       <span>Ventas</span>
     </a>
@@ -51,7 +58,7 @@
   <li>
     <a href="{% url 'movimiento_caja' %}">
       <i class="fas fa-money-bill-wave"></i>
-      <span>Caja</span>
+      <span>Fondos</span>
     </a>
   </li>
 

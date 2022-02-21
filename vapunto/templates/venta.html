@@ -5,97 +5,222 @@
 {%load static%}
 
 
+
 <div class="comtainer-fluid">
   <div class="col-12 col-lg-12 col-xl-12">
     <div class="card">
-      <div class="card-header">Cliente
-        <div class="forma">
-          <div>
-            <label for="ingresar-nombre">RUC de cliente </label>
-            <input type="text" class="form-control" onfocusout="traerCliente(this)">
-          </div>
-          <div class="clientept">
-            <label for="ingresar-nombre" id="nombre_cliente">Nombre del Cliente: </label>
+      
+     
+        <div class="card-header">Cliente
+          <div class="forma">
+            <div>
+              <label for="ingresar-nombre">RUC de cliente </label>
+              <input type="text" class="form-control" onfocusout="traerCliente(this)">
+            </div>
+            <div class="clientept">
+              <label for="ingresar-nombre" id="nombre_cliente">Nombre del Cliente: </label>
+            </div>
           </div>
         </div>
-      </div>
+      
     </div>
   </div>
 </div>
 <!--End topbar header-->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">Productos
-          <div class="table-responsive">
-            <table class="table" id="datos">
-              <thead>
-                <tr>
-                  <th>Codigo</th>
-                  <th>Nombre</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for lista in parameters.listatabla %}
-                <tr>
-                  <td>{{ lista.codigo_productos }}</td>
-                  <td>{{ lista.nombre_productos }}</td>
-                  <td>{{ lista.precioventa_productos }}</td>
-                  <td><input id="number" type="number" value="0" style="width: 5em;" class="form-control"></td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+      <div class="col-12 col-lg-6 col-xl-6">
+        <div class="card">
+          
+          <div class="item">
+            <section class="store">
+              <div class="card-header">Productos
+                <div class="table-responsive">
+                  <table class="table" id="item">
+                    <thead>
+                      <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Agregar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for lista in parameters.listatabla %}
+                      <tr class="item">
+                        <td class="item-id">{{ lista.codigo_productos }}</td>
+                        <td class="item-title">{{ lista.nombre_productos }}</td>
+                        <td class="item-price">{{ lista.precioventa_productos }}</td>
+                        <td>{{ lista.cantidad_productos }}</td>
+                        <td><a data-toggle="tooltip" data-original-title="Agregar" type="button"
+                            class="item-button btn btn-primary addToCart">
+                            <i class="fas fa-plus-square"></i>
+                          </a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
-    </div>
+      
+        <div class="col-12 col-lg-6 col-xl-6">
+          <div class="card">
+            <section class="shopping-cart">
+              <div class="container">
+                <h1 class="text-center">Carrito</h1>
+                <hr>
+                <div class="row">
+                  <div class="col-2">
+                    <div class="shopping-cart-header">
+                      <h6>Id</h6>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="shopping-cart-header">
+                      <h6>Producto</h6>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="shopping-cart-header">
+                      <h6 class="text-truncate">Precio</h6>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="shopping-cart-header">
+                      <h6>Cantidad</h6>
+                    </div>
+                  </div>
+                </div>
+                <!-- ? START SHOPPING CART ITEMS -->
+                <div class="shopping-cart-items shoppingCartItemsContainer">
+                </div>
+                <!-- ? END SHOPPING CART ITEMS -->
 
-    <div class="col-12 col-lg-6 col-xl-6">
-      <div class="card">
-        <div class="card-header">Carrito
-          <div class="card-action">
+                <!-- START TOTAL -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="shopping-cart-total d-flex align-items-center">
+                      <p class="ml-2 mb-0">Total</p>
+                      <p class="ml-4 mb-0 shoppingCartTotal">0 GS</p>
+                      <div class="toast ml-auto bg-info" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="2000">
+                        <div class="toast-header">
+                          <span>✅</span>
+                          <strong class="mr-auto ml-1 text-secondary">Elemento en el carrito</strong>
+                          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="toast-body text-white">
+                          Se aumentó correctamente la cantidad
+                        </div>
+                      </div>
+                      <button class="btn btn-success ml-auto comprarButton" type="sumit" data-toggle="modal"
+                        data-target="#comprarModal">Comprar</button>
+                    </div>
+                  </div>
+                </div>
+                <form action="{% url 'venta' parameters.orden_actual%}" method="post">
+                  {% csrf_token %}
+                  <input type="text" id="resultado" name="resultado" value="resultado" >
+                  <input type="text" id="codigo" name="codigo" value="codigo">
+                  <input type="text" id="precio" name="precio" value="precio" >
+                  <input type="text" id="canti" name="canti" value="canti">
+                  <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
+                    Finalizar compra
+                  </button>
+                </form>
+              
+              <!-- END TOTAL -->
+
+              <!-- START MODAL COMPRA -->
+              <div class="modal fade" id="comprarModal" tabindex="-1" class="aria-modal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered ">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="comprarModalLabel">Gracias por su compra</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Pronto recibirá su pedido</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END MODAL COMPRA -->
 
 
+            </div>
 
+          </section>
 
-          </div>
         </div>
       </div>
-    </div>
+   
   </div>
-</div>
 </div>
 <!--End wrapper-->
 
 </body>
 <script>
   function traerCliente(event) { //event es el input donde se carga el valor
-      var flag = false
-      var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
-      {% for cliente in parameters.listacliente %}
-          var r_cliente = "{{cliente.ruc_cliente}}"   //se trae cedula del cliente
+    var flag = false
+    var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
+    {% for cliente in parameters.listacliente %}
+    var r_cliente = "{{cliente.ruc_cliente}}"   //se trae cedula del cliente
 
-          if(event.value == r_cliente) { //se compara si las cedulas de la base de datos coincide con el del input
-              nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}} {{cliente.apellido_cliente}}"   //si coincide se carga el nombre al label
-              flag = true
-          }
+    if (event.value == r_cliente) { //se compara si las cedulas de la base de datos coincide con el del input
+      nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}} {{cliente.apellido_cliente}}"   //si coincide se carga el nombre al label
+      flag = true
+    }
 
-          if(!flag) {
-              nCliente.innerHTML = "Nombre del Cliente: No existe ese cliente"//si coincide se muestra el mensaje en el label
-          }
-      {% endfor %}
+    if (!flag) {
+      nCliente.innerHTML = "Nombre del Cliente: No existe ese cliente"//si coincide se muestra el mensaje en el label
+    }
+    {% endfor %}
 
-      if(event.value == '') { //si el input esta vacio el label se vaciara tambien
-          nCliente.innerHTML = "Nombre del Cliente:  "
-      }
+    if (event.value == '') { //si el input esta vacio el label se vaciara tambien
+      nCliente.innerHTML = "Nombre del Cliente:  "
+    }
   }
 </script>
 {%endblock%}
 
 {%block extra%}
+<script>
+  $(document).ready(function () {
+    $('#item').DataTable({
+      "language": {
+        "emptyTable": "No existen registros a exponer.",
+        "info": "",
+        "infoEmpty": "",
+        "infoFiltered": "",
+        "infoPostFix": "",
+        "thousands": ".",
+        "lengthMenu": "Registros a mostrar _MENU_",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "No se obtuvo ninguna coincidencia",
+        oPaginate: {
+          sNext: '<i class="fas fa-arrow-circle-right"></i>',
+          sPrevious: '<i class="fas fa-arrow-alt-circle-left"></i>',
+          sFirst: '<i class="fa fa-step-backward"></i>',
+          sLast: '<i class="fa fa-step-forward"></i>'
+        }
+      }
+    });
+  });
+</script>
 
 {%endblock%}

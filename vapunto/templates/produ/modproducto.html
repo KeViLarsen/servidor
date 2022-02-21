@@ -40,11 +40,18 @@
             <input type="text" class="form-control" id="formGroupExampleInput5" name='cantidad'
               value="{{ parameters.datos_act.cantidad_productos }}">
 
-            <div class="form-group form-default mb-3">
-                <label class="float-label">Fecha de Creacion</label>
-               
-                <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_productos}}">
-            </div>
+              <label for="Seleccionar-Nacionalidad">Seleccionar Proveedor</label>
+              <select class="custom-select custom-select-sm form-control form-control-sm" name='proveedor'>
+                {%for prov in parameters.listaproveedor%}
+                <option value="{{prov.codigo_proveedor}}" {%if parameters.datos_act.nombre_proveedor_id == prov.codigo_proveedor %} selected {%endif%} >
+                  {{prov.nombre_proveedor}}
+                </option>
+                {%endfor%}
+              </select>
+
+          
+                <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_productos}}" style="display: none;">
+           
 
           </div>
 
