@@ -8,7 +8,6 @@ urlpatterns = [
     path('modproducto/<int:prod_actual>', views.modproducto, name="modproducto"),
     path('borrproducto/<int:prod_actual>', views.borrproducto, name="borrproducto"),
     path('tabla', views.tabla, name='tabla'),
-    path('venta', views.venta, name='venta'),
     path('salir', views.salir, name='salir'),
     path('verusuario', views.verusuario, name='verusuario'),
     path('modusuario/<int:usu_actual>',  views.modusuario, name='modusuario'),
@@ -25,12 +24,18 @@ urlpatterns = [
     path('ciudad', views.ciudad, name='ciudad'),
     path('modciudad/<int:ciu_actual>', views.modciudad, name="modciudad"),
     path('borciudad/<int:ciu_actual>', views.borciudad, name="borciudad"),
-    path('movimiento_caja', views.vercaja, name='movimiento_caja'),
+    path('movimiento_caja', views.cerrar_caja, name='movimiento_caja'),
     path('retirar_caja/<int:caja_actual>', views.retirar_caja, name="retirar_caja"),
     path('abrir_caja/<int:caja_actual>', views.abrir_caja, name="abrir_caja"),
+<<<<<<< HEAD
     path('agregar/<int:codigo_productos>', views.agregar_producto, name="Add"),
     path('eliminar/<int:codigo_productos>', views.eliminar_producto, name="Del"),
     path('restar/<int:codigo_productos>', views.restar_producto, name="Sub"),
     path('limpiar/', views.limpiar_carrito, name="CLS"),
 
+=======
+    path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
+    path('compras', views.venta, name='compras'),
+    path('venta', views.mod_venta, name='venta')
+>>>>>>> estilo2venta
 ]

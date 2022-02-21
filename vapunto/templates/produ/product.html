@@ -24,6 +24,7 @@
               <th>Precio/venta</th>
               <th>Categoria</th>
               <th>Cantidad</th>
+              <th>Proveedor</th>
               <th>Fecha</th>
               <th>Acciones</th>
             </tr>
@@ -37,6 +38,11 @@
               <td>{{ lista.precioventa_productos }}</td>
               <td>{{ lista.categoria_productos }}</td>
               <td>{{ lista.cantidad_productos }}</td>
+              {% for prov in parameters.listaproveedor %}
+              {% if prov.codigo_proveedor == lista.nombre_proveedor_id %}
+              <td>{{ prov.nombre_proveedor }}</td>
+              {%endif%}
+              {%endfor%}
               <td>{{ lista.fecha_productos }}</td>
               <td data-sortable="" style="width:11.125%;"><a href="{% url 'modproducto' lista.codigo_productos %}"
                   data-toggle="tooltip" data-original-title="Editar producto">
