@@ -36,6 +36,10 @@ urlpatterns = [
 =======
     path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
     path('compras', views.venta, name='compras'),
+<<<<<<< HEAD
     path('venta', views.mod_venta, name='venta')
 >>>>>>> estilo2venta
+=======
+    path('venta/<int:orden_actual>', views.mod_venta, name='venta')
+>>>>>>> venta_test
 ]

@@ -62,7 +62,7 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
         <div class="col-4">
             <div
                 class="shopping-cart-quantity d-flex justify-content-between align-items-center h-100 border-bottom pb-2 pt-3">
-                <input class="shopping-cart-quantity-input shoppingCartItemQuantity  form-control" type="number"
+                <input class="shopping-cart-quantity-input shoppingCartItemQuantity  form-control" type="number" id="cant"
                     value="1">
                 <button class="btn btn-danger buttonDelete" type="button">X</button>
             </div>
@@ -70,6 +70,9 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
     </div>`;
   shoppingCartRow.innerHTML = shoppingCartContent;
   shoppingCartItemsContainer.append(shoppingCartRow);
+  document.getElementById("codigo").value = itemid;
+  document.getElementById("precio").value = itemPrice;
+
 
   shoppingCartRow
     .querySelector('.buttonDelete')
@@ -82,9 +85,6 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
     
   updateShoppingCartTotal();
 }
-
-
-
 
 function updateShoppingCartTotal() {
   let total = 0;
@@ -106,8 +106,11 @@ function updateShoppingCartTotal() {
       shoppingCartItemQuantityElement.value
     );
     total = total + shoppingCartItemPrice * shoppingCartItemQuantity ;
+    document.getElementById("canti").value = shoppingCartItemQuantity;
   });
   shoppingCartTotal.innerHTML = `${total.toFixed(0)} Gs`;
+  document.getElementById("resultado").value = total.toFixed(0)
+  
 }
 
 
