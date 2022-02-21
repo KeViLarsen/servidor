@@ -492,7 +492,6 @@ def mod_venta(request,orden_actual=0):
             return validar(request, "venta.html",{"listaorder":listaorder,"listacliente":listacliente,"listatabla":listatabla})
         if request.method=="POST":
             if orden_actual==0:
-                if Order
                 venta_nueva=Order(order_id=request.POST.get('orden_actual'),
                     codigo_producto=request.POST.get('codigo'),
                     precio=request.POST.get('precio'),
