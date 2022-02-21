@@ -427,7 +427,7 @@ def abrir_caja(request, caja_actual=0):
                     codigo_usuario=request.session.get("codigo_usuario"),
                     nombre_usuario=request.session.get("nombre_completo_usuario"))
                     caja_nuevo.save()
-            return redirect("../movimiento_caja")
+        return redirect("../movimiento_caja")
     else:
         return redirect("login")
 
@@ -458,7 +458,7 @@ def cerrar_caja(request,caja_actual=0):
         listacaja=Caja.objects.all()
         if request.method=="GET":
             return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
-        if request.method=="POST":
+        if request.method == "POST":
             if caja_actual==0:
                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
                 motivo_caja=request.POST.get('motivo_caja'),

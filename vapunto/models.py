@@ -5,7 +5,6 @@ from django.db.models.fields.related import ForeignKey
 
 from datetime import datetime
 
-from django.forms import IntegerField
 
 # Create your models here.
 
@@ -102,10 +101,12 @@ class Caja(models.Model):
     fecha_caja=models.DateField()
     hora_caja=models.TimeField()
     motivo_caja=models.CharField(max_length = 50, null=True)
-    entrada_caja=models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    salida_caja=models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    entrada_caja=models.CharField(max_length = 50, null=True)
+    salida_caja=models.CharField(max_length = 50, null=True)
     tipo_mov=models.IntegerField(null=True)
-    nombre_usuario = models.ForeignKey(Usuariosid ,on_delete=models.CASCADE,null=True)
+    total_caja = models.IntegerField(null=True)
+    codigo_usuario = models.IntegerField()
+    nombre_usuario = models.CharField(max_length = 50)
 
 class MethodPay(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
