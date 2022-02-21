@@ -1,12 +1,4 @@
-from gettext import translation
-import json
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from vapunto.form import SaleForm
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, ListView
 from vapunto.models import *
 from vapunto.models import producto
 from vapunto.models import Caja
@@ -207,6 +199,7 @@ def modcliente(request, cli_actual = 0):
                 ruc_cliente=datos_usuario.ruc_cliente,
                 codigo_usuario=request.session.get("codigo_usuario"),
                 nombre_usuario=request.session.get("nombre_completo_usuario"),
+                codigo_cliente=datos_usuario.codigo_cliente,
                 apellido_cliente=datos_usuario.apellido_cliente,
                 telefono_cliente=datos_usuario.telefono_cliente,
                 nacionalidad=datos_usuario.nacionalidad,
@@ -372,11 +365,11 @@ def modciudad(request, ciu_actual = 0):
 
         if request.method=="POST":
             if ciu_actual==0:
-                pais_nuevo=Ciudad(codigo_ciudad=request.POST.get('codigo'),
+                ciudad_nuevo=Ciudad(codigo_ciudad=request.POST.get('codigo'),
                 ciudad=request.POST.get("nombre")
                         
                 )
-                pais_nuevo.save()
+                ciudad_nuevo.save()
             else:
                 datos_usuario=Ciudad.objects.filter(codigo_ciudad=ciu_actual).first()
                 ciudad_nueva=Ciudad2(ciudad = datos_usuario.ciudad,
@@ -434,7 +427,7 @@ def abrir_caja(request, caja_actual=0):
                     codigo_usuario=request.session.get("codigo_usuario"),
                     nombre_usuario=request.session.get("nombre_completo_usuario"))
                     caja_nuevo.save()
-            return redirect("../movimiento_caja")
+        return redirect("../movimiento_caja")
     else:
         return redirect("login")
 
@@ -465,7 +458,7 @@ def cerrar_caja(request,caja_actual=0):
         listacaja=Caja.objects.all()
         if request.method=="GET":
             return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
-        if request.method=="POST":
+        if request.method == "POST":
             if caja_actual==0:
                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
                 motivo_caja=request.POST.get('motivo_caja'),
@@ -490,92 +483,21 @@ def venta(request):
     else:
         return redirect("login")
 
-def mod_venta(request,venta_actual=0):
+def mod_venta(request,orden_actual=0):
     if request.session.get("codigo_usuario"):
-        listasale=Sale.objects.all()
+        listaorder=Order.objects.all()
         listatabla=producto.objects.all()
         listacliente=Clientes.objects.all()
         if request.method=="GET":
-            return validar(request, "venta.html",{"listacliente":listacliente,"listasale":listasale,"listatabla":listatabla})
-            
+            return validar(request, "venta.html",{"listaorder":listaorder,"listacliente":listacliente,"listatabla":listatabla})
         if request.method=="POST":
-            if venta_actual==0:
-                venta_nueva=Sale(id=request.POST.get('codigo_venta'),
-                    codigo_productos=request.POST.get('codigo_productos'),
-                    nombre_productos=request.POST.get('nombre_productos'),
-                    precioventa_productos=request.POST.get('precioventa_productos'),
-                    cantidad_productos=request.POST.get('cantidad_productos'),
-                    total=request.POST.get('resultado'),
-                    codigo_cliente=request.POST.get('codigo_cli'))
+            if orden_actual==0:
+                venta_nueva=Order(order_id=request.POST.get('orden_actual'),
+                    codigo_producto=request.POST.get('codigo'),
+                    precio=request.POST.get('precio'),
+                    cantidad=request.POST.get('canti'))
                 venta_nueva.save()
 
-                request.POST.get('cantidad_productos')
-                stock_actual=producto.objects.get(codigo_productos=request.POST.get('codigo_productos'))
-                stock_actual.cantidad_productos=stock_actual.cantidad_productos - int(request.POST.get('cantidad_productos'))
-                stock_actual.save()
-        return redirect("../venta")     
+        return redirect("../venta/0")     
     else:
         return redirect("login")
-
-class SaleCreateView(CreateView):
-    model = Sale
-    form_class = SaleForm
-    template_name = 'venta.html'
-    success_url = reverse_lazy('inicio')
-    url_redirect = success_url
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        data = {}
-        try:
-            action = request.POST['action']
-            if action == 'search_products':
-                data = []
-                prods = producto.objects.filter(name__icontains=request.POST['term'])[
-                        0:10]  # limitante, mostrar de 0 a 10 pdtos
-                for i in prods:
-                    item = i.toJSON()
-                    item['value'] = i.name  # lo que se va a presentar
-                    data.append(item)
-                    #Guardado
-            elif action == 'add':
-                #Metodo de control de Django
-                with translation.atomic():#si hay un error no se guarda nada
-                    vents = json.loads(request.POST['vents'])#recuperar el valor
-                    # inserciones
-                    sale = Sale()
-                    sale.date_joined = vents['date_joined']
-                    sale.cli_id = vents['cli']
-                    sale.pay_id = vents['pay']
-                    sale.subtotal = float(vents['subtotal'])
-                    sale.iva = float(vents['iva'])
-                    sale.total = float(vents['total'])
-                    sale.save()
-                    #iteracion de los productos
-                    for i in vents['products']:
-                        det = DetSale()
-                        det.sale_id = sale.id #relacióon con la factura
-                        det.prod_id = i['id'] #relaicón del pdto con su id
-                        det.cant = int(i['cant']) #relación con cantidad
-                        det.price = float(i['pvp']) #el price de detalle se relaciona con pvp de pdto
-                        det.subtotal = float(i['subtotal'])
-                        det.save()
-            else:
-                data['error'] = 'No ha ingresado a ninguna opción'
-        except Exception as e:
-            data['error'] = str(e)
-        return JsonResponse(data, safe=False)  # false para poder serializarse
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación de una Venta'
-        context['entity'] = 'Ventas'
-        context['list_url'] = self.success_url
-        context['action'] = 'add'
-        return context
-
-
-
