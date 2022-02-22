@@ -50,6 +50,7 @@ def product(request):
 
 def modproducto(request, prod_actual = 0):
     listaproveedor=Proveedor.objects.all()
+    listatabla=producto.objects.all()
     if request.session.get("codigo_usuario"):
             if request.method=="GET":
                 producto_actual=producto.objects.filter(codigo_productos=prod_actual).exists()
@@ -57,9 +58,9 @@ def modproducto(request, prod_actual = 0):
                     datos_producto=producto.objects.filter(codigo_productos=prod_actual).first()
                     datos_producto.fecha_productos=str(datos_producto.fecha_productos)
                     return validar(request, 'produ/modproducto.html',
-                    {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto","listaproveedor":listaproveedor})
+                    {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto","listaproveedor":listaproveedor,"listatabla":listatabla})
                 else:
-                    return validar(request, "produ/modproducto.html", {"titulo_f":"Cargar nuevo Producto","prod_actual": prod_actual,"listaproveedor":listaproveedor})
+                    return validar(request, "produ/modproducto.html", {"titulo_f":"Nuevo Producto","prod_actual": prod_actual,"listaproveedor":listaproveedor,"listatabla":listatabla})
 
             if request.method=="POST":
                 if prod_actual==0:
@@ -453,6 +454,29 @@ def retirar_caja(request, caja_actual=0):
     else:
         return redirect("login")
 
+# def cerrar_caja(request,caja_actual=0):
+#     if request.session.get("codigo_usuario"):
+#         listacaja=Caja.objects.all()
+#         if request.method=="GET":
+#             return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
+#         if request.method == "POST":
+#             if caja_actual==0:
+#                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+#                 motivo_caja=request.POST.get('motivo_caja'),
+#                 fecha_caja=request.POST.get('fecha'),
+#                 hora_caja=request.POST.get('hora_caja'),
+#                 entrada_caja=request.POST.get('entrada_caja'),
+#                 tipo_mov=request.POST.get('tipo_mov'),
+#                 salida_caja=request.POST.get('salida_caja'),
+#                 codigo_usuario=request.session.get("codigo_usuario"),
+#                 nombre_usuario=request.session.get("nombre_completo_usuario"),
+#                 total_caja=request.POST.get('total_caja'))
+#                 caja_nuevo.save()
+                
+                
+#         return redirect("../movimiento_caja")
+#     else:
+#         return redirect("login")
 def cerrar_caja(request,caja_actual=0):
     if request.session.get("codigo_usuario"):
         listacaja=Caja.objects.all()
@@ -467,13 +491,29 @@ def cerrar_caja(request,caja_actual=0):
                 entrada_caja=request.POST.get('entrada_caja'),
                 tipo_mov=request.POST.get('tipo_mov'),
                 salida_caja=request.POST.get('salida_caja'),
-                total_caja=request.POST.get('total_caja'),
                 codigo_usuario=request.session.get("codigo_usuario"),
-                nombre_usuario=request.session.get("nombre_completo_usuario"))
+                nombre_usuario=request.session.get("nombre_completo_usuario"),
+                total_caja=request.POST.get('total_caja'))
                 caja_nuevo.save()
+                
+                
         return redirect("../movimiento_caja")
     else:
         return redirect("login")
+        
+def audirep(request):
+    if request.session.get("codigo_usuario"):
+        listatabla=producto2.objects.all()
+        listacliente=Clientes2.objects.all()
+        listaprove=Proveedor.objects.all()
+        listaprove2=Proveedor2.objects.all()
+        listaciu=Ciudad.objects.all()
+        listapai=Nacionalidad.objects.all()
+        listaciu2=Ciudad2.objects.all()
+        listapai2=Nacionalidad2.objects.all()
+        return validar(request,'Auditoria.html',{"listatabla":listatabla,"listacliente":listacliente,"listaprove":listaprove,"listaprove2":listaprove2,"listaciu":listaciu,"listapai":listapai,"listaciu2":listaciu2,"listapai2":listapai2})
+    else:
+        return redirect("login")     
 
 def venta(request):
     if request.session.get("codigo_usuario"):

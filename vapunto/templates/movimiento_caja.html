@@ -20,15 +20,15 @@
                 data-toggle="tooltip" data-original-title="Retiro de caja">
                     <i>Retiro de Caja </i>
                 </a>
-                    <form class="cerrar-caja-input" action="{% url 'cerrar_caja' 0 %}" id="formCliente"
+                    <form class="cerrar-caja-input" action="{% url 'cerrar_caja' 0 %}" id="total"
                         method="POST">
                         {% csrf_token %}
-                        <input type="text" class="form-control" id="formGroupExampleInput2" name="entrada_caja"value="{{parameters.datos_act.entrada_caja}}" style="display:none;">
-                       
-                        <input type="text" class="form-control" id="formGroupExampleInput2" name="total" value="{{parameters.datos_act.total}}"style="display:none;">
-                        <input type="text" class="form-control" id="formGroupExampleInput2" name="entrada_caja" value="Total:"style="display:none;">
-                        <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_caja}}"style="display:none;">
-                        <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.datos_act.hora_caja}}"style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="entrada_caja"value="{{parameters.entrada_caja}}" style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="salida_caja"value="{{parameters.salida_caja}}" style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="total_caja" value="{{parameters.total_caja}}"style="display:none;">
+                        
+                        <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.fecha_caja}}"style="display:none;">
+                        <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.hora_caja}}"style="display:none;">
                         <input style="display: none;" name="tipo_mov" value="3" type="number">
                         <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit" onclick="checker()"
                         data-toggle="tooltip" data-original-title="Cierre de caja">
@@ -111,6 +111,12 @@
             event.preventDefault();
         }
     }
+</script>
+<script>
+    let boton = document.getElementById(total);
+    let respuesta = document.getElementById(respuesta);
+
+    
 </script>
 {%endblock%}
 
