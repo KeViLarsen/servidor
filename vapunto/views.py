@@ -523,6 +523,22 @@ def venta(request):
     else:
         return redirect("login")
 
+def compra(request):
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        listacliente=Clientes.objects.all()
+        return validar(request,'compra.html',{"listatabla":listatabla,"listacliente":listacliente})
+    else:
+        return redirect("login")
+
+def carrito(request):
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        listacliente=Clientes.objects.all()
+        return validar(request,'carrito.html',{"listatabla":listatabla,"listacliente":listacliente})
+    else:
+        return redirect("login")
+
 def mod_venta(request,orden_actual=0):
     if request.session.get("codigo_usuario"):
         listaorder=Order.objects.all()

@@ -5,6 +5,8 @@ from django.db.models.fields.related import ForeignKey
 
 from datetime import datetime
 
+from django.forms import model_to_dict
+
 
 # Create your models here.
 
@@ -42,6 +44,16 @@ class producto(models.Model):
     fecha_productos=models.DateField()
     nombre_proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['codigo_productos'] = self.codigo_productos.toJSON()  # trae el diccionario
+        item['nombre_productos'] = self.nombre_productos.toJSON()
+        item['nombre_productos'] = self.nombre_productos.toJSON() # traigo la imagen de su ruta
+        item['preciocompra_productos'] = format(self.preciocompra_productos, '.2f')
+        item['precioventa_productos'] = format(self.precioventa_productos, '.2f')
+        item['cantidad_productos'] = self.cantidad_productos.toJSON()
+        item['fecha_productos'] = self.fecha_productos.strftime('%Y-%m-%d')
+        return item
 
 class Clientes(models.Model):
     codigo_cliente = models.AutoField(primary_key = True)
