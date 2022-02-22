@@ -129,6 +129,7 @@ class Order (models.Model):
     codigo_producto = models.IntegerField()
     precio = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cantidad = models.IntegerField()
+    
 
 class DetSale(models.Model):
     sale = models.IntegerField()
