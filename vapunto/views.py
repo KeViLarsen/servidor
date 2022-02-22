@@ -541,6 +541,7 @@ def venta(request):
         return redirect("login")
 
 def venta_detalle(request):
+
     if request.method == "POST":
         id_ultima_factura=Sale.objects.all().last().sale_id
 
