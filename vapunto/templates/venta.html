@@ -16,7 +16,7 @@
           <div class="forma">
             <div>
               <label for="ingresar-nombre">RUC de cliente </label>
-              <input type="text" class="form-control" onfocusout="traerCliente(this)">
+              <input type="text" class="form-control" id="ruc_cliente" onfocusout="traerCliente(this)">
             </div>
             <div class="clientept">
               <label for="ingresar-nombre" id="nombre_cliente">Nombre del Cliente: </label>
@@ -107,7 +107,7 @@
                   <div class="col-12">
                     <div class="shopping-cart-total d-flex align-items-center">
                       <p class="ml-2 mb-0">Total</p>
-                      <p class="ml-4 mb-0 shoppingCartTotal">0 GS</p>
+                      <p class="ml-4 mb-0 shoppingCartTotal" id="total">0</p>
                       <div class="toast ml-auto bg-info" role="alert" aria-live="assertive" aria-atomic="true"
                         data-delay="2000">
                         <div class="toast-header">
@@ -126,14 +126,13 @@
                     </div>
                   </div>
                 </div>
-                <form class="venta" action="{% url 'venta' 0 %}" id="formCliente" method="POST">
-                  {% csrf_token %}
+                <form class="venta" id="formCliente">
                   <input type="text" id="resultado" name="resultado" value="resultado" style="display: none;">
                   <input type="text" id="codigo" name="codigo" value="codigo" style="display: none;">
                   <input type="text" id="precio" name="precio" value="precio" style="display: none;">
                   <input type="text" id="canti" name="canti" value="canti" style="display: none;">
                   
-                  <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
+                  <button class="btn-guardar" id="cargar" style="margin-right: 5px; margin-top: -1px;" type="button">
                     Finalizar compra
                   </button>
                 </form>
@@ -175,6 +174,20 @@
 
 </body>
 <script>
+    function alerta() {
+    if (sessionStorage.getItem('1') == 1) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Aviso',
+        text: 'Registro guardado existosamente.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+      })
+      sessionStorage.setItem('1', 0)
+    }
+  }
+  window.onload = alerta()
   function traerCliente(event) { //event es el input donde se carga el valor
     var flag = false
     var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
@@ -196,6 +209,61 @@
     }
     
   }
+
+  //DATOS FACTURA COMPRA DETALLE \\OBS: todos los atributos son extraidos de tienda.js\\
+	var unidades = document.getElementsByClassName("shoppingCartItem")
+	var codigos = document.getElementsByClassName("idDeUnidad")
+	var cantidades = document.getElementsByClassName("cantidadDeUnidad")
+	var precios = document.getElementsByClassName("precioDeUnidad")
+
+	document.getElementById("cargar").addEventListener("click", () => {   //Funcion que controla cuando se hace click en comprar
+		sessionStorage.setItem('1', 1)  //Se le dice al cookie de las alertas que cambie su valor a 1
+
+    //DATOS FACTURA COMPRA
+    var ruc_cliente = document.getElementById("ruc_cliente").value  //Trae RUC del Cliente
+    var total = document.getElementById("total").innerText.replaceAll(" Gs", "")  //Trae el Total de Venta
+    var iva10 = parseInt(total) / 11  //Calula el IVA 10% a partir del Total de Venta
+    var id_cliente = "" //Se crea variable para traer el codigo_cliente a través de su RUC \\OBSERVACION: id_cliente es simplemente un nombre generico, es decir que no se trae el id del cliente, sino su codigo\\ 
+
+		{% for cliente in parameters.listacliente %}  //Iniciamos ciclo FOR de la tabla de clientes
+			if("{{cliente.ruc_cliente}}" == ruc_cliente ) { //Verificamos si el cliente introducido existe en la tabla de clientes
+				id_cliente = "{{cliente.codigo_cliente}}" //Si el cliente existe, se carga la variable id_cliente con el valor codigo_cliente
+			}
+		{% endfor %}
+
+		
+			$.ajax({  //Iniciando funcion de AJAX donde enviamos la venta
+			url: "{% url 'venta' %}", //Direccion a donde AJAX debe enviar los datos
+			type: 'POST', //El metodo de envio. En este caso POST, porque enviamos datos a la base
+			data:{  //variables que seran enviadas al VIEWS dentro de los request.POST.get("")
+				'codigo_cliente': id_cliente,
+				'iva10_factura_venta': iva10,
+				'total_factura_venta': total,
+				'csrfmiddlewaretoken': '{{csrf_token}}' //CSRF_TOKEN que se suele utilizar en todos los FORMS
+			},
+			success: //Si se envian correctamente ejecutamos lo que se encuentre dentro de SUCCESS
+				function(data){ //Funcion que envia el DETALLE de la venta
+					for(let i=0; i < unidades.length; i++) {  //Iniciamos un for que utiliza la variable *unidades*. Esta variable almacena todos los elementos cargados y utilizamos el atributo *lenght* para contabilizar esos elementos
+						$.ajax({  //Iniciando nuevamente funcion AJAX
+							url: "{% url 'venta_detalle' %}", //Direccion a donde AJAX debe enviar los datos
+							type: 'POST', //El metodo de envio. En este caso POST, porque enviamos datos a la base
+							data:{ //variables que seran enviadas al VIEWS dentro de los request.POST.get("")
+								'id_producto_id': codigos[i].innerText,
+								'cant_producto': cantidades[i].value,
+								'subtotal_factura_venta': parseInt(cantidades[i].value) * parseInt(precios[i].innerText),
+								'csrfmiddlewaretoken': '{{csrf_token}}'
+							},
+							success: //Si se envian correctamente ejecutamos lo que se encuentre dentro de SUCCESS
+								function(data){
+									if ((unidades.length - 1) == i){  //Cuando el for recorra el ultimo elemento cargado, se redireccionara al usuario
+										location.href = './venta'
+									}
+								}
+						})
+					}
+				}
+			})
+	})
 </script>
 {%endblock%}
 

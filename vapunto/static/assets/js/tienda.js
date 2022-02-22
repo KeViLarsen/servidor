@@ -46,7 +46,7 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
   <div class="row shoppingCartItem">
         <div class="col-2">
             <div class="shopping-cart-item d-flex align-items-center h-100 border-bottom pb-2 pt-3">
-                <h6 class="shopping-cart-item-title shoppingCartItemid text-truncate ml-3 mb-0">${itemid} </h6>
+                <h6 class="shopping-cart-item-title shoppingCartItemid text-truncate ml-3 mb-0 idDeUnidad">${itemid} </h6>
             </div>
         </div>
         <div class="col-2">
@@ -56,13 +56,13 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemid) {
         </div>
         <div class="col-2">
             <div class="shopping-cart-price d-flex align-items-center h-100 border-bottom pb-2 pt-3">
-                <p class="item-price mb-0 shoppingCartItemPrice">${itemPrice}</p>
+                <p class="item-price mb-0 shoppingCartItemPrice precioDeUnidad">${itemPrice}</p>
             </div>
         </div>
         <div class="col-4">
             <div
                 class="shopping-cart-quantity d-flex justify-content-between align-items-center h-100 border-bottom pb-2 pt-3">
-                <input class="shopping-cart-quantity-input shoppingCartItemQuantity  form-control" type="number" id="cant"
+                <input class="shopping-cart-quantity-input shoppingCartItemQuantity form-control cantidadDeUnidad" type="number" id="cant"
                     value="1">
                 <button class="btn btn-danger buttonDelete" type="button">X</button>
             </div>

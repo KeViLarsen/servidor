@@ -30,5 +30,6 @@ urlpatterns = [
     path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
     path('Auditoria', views.audirep, name='Auditoria'),
     path('compras', views.venta, name='compras'),
-    path('venta/<int:orden_actual>', views.mod_venta, name='venta')
+    path('venta', views.venta, name='venta'),
+    path('venta_detalle', views.venta_detalle, name='venta_detalle')
 ]

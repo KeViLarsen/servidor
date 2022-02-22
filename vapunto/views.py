@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from vapunto.models import *
 from vapunto.models import producto
 from vapunto.models import Caja
+from datetime import date
+from django.http import HttpResponse, JsonResponse, response
 
 
 def login(request):
@@ -517,27 +519,39 @@ def audirep(request):
 
 def venta(request):
     if request.session.get("codigo_usuario"):
-        listatabla=producto.objects.all()
-        listacliente=Clientes.objects.all()
-        return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
+        if request.method == "GET":
+            listatabla=producto.objects.all()
+            listacliente=Clientes.objects.all()
+            return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
+
+        elif request.method == "POST":
+            print(request.POST.get('codigo_cliente'))
+            factura_venta_nueva=Sale(cli_id=request.POST.get('codigo_cliente'),
+            date_joined = date.today(),
+            total=request.POST.get('total_factura_venta'), 
+            iva=request.POST.get('iva10_factura_venta'))
+            factura_venta_nueva.save()
+
+        error = 'No hay error!'
+        response = JsonResponse({'error':error})
+        response.status_code = 201
+        return response
+
     else:
         return redirect("login")
 
-def mod_venta(request,orden_actual=0):
-    if request.session.get("codigo_usuario"):
-        listaorder=Order.objects.all()
-        listatabla=producto.objects.all()
-        listacliente=Clientes.objects.all()
-        if request.method=="GET":
-            return validar(request, "venta.html",{"listaorder":listaorder,"listacliente":listacliente,"listatabla":listatabla})
-        if request.method=="POST":
-            if orden_actual==0:
-                venta_nueva=Order(order_id=request.POST.get('orden_actual'),
-                    codigo_producto=request.POST.get('codigo'),
-                    precio=request.POST.get('precio'),
-                    cantidad=request.POST.get('canti'))
-                venta_nueva.save()
+def venta_detalle(request):
+    if request.method == "POST":
+        id_ultima_factura=Sale.objects.all().last().sale_id
 
-        return redirect("../venta/0")     
-    else:
-        return redirect("login")
+        factura_venta_deta=DetSale(sale_id=int(id_ultima_factura), 
+        prod_id=request.POST.get('id_producto_id'),
+        cant=request.POST.get('cant_producto'),
+        subtotal=request.POST.get('subtotal_factura_venta'))
+        factura_venta_deta.save()
+
+    error = 'No hay error!'
+    response = JsonResponse({'error':error})
+    response.status_code = 201
+    return response
+

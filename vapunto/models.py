@@ -114,27 +114,17 @@ class MethodPay(models.Model):
 
 
 class Sale(models.Model):
-    sale_id = models.IntegerField(primary_key=True)
+    sale_id = models.AutoField(primary_key=True)
     cli = models.ForeignKey(Clientes ,on_delete=models.CASCADE,null=True)
     date_joined = models.DateField(default=datetime.now)
     pay = models.ForeignKey(MethodPay ,on_delete=models.CASCADE,null=True)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
-class Order (models.Model):
-    order_id = models.AutoField(primary_key=True)
-    orden = models.IntegerField(null=True)
-    sale_id = models.ForeignKey(Sale ,on_delete=models.CASCADE,null=True)
-    codigo_producto = models.IntegerField()
-    precio = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    cantidad = models.IntegerField()
-    
-
 class DetSale(models.Model):
-    sale = models.IntegerField()
+    detsale_id = models.AutoField(primary_key=True)
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     prod = models.ForeignKey(producto, on_delete=models.CASCADE)
-    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cant = models.IntegerField()
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
   
