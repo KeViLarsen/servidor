@@ -17,16 +17,16 @@
 
           <div class="forma">
             <label for="ingresar-nombre">Añadir Nombre Del Proveedor</label>
-            <input type="text" class="form-control" id="formGroupExampleInput1" name='nombre'
-              value="{{ parameters.datos_act.nombre_proveedor }}">
+            <input type="text" class="form-control" id="ingresar-nombre" name='nombre'
+              value="{{ parameters.datos_act.nombre_proveedor }}" required>
 
             <label for="ingresar-telefono">Añadir Telefono del Proveedor</label>
-            <input type="text" class="form-control" id="formGroupExampleInput4" name='telefono'
-              value="{{ parameters.datos_act.telefono_proveedor }}">
+            <input type="text" class="form-control" id="ingresar-telefono" name='telefono'
+              value="{{ parameters.datos_act.telefono_proveedor }}" required>
 
             <label for="ingresar-ruc">Añadir Ruc</label>
-            <input type="text" class="form-control" id="formGroupExampleInput5" name='ruc'
-              value="{{ parameters.datos_act.ruc_proveedor }}">
+            <input type="text" class="form-control" id="ingresar-ruc" name='ruc'
+              value="{{ parameters.datos_act.ruc_proveedor }}" required>
 
             <label for="Seleccionar-Nacionalidad">Seleccionar Nacionalidad</label>
             <select class="custom-select custom-select-sm form-control form-control-sm" name='nacionalidad'>

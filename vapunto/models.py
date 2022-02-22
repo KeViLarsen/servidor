@@ -35,12 +35,13 @@ class Proveedor(models.Model):
 class producto(models.Model):
     codigo_productos=models.IntegerField(primary_key=True)
     nombre_productos= models.CharField(max_length = 50)
-    preciocompra_productos= models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    precioventa_productos= models.IntegerField()
+    preciocompra_productos= models.DecimalField(max_digits=9, decimal_places=2)
+    precioventa_productos= models.DecimalField( max_digits=9, decimal_places=2)
     categoria_productos= models.CharField(max_length = 50)
     cantidad_productos=models.IntegerField()
     fecha_productos=models.DateField()
     nombre_proveedor = models.ForeignKey(Proveedor ,on_delete=models.CASCADE,null=True)
+
 
 class Clientes(models.Model):
     codigo_cliente = models.AutoField(primary_key = True)
@@ -97,14 +98,14 @@ class Ciudad2(models.Model):
     nombre_usuario = models.CharField(max_length = 50)
 
 class Caja(models.Model):
-    codigo_caja=models.AutoField(primary_key=True)
-    fecha_caja=models.DateField()
-    hora_caja=models.TimeField()
-    motivo_caja=models.CharField(max_length = 50, null=True)
-    entrada_caja=models.CharField(max_length = 50, null=True)
-    salida_caja=models.CharField(max_length = 50, null=True)
+    codigo_caja = models.AutoField(primary_key=True)
+    fecha_caja = models.DateField()
+    hora_caja = models.TimeField()
+    motivo_caja = models.CharField(max_length = 50, null=True)
+    entrada_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
+    salida_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
     tipo_mov=models.IntegerField(null=True)
-    total_caja = models.IntegerField(null=True)
+    total_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, null=True)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
 
@@ -116,16 +117,19 @@ class Sale(models.Model):
     sale_id = models.IntegerField(primary_key=True)
     cli = models.ForeignKey(Clientes ,on_delete=models.CASCADE,null=True)
     date_joined = models.DateField(default=datetime.now)
+    pay = models.ForeignKey(MethodPay ,on_delete=models.CASCADE,null=True)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
 class Order (models.Model):
     order_id = models.AutoField(primary_key=True)
+    orden = models.IntegerField(null=True)
     sale_id = models.ForeignKey(Sale ,on_delete=models.CASCADE,null=True)
     codigo_producto = models.IntegerField()
-    precio = models.IntegerField()
+    precio = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cantidad = models.IntegerField()
+    
 
 class DetSale(models.Model):
     sale = models.IntegerField()

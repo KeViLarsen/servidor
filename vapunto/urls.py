@@ -35,6 +35,7 @@ urlpatterns = [
 
 =======
     path('cerrar_caja/<int:caja_actual>', views.cerrar_caja, name="cerrar_caja"),
+    path('Auditoria', views.audirep, name='Auditoria'),
     path('compras', views.venta, name='compras'),
 <<<<<<< HEAD
     path('venta', views.mod_venta, name='venta')

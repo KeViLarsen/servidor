@@ -19,6 +19,7 @@
             <input type="text" class="form-control" onfocusout="traerCliente(this)">
 =======
       
+      
      
         <div class="card-header">Cliente
           <div class="forma">
@@ -257,16 +258,17 @@
                         </div>
                       </div>
                       <button class="btn btn-success ml-auto comprarButton" type="sumit" data-toggle="modal"
-                        data-target="#comprarModal">Comprar</button>
+                        data-target="#comprarModal">Limpiar</button>
                     </div>
                   </div>
                 </div>
-                <form action="{% url 'venta' parameters.orden_actual%}" method="post">
+                <form class="venta" action="{% url 'venta' 0 %}" id="formCliente" method="POST">
                   {% csrf_token %}
-                  <input type="text" id="resultado" name="resultado" value="resultado" >
-                  <input type="text" id="codigo" name="codigo" value="codigo">
-                  <input type="text" id="precio" name="precio" value="precio" >
-                  <input type="text" id="canti" name="canti" value="canti">
+                  <input type="text" id="resultado" name="resultado" value="resultado" style="display: none;">
+                  <input type="text" id="codigo" name="codigo" value="codigo" style="display: none;">
+                  <input type="text" id="precio" name="precio" value="precio" style="display: none;">
+                  <input type="text" id="canti" name="canti" value="canti" style="display: none;">
+                  
                   <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
                     Finalizar compra
                   </button>
@@ -279,13 +281,13 @@
                 <div class="modal-dialog modal-dialog-centered ">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="comprarModalLabel">Gracias por su compra</h5>
+                      <h5 class="modal-title" id="comprarModalLabel">A vaciado el carrito Correctamente</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
-                      <p>Pronto recibirá su pedido</p>
+                      <p>Realice un nuevo carrito</p>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -324,6 +326,7 @@
 </body>
 <script>
   function traerCliente(event) { //event es el input donde se carga el valor
+<<<<<<< HEAD
       var flag = false
       var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
       {% for cliente in parameters.listacliente %}
@@ -342,6 +345,27 @@
       if(event.value == '') { //si el input esta vacio el label se vaciara tambien
           nCliente.innerHTML = "Nombre del Cliente:  "
       }
+=======
+    var flag = false
+    var nCliente = document.getElementById("nombre_cliente") //traigo el label que se va a modificar con el nombre del cliente
+    {% for cliente in parameters.listacliente %}
+    var r_cliente = "{{cliente.ruc_cliente}}"   //se trae cedula del cliente
+
+    if (event.value == r_cliente) { //se compara si las cedulas de la base de datos coincide con el del input
+      nCliente.innerHTML = "Nombre del Cliente: {{cliente.nombre_cliente}} {{cliente.apellido_cliente}}"   //si coincide se carga el nombre al label
+      flag = true
+    }
+
+    if (!flag) {
+      nCliente.innerHTML = "Nombre del Cliente: No existe ese cliente"//si coincide se muestra el mensaje en el label
+    }
+    {% endfor %}
+
+    if (event.value == '') { //si el input esta vacio el label se vaciara tambien
+      nCliente.innerHTML = "Nombre del Cliente:  "
+    }
+    
+>>>>>>> venta_test
   }
 </script>
 =======
