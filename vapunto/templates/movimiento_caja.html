@@ -23,9 +23,9 @@
                     <form class="cerrar-caja-input" action="{% url 'cerrar_caja' 0 %}" id="total"
                         method="POST">
                         {% csrf_token %}
-                        <input type="number" class="form-control" id="formGroupExampleInput2" name="entrada_caja"value="{{parameters.entrada_caja}}" style="display:none;">
-                        <input type="number" class="form-control" id="formGroupExampleInput2" name="salida_caja"value="{{parameters.salida_caja}}" style="display:none;">
-                        <input type="number" class="form-control" id="formGroupExampleInput2" name="total_caja" value="{{parameters.total_caja}}"style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="entrada_caja"value="0" style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="salida_caja"value="0" style="display:none;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="total_caja" value="0"style="display:none;">
                         
                         <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.fecha_caja}}"style="display:none;">
                         <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.hora_caja}}"style="display:none;">

@@ -1,0 +1,173 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Registro de Ventas
+        </a>
+      </h5>
+      <div class="table-responsive">
+        <table class="table" id="datos">
+          <thead>
+            <tr>
+              <th>Nro</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Subtotal</th>
+              <th>Iva</th>
+              <th>Total</th>
+              <th>Metodo De Pago</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for lista in parameters.listasale %}
+            <tr>
+              <td>{{ lista.sale_id }}</td>
+              
+              {% for cli in parameters.listacliente %}
+              {% if cli.codigo_cliente == lista.cli_id %}
+              <td>{{ cli.nombre_cliente }} {{ cli.apellido_cliente }}</td>
+              {%endif%}
+              {%endfor%}
+
+              <td>{{ lista.date_joined }}</td>
+
+
+              <td>{{ lista.subtotalsuma }}</td>
+     
+
+              <td>{{ lista.iva }}</td>
+
+              <td>{{ lista.total }}</td>
+
+              {% for meto in parameters.listameto %}
+              {% if meto.id == lista.pay_id %}
+              <td>{{ meto.name }}</td>
+              {%endif%}
+              {%endfor%}
+              <td>
+              <div class="container">
+                <div class="modal" tabindex="-1" id="ventas">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        Encabezado
+                      </div>
+                      <div class="modal-body">
+                        <div class="col-lg-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <h5 class="card-title">Detalle Ventas
+                                </a>
+                              </h5>
+                              <div class="table-responsive">
+                                <table class="table" id="">
+                                  <thead>
+                                    <tr>
+                                      <th>ID cliente</th>
+                                      <th>Nombre</th>
+                                      <th>Apellido</th>
+                                      <th>Ruc</th>
+                                      <th>Direccion</th>
+                                      <th>Total</th>
+                                      <th>Metodo De Pago</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% if cli.codigo_cliente == lista.cli_id %}
+                                    {% for lista in parameters.listasale %}
+                                    <tr>
+                                      <td>{{ lista.sale_id }}</td>
+                                      
+                                      {% for cli in parameters.listacliente %}
+                                      {% if cli.codigo_cliente == lista.cli_id %}
+                                      <td>{{ cli.nombre_cliente}} {{cli.apellido_cliente }}</td>
+                                      {%endif%}
+                                      {%endfor%}
+                        
+                                      <td>{{ lista.date_joined }}</td>
+                        
+                        
+                                      <td>{{ lista.subtotalsuma }}</td>
+                             
+                        
+                                      <td>{{ lista.iva }}</td>
+                        
+                                      <td>{{ lista.total }}</td>
+                        
+                                      {% for meto in parameters.listameto %}
+                                      {% if meto.id == lista.pay_id %}
+                                      <td>{{ meto.name }}</td>
+                                      {%endif%}
+                                      {%endfor%}
+                                      <td>
+                                    </tr>
+                                    {%endfor%}
+                                    {%endif%}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal">&times;</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>                
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ventas">
+                Launch modal
+              </button></td>
+           
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="{% static 'assets/js/sweetalert2.all.min.js' %}"></script>
+
+<script>
+  function alerta() {
+    if (sessionStorage.getItem('1') == 1) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Aviso',
+        text: 'Registro guardado existosamente.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+      })
+      sessionStorage.setItem('1', 0)
+    }
+  }
+  window.onload = alerta()
+</script>
+
+
+</body>
+<script>
+
+$('#ventas').modal(show)
+</script>
+
+{%endblock%}
+
+{%block extra%}
+{%endblock%}

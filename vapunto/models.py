@@ -120,6 +120,7 @@ class Sale(models.Model):
     pay = models.ForeignKey(MethodPay ,on_delete=models.CASCADE,null=True)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    subtotalsuma = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
 class DetSale(models.Model):
     detsale_id = models.AutoField(primary_key=True)

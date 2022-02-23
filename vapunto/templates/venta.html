@@ -21,7 +21,7 @@
             <label for="Seleccionar-Nacionalidad">Metodo de Pago</label>
               <select class="custom-select custom-select-sm form-control form-control-sm" name='nombre' id="codigo_pay">
                 {%for pago in parameters.listapay%}
-                <option value="{{pago.id}}" {%if parameters.pay_id == pago.id %} selected {%endif%} id="codigo_pay" >
+                <option value="{{pago.id}}" {%if parameters.pay_id == pago.id %} selected {%endif%} >
                   {{pago.name}}
                 </option>
                 {%endfor%}
@@ -230,15 +230,25 @@
     //DATOS FACTURA COMPRA
     var ruc_cliente = document.getElementById("ruc_cliente").value//Trae RUC del Cliente
     var codigo_pay = document.getElementById("codigo_pay").value   //Trae id del pago
-    var total = document.getElementById("total").innerText.replaceAll(" Gs", "")  //Trae el Total de Venta
-    var iva10 = parseInt(total) / 11  //Calula el IVA 10% a partir del Total de Venta
+    var subtotal = document.getElementById("total").innerText.replaceAll(" Gs", "")  //Trae el Total de Venta
+    var iva10 = parseInt(subtotal) / 11
+    var total = parseFloat(subtotal) + parseFloat(iva10)//Calula el IVA 10% a partir del Total de Venta
     var id_cliente = "" //Se crea variable para traer el codigo_cliente a través de su RUC \\OBSERVACION: id_cliente es simplemente un nombre generico, es decir que no se trae el id del cliente, sino su codigo\\ 
-
-		{% for cliente in parameters.listacliente %}  //Iniciamos ciclo FOR de la tabla de clientes
+    var id_pay = ""
+		
+    {% for cliente in parameters.listacliente %}  //Iniciamos ciclo FOR de la tabla de clientes
 			if("{{cliente.ruc_cliente}}" == ruc_cliente ) { //Verificamos si el cliente introducido existe en la tabla de clientes
 				id_cliente = "{{cliente.codigo_cliente}}" //Si el cliente existe, se carga la variable id_cliente con el valor codigo_cliente
 			}
 		{% endfor %}
+
+    {% for lista in parameters.listapay %} 
+            if("{{lista.id}}" == codigo_pay ) {
+              id_pay = "{{lista.id}}"
+                
+            }
+        {% endfor %}
+
 		
 			$.ajax({  //Iniciando funcion de AJAX donde enviamos la venta
 			url: "{% url 'venta' %}", //Direccion a donde AJAX debe enviar los datos
@@ -247,7 +257,8 @@
 				'codigo_cliente': id_cliente,
 				'iva10_factura_venta': iva10,
 				'total_factura_venta': total,
-        'jsid':codigo_pay,
+        'subtotal_factura_venta': subtotal,
+        'jsid':id_pay,
 				'csrfmiddlewaretoken': '{{csrf_token}}' //CSRF_TOKEN que se suele utilizar en todos los FORMS
 			},
 			success: //Si se envian correctamente ejecutamos lo que se encuentre dentro de SUCCESS

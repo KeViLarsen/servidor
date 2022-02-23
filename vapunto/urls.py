@@ -31,5 +31,7 @@ urlpatterns = [
     path('Auditoria', views.audirep, name='Auditoria'),
     path('compras', views.venta, name='compras'),
     path('venta', views.venta, name='venta'),
-    path('venta_detalle', views.venta_detalle, name='venta_detalle')
+    path('venta_detalle', views.venta_detalle, name='venta_detalle'),
+    path('r_venta', views.registro, name='r_venta')
+
 ]
