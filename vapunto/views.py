@@ -556,7 +556,6 @@ def venta_detalle(request):
 
 def registro(request):
     if request.session.get("codigo_usuario"):
-        print(request.POST.get('clien'))
         listasale=Sale.objects.all()
         listacliente=Clientes.objects.all()
         listadet=DetSale.objects.all()
@@ -566,3 +565,4 @@ def registro(request):
         return validar(request,'r_venta.html',{"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
     else:
         return redirect("login")     
+
