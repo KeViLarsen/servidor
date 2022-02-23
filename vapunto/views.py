@@ -76,6 +76,9 @@ def modproducto(request, prod_actual = 0):
                     nombre_proveedor_id=request.POST.get("proveedor")      
                     )
                     producto_nuevo.save()
+                    stock_act=producto.objects.get(codigo_productos=request.POST.get('codigo'))
+                    stock_act.cantidad_productos = stock_act.cantidad_productos + int(request.POST.get('cantidad'))
+                    stock_act.save()
                 else:
                     datos_usuario=producto.objects.filter(codigo_productos=prod_actual).first()
                     producto_nueva=producto2(nombre_productos = datos_usuario.nombre_productos,
@@ -99,6 +102,10 @@ def modproducto(request, prod_actual = 0):
                     producto_actual.cantidad_productos=request.POST.get("cantidad")
                     producto_actual.nombre_proveedor_id=request.POST.get("proveedor")
                     producto_actual.save()
+
+                    stock_act=producto.objects.get(codigo_productos=prod_actual)
+                    stock_act.cantidad_productos = stock_act.cantidad_productos + int(request.POST.get('cantidad'))
+                    stock_act.save()
 
             
             return redirect("../product")
@@ -405,10 +412,10 @@ def validar(request, pageSuccess, parameters={}):
     else:
         return render(request, 'login.html')
 
-def vercaja(request):     
+def fondos(request):     
     if request.session.get("codigo_usuario"):
         listacaja = Caja.objects.all() 
-        return validar(request, "movimiento_caja.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
+        return validar(request, "fondos.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
     else:
         return redirect("login")
 
@@ -426,10 +433,11 @@ def abrir_caja(request, caja_actual=0):
                     entrada_caja=request.POST.get('entrada_caja'),
                     tipo_mov=request.POST.get('tipo_mov'),
                     salida_caja=request.POST.get('salida_caja'),
-                    total_caja=request.POST.get('total_caja'),
+                    total_caja=request.POST.get('entrada_caja'),
                     codigo_usuario=request.session.get("codigo_usuario"),
                     nombre_usuario=request.session.get("nombre_completo_usuario"))
                     caja_nuevo.save()
+                    
         return redirect("../movimiento_caja")
     else:
         return redirect("login")
@@ -452,33 +460,12 @@ def retirar_caja(request, caja_actual=0):
                 codigo_usuario=request.session.get("codigo_usuario"),
                 nombre_usuario=request.session.get("nombre_completo_usuario"))
                 caja_nuevo.save()
+                
         return redirect("../movimiento_caja")
     else:
         return redirect("login")
 
-# def cerrar_caja(request,caja_actual=0):
-#     if request.session.get("codigo_usuario"):
-#         listacaja=Caja.objects.all()
-#         if request.method=="GET":
-#             return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
-#         if request.method == "POST":
-#             if caja_actual==0:
-#                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-#                 motivo_caja=request.POST.get('motivo_caja'),
-#                 fecha_caja=request.POST.get('fecha'),
-#                 hora_caja=request.POST.get('hora_caja'),
-#                 entrada_caja=request.POST.get('entrada_caja'),
-#                 tipo_mov=request.POST.get('tipo_mov'),
-#                 salida_caja=request.POST.get('salida_caja'),
-#                 codigo_usuario=request.session.get("codigo_usuario"),
-#                 nombre_usuario=request.session.get("nombre_completo_usuario"),
-#                 total_caja=request.POST.get('total_caja'))
-#                 caja_nuevo.save()
-                
-                
-#         return redirect("../movimiento_caja")
-#     else:
-#         return redirect("login")
+
 def cerrar_caja(request,caja_actual=0):
     if request.session.get("codigo_usuario"):
         listacaja=Caja.objects.all()
@@ -519,6 +506,7 @@ def audirep(request):
 
 def venta(request):
     if request.session.get("codigo_usuario"):
+        
         if request.method == "GET":
             listatabla=producto.objects.all()
             listacliente=Clientes.objects.all()
@@ -526,7 +514,7 @@ def venta(request):
             return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listapay":listapay})
 
         elif request.method == "POST":
-            print(request.POST.get('jsid'))
+            
             factura_venta_nueva=Sale(cli_id=request.POST.get('codigo_cliente'),
             date_joined = date.today(),
             total=request.POST.get('total_factura_venta'), 
@@ -534,43 +522,47 @@ def venta(request):
             iva=request.POST.get('iva10_factura_venta'),
             pay_id=request.POST.get('jsid'))
             factura_venta_nueva.save()
-
-
+        
         error = 'No hay error!'
         response = JsonResponse({'error':error})
         response.status_code = 201
         return response
 
     else:
+        
         return redirect("login")
 
 def venta_detalle(request):
+    if request.session.get("codigo_usuario"):
+        if request.method == "POST":
+            id_ultima_factura=Sale.objects.all().last().sale_id
 
-    if request.method == "POST":
-        id_ultima_factura=Sale.objects.all().last().sale_id
+            factura_venta_deta=DetSale(sale_id=int(id_ultima_factura), 
+            prod_id=request.POST.get('id_producto_id'),
+            cant=request.POST.get('cant_producto'),
+            subtotal=request.POST.get('subtotal_factura_venta'))
+            factura_venta_deta.save()
 
-        factura_venta_deta=DetSale(sale_id=int(id_ultima_factura), 
-        prod_id=request.POST.get('id_producto_id'),
-        cant=request.POST.get('cant_producto'),
-        subtotal=request.POST.get('subtotal_factura_venta'))
-        factura_venta_deta.save()
-
-        stock_act=producto.objects.get(codigo_productos=request.POST.get('id_producto_id'))
-        stock_act.cantidad_productos = stock_act.cantidad_productos - int(request.POST.get('cant_producto'))
-        stock_act.save()
-        
-    error = 'No hay error!'
-    response = JsonResponse({'error':error})
-    response.status_code = 201
-    return response
+            stock_act=producto.objects.get(codigo_productos=request.POST.get('id_producto_id'))
+            stock_act.cantidad_productos = stock_act.cantidad_productos - int(request.POST.get('cant_producto'))
+            stock_act.save()
+            
+        error = 'No hay error!'
+        response = JsonResponse({'error':error})
+        response.status_code = 201
+        return response
+    else:
+        return redirect("login")
 
 def registro(request):
     if request.session.get("codigo_usuario"):
+        print(request.POST.get('clien'))
         listasale=Sale.objects.all()
         listacliente=Clientes.objects.all()
         listadet=DetSale.objects.all()
         listaprod=producto.objects.all()
         listameto=MethodPay.objects.all()
-        return validar(request,'r_venta.html',{"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto})
+        listaciu=Ciudad.objects.all()
+        return validar(request,'r_venta.html',{"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
     else:
         return redirect("login")     

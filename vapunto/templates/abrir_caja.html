@@ -10,33 +10,22 @@
             <form class="abrir-caja-input" action="{% url 'abrir_caja' 0 %}" id="formCliente" method="POST">
                     <div>
                         {% csrf_token %}
-                        
-
-
                         <label for="ingresar-nombre"> Ingresar monto para abrir la caja </label>
-                        <input type="number" class="form-control" id="ingresar-nombre" name="entrada_caja"
-                            value="{{parameters.entrada_caja}}" required>
-
+                        <input type="number" class="form-control" id="ingresar-nombre" name="entrada_caja" value="{{parameters.entrada_caja}}" required>
                         {% for lista in parameters.listausuario %}
-                        <input value="{{lista.codigo_usuario}}" {% if
-                            lista.codigo_usuario == parameters.nombre_usuario_id%} {{lista.nombre_usuario}} {%
-                            endif %} style="visibility: hidden;">
+                        <input value="{{lista.codigo_usuario}}" {% if lista.codigo_usuario == parameters.nombre_usuario_id%} {{lista.nombre_usuario}} {% endif %} style="visibility: hidden;">
                         </input>
                         {% endfor %}
 
                         <div class="form-group form-default mb-3">
                             <label class="float-label">Fecha de Apertura</label>
-                            
-                            <input type="text" class="form-control" id="ingresar-motivo" name="motivo_caja"
-                            value="Inicio" style="visibility: hidden;">
-                           
+                            <input type="text" class="form-control" id="ingresar-motivo" name="motivo_caja" value="Inicio" style="visibility: hidden;">
                             <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.fecha_caja}}" style="visibility: hidden;">
                         </div>
-                        <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.hora_caja}}"
-                            style="visibility: hidden;">
-                            <input type="number" class="form-control" id="formGroupExampleInput2" name="salida_caja"
-                            value="0" style="display: none;">
+                        <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.hora_caja}}"style="visibility: hidden;">
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="salida_caja" value="0" style="display: none;">
                         <input style="display: none;" name="tipo_mov" value="2" type="number" >
+                        <input type="number" class="form-control" id="formGroupExampleInput2" name="total_caja" value=""style="display:none;">
 
                     </div>
                     <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">

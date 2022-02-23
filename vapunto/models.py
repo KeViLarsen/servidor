@@ -102,12 +102,14 @@ class Caja(models.Model):
     fecha_caja = models.DateField()
     hora_caja = models.TimeField()
     motivo_caja = models.CharField(max_length = 50, null=True)
-    entrada_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
-    salida_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
-    tipo_mov=models.IntegerField(null=True)
-    total_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, null=True)
+    monto_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
+    estado_caja=models.IntegerField(null=True)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
+
+class cajaDinero(models.Model):
+    codigo_caja_dinero=models.AutoField(primary_key=True)
+    total_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, null=True)
 
 class MethodPay(models.Model):
     name = models.CharField(max_length=150)

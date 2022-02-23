@@ -10,7 +10,7 @@
       <h5 class="card-title">Lista De Clientes Alterados
       </h5>
       <div class="table-responsive">
-        <table class="table" id="datos">
+        <table class="table" id="datos2">
           <thead>
             <tr>
               <th>Id</th>
@@ -61,7 +61,7 @@
         <h5 class="card-title">Lista De Proveedores Alterados
         </h5>
         <div class="table-responsive">
-          <table class="table" id="datos2">
+          <table class="table" id="datos">
             <thead>
               <tr>
                 <th>Codigo</th>
@@ -157,31 +157,8 @@
 {%endblock%}
 
 {%block extra%}
-<script>
-    $(document).ready(function () {
-      $('#datos2').DataTable({
-        "language": {
-          "emptyTable": "No existen registros a exponer.",
-          "info": "",
-          "infoEmpty": "",
-          "infoFiltered": "",
-          "infoPostFix": "",
-          "thousands": ".",
-          "lengthMenu": "Registros a mostrar _MENU_",
-          "loadingRecords": "Cargando...",
-          "processing": "Procesando...",
-          "search": "Buscar:",
-          "zeroRecords": "No se obtuvo ninguna coincidencia",
-          oPaginate: {
-            sNext: '<i class="fas fa-arrow-circle-right"></i>',
-            sPrevious: '<i class="fas fa-arrow-alt-circle-left"></i>',
-            sFirst: '<i class="fa fa-step-backward"></i>',
-            sLast: '<i class="fa fa-step-forward"></i>'
-          }
-        }
-      });
-    });
-  </script>
+paging:false,
+
   <script>
     $(document).ready(function () {
       $('#datos3').DataTable({
@@ -207,6 +184,26 @@
       });
     });
   </script>
-
+<script>
+  $(document).ready(function () {
+    $('#datos2').DataTable({
+      "language": {
+        "emptyTable": "No existen registros a exponer.",
+        "info": false,
+        "infoEmpty": "",
+        "infoFiltered": "",
+        "infoPostFix": "",
+        "thousands": ".",
+        "lengthMenu": "Registros a mostrar _MENU_",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": false,
+        "zeroRecords": "No se obtuvo ninguna coincidencia",
+        oPaginate: 
+          false
+      }
+    });
+  });
+</script>
 
 {%endblock%}
