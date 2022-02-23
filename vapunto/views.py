@@ -522,14 +522,16 @@ def venta(request):
         if request.method == "GET":
             listatabla=producto.objects.all()
             listacliente=Clientes.objects.all()
-            return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente})
+            listapay=MethodPay.objects.all()
+            return validar(request,'venta.html',{"listatabla":listatabla,"listacliente":listacliente,"listapay":listapay})
 
         elif request.method == "POST":
-            print(request.POST.get('codigo_cliente'))
+            print(request.POST.get('jsid'))
             factura_venta_nueva=Sale(cli_id=request.POST.get('codigo_cliente'),
             date_joined = date.today(),
             total=request.POST.get('total_factura_venta'), 
-            iva=request.POST.get('iva10_factura_venta'))
+            iva=request.POST.get('iva10_factura_venta'),
+            pay_id=request.POST.get('jsid'))
             factura_venta_nueva.save()
 
         error = 'No hay error!'
@@ -551,6 +553,9 @@ def venta_detalle(request):
         subtotal=request.POST.get('subtotal_factura_venta'))
         factura_venta_deta.save()
 
+        stock_act=producto.objects.get(codigo_productos=request.POST.get('id_producto_id'))
+        stock_act.cantidad_productos = stock_act.cantidad_productos - int(request.POST.get('cant_producto'))
+        stock_act.save()
     error = 'No hay error!'
     response = JsonResponse({'error':error})
     response.status_code = 201
