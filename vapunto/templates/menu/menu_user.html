@@ -8,22 +8,15 @@
   </a>
 </li>
 
-<li class="sidebar-menu  has-sub">
-  <a href="#" class='sidebar-link'>
-    <i class="far fa-clipboard"></i>
-    <span>Registrar</span>
+<li>
+  <a href="{% url 'vercliente' %}">
+    <i class="fas fa-user"></i>
+    <span>clientes</span>
   </a>
-
-  <ul class="sidebar-submenu ">
-
-    <li>
-      <a href="{% url 'vercliente' %}">Cliente</a>
-    </li>
- 
-
-  </ul>
-
 </li>
+
+
+</ul>
 
 <li>
   <a href="{%url 'product'%}">
@@ -31,7 +24,12 @@
     <span>Producto</span>
   </a>
 </li>
-
+<li>
+  <a href="{% url 'movimiento_caja' %}">
+    <i class="fas fa-money-bill-wave"></i>
+    <span>Fondos</span>
+  </a>
+</li>
 <li>
   <a href="{%url 'venta' %}">
     <i class="fas fa-cart-arrow-down"></i>
