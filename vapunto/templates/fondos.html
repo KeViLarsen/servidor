@@ -7,95 +7,123 @@
 <!--End topbar header-->
 
 
-<div class="col-lg-12">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Lista De Movimiento</h5>
-                <a class="btn btn-info pull-left" onclick="sumar();">Cargar en Caja</a>
-                <div class="col-md-1"></div>
-                <a class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" href="{% url 'abrir_caja' 0 %}"
-                    data-toggle="tooltip" data-original-title="Apertura De caja">
-                    <i>Apertura De Caja</i>
-                </a>
-                <a class="btn btn-warning pull-left" onclick="restar();">Retirar de Caja</a>
-                <div class="col-md-1"></div>
-                <a class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" href="{% url 'retirar_caja' 0 %}"
-                    data-toggle="tooltip" data-original-title="Retiro de caja">
-                    <i>Retiro de Caja </i>
-                </a>
-                <form class="cerrar-caja-input" action="{% url 'cerrar_caja' 0 %}" id="total" method="POST">
-                    {% csrf_token %}
-                    <input type="number" class="form-control" id="formGroupExampleInput2" style="display:none;">
-                    <input type="number" class="form-control" id="formGroupExampleInput2" style="display:none;">
-                    <input type="number" class="form-control" id="formGroupExampleInput2" name="total_caja" value="0"
-                        style="display:none;">
+<body>
 
-                    <input type="date" id="fecha" name="fecha" class="form-control" value="{{parameters.fecha_caja}}"
-                        style="display:none;">
-                    <input type=" text" id="currentTime" name="hora_caja" value="{{parameters.hora_caja}}"
-                        style="display:none;">
-                    <input style="display: none;" name="tipo_mov" value="3" type="number">
-                    <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit"
-                        onclick="checker()" data-toggle="tooltip" data-original-title="Cierre de caja">
-                        Cerrar
-                    </button>
-                </form>
-            
-            <div class="table-responsive">
-                <table class="table" id="datos">
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Motivo</th>
-                            <th>Tipo de mov.</th>
-                            <th>Saldo</th>
-                        </tr>
-                    </thead>
-                    {%for lista in parameters.listacaja %}
-                    <tr>
-                        <td>{{lista.nombre_usuario}}</td>
-                        <td>{{lista.fecha_caja}}</td>
-                        <td>{{lista.hora_caja}}</td>
-                        <td>{{lista.motivo_caja}}</td>
-                        {%if lista.tipo_mov == 2 %}<td>Retirar</td>{% else %}
-                        {%if lista.tipo_mov == 1 %}<td>Apertura</td>{% else %}
-                        {%if lista.tipo_mov == 0 %}<td>Cierre</td>{% else %}
-                        {%endif%}
-                        {%endif%}
-                        {%endif%}
-                        <td>{{lista.monto_caja}}</td>
-                    </tr>
-                    {%endfor%}
-                </table>
+    <div class="card">
+        <div class="card-header card-header-info">
+          <p>
+          <h4 class="card-title "> Dinero en caja  </h4>
+          <h4 class="card-title "> {{total}}  </h4>
+          </p>
+    <form action="{% url 'fondos' 1 %}" method="POST">
+        {% csrf_token %} 
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="bmd-label-floating">Deuda Actual</label>
+                <input type="number" id="resultado" class="form-control" name="total" required value="{{total}}">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="bmd-label-floating">Carga para agregar</label>
+                <input type="number" id="numer2" class="form-control" value="0">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="bmd-label-floating">Motivo</label>
+                <input type="text" id="" class="form-control" name="Motivo" required value="">
             </div>
         </div>
     </div>
-</div>
+      
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <a class="btn btn-success pull-left" onclick="sumar();">Cargar en Caja</a>
+        </div>
+        <div class="col-md-3">
+    
+    
+            <a class="btn btn-danger pull-left" onclick="restar();">Retirar de Caja</a>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-success pull-right">Guardar Cambios </button>
+    
+        </div>
+    </div>
+    
+    
+    
+    </form></div>
 
-<script>
-    var inputFecha = "fecha"  //COLOCAR ID DEL INPUT DE FECHA
-    window.onload = completarHoraInicio(document.getElementById(inputFecha))
+        
+       
+        <div class="card-body" style="overflow-y:auto;">
 
-    function completarHoraInicio(event) {
-        var fecha = new Date(); //Fecha actual
-        var mes = fecha.getMonth() + 1; //obteniendo mes
-        var dia = fecha.getDate(); //obteniendo dia
-        var ano = fecha.getFullYear(); //obteniendo año
-        if (dia < 10)
-            dia = '0' + dia; //agrega cero si el menor de 10
-        if (mes < 10)
-            mes = '0' + mes //agrega cero si el menor de 10
-        event.value = ano + "-" + mes + "-" + dia;
-    }
-</script>
+            <table class="table table-striped dataTable-table" id="tabla" style="width:100%">
+                <thead>
+                    <tr>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Usuario</a>
+                        </th>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Fecha</a>
+                        </th>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Hora</a></th>
 
-<script>
-    var today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    document.getElementById("currentTime").value = time;
-</script>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Motivo</a>
+                        </th>
+                        </th>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Entrada</a>
+                        </th>
+                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Salida</a>
+                        </th>
+                       
+                    </tr>
+                </thead>
+                {%for lista in listatabla %}
+                    <tr>
+                        
+                        {%for usuario in listausuario %}
+                        {%if usuario.codigo_usuario == lista.codigo_usuario%}
+                        <td>{{usuario.nombre_usuario}}</td>
+                        {%endif%}
+                        {%endfor%}
+                        <td>{{lista.fecha_caja}}</td>
+                        <td>{{lista.hora_caja}}</td>
+                        {% if lista.motivo_caja == null %}
+                        <td>--------</td>
+                        {% else %}
+                        <td>{{lista.motivo_caja}}</td>
+                        {% endif %}
+                        {% if lista.monto_caja == none %}
+                        <td>0</td>
+                        {% else %}
+                        <td id="entrada_caja1">{{lista.monto_caja}}</td>
+                        {% endif %}
+                        {% if lista.monto_caja == null %}
+                        <td>0</td>
+                        {% else %}
+                        <td id="salida_caja1" >-{{lista.monto_caja}}</td>
+                        {% endif %}
+                    </tr> 
+
+                {%endfor %} 
+                           
+               
+            </table>
+
+
+        </div>
+        <div>
+          
+        </div>  
+    </div>
+</body>
+
+
 <script>
     function checker() {
         var result = confirm('Estas seguro que quieres abrir la caja?');
@@ -118,6 +146,34 @@
         }
     }
 </script>
+<script>
+    // si la respuesta que se espera es sumar
+    function sumar(){
+        var numero1 = document.getElementById('resultado').value;
+        var numero2 = document.getElementById('numer2').value;
+
+        if(numero1!=='' && numero2!==''){
+            var suma = (parseFloat(numero1)+parseFloat(numero2));
+
+            document.getElementById('resultado').value = suma;
+            document.getElementById('resultado2').value = suma;
+        }
+    }
+    </script>
+    <script>
+      // si la respuesta que se espera es sumar
+      function restar(){
+          var numero1 = document.getElementById('resultado').value;
+          var numero2 = document.getElementById('numer2').value;
+
+          if(numero1!=='' && numero2!==''){
+              var suma = (parseFloat(numero1)-parseFloat(numero2));
+
+              document.getElementById('resultado').value = suma;
+              document.getElementById('resultado2').value = suma;
+          }
+      }
+  </script>
 {%endblock%}
 
 {%block extra%}

@@ -99,11 +99,12 @@ class Ciudad2(models.Model):
 
 class Caja(models.Model):
     codigo_caja = models.AutoField(primary_key=True)
-    fecha_caja = models.DateField()
+    fecha_caja = models.CharField(max_length = 50)
     hora_caja = models.TimeField()
     motivo_caja = models.CharField(max_length = 50, null=True)
-    monto_caja = models.DecimalField(default=0.00, max_digits=9, decimal_places=2,null=True)
-    estado_caja=models.IntegerField(null=True)
+    entrada_caja=models.DecimalField(default=0.00, max_digits=12, decimal_places=2,null=True)
+    salida_caja=models.DecimalField(default=0.00, max_digits=12, decimal_places=2,null=True)
+    estado_caja = models.IntegerField(null=True)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
 

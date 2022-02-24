@@ -13,7 +13,7 @@
         </a>
       </h5>
       <div class="table-responsive">
-        <table class="table" id="datos">
+        <table class="table" id="data" cellspacing="0" width="100%">
           <thead>
             <tr>
               <th>Nro</th>
@@ -74,7 +74,7 @@
                                   Cliente
                                 </h5>
                                 <div class="table-responsive">
-                                  <table class="table" id="ventas">
+                                  <table class="table" id="ventas" cellspacing="0" width="100%">
                                     <thead>
                                       <tr>
                                         <th>ID cliente</th>
@@ -117,7 +117,7 @@
                                   Cliente
                                 </h5>
                                 <div class="table-responsive">
-                                  <table class="table" id="ventas">
+                                  <table class="table" id="ventas" cellspacing="0" width="100%">
                                     <thead>
                                       <tr>
                                         <th>Nro Factura</th>
@@ -129,8 +129,9 @@
                                     </thead>
                                     <tbody>
                                       
-                                      <tr>
-                                        {% for det in parameters.listadet %}
+                                      
+                                        {% for det in parameters.listadet  %}
+                                        <tr>
                                         {% if det.sale_id == lista.sale_id %}
                                         <td>{{ det.sale_id }}</td>
                                         {% for prod in parameters.listaprod %}
@@ -142,8 +143,9 @@
                                         <td>{{ det.cant }}</td>
                                         <td>{{det.subtotal }}</td>
                                         {%endif%}
-                                        {%endfor%}
                                       </tr>
+                                        {%endfor%}
+                                      
                                       
                                       </tbody>
                                     </table>
@@ -195,6 +197,7 @@
 <script>
 $('#ventas').modal(show)
 </script>
+
 <script>
   $(document).ready(function () {
     $('#ventas').DataTable({

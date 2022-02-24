@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, time
+import datetime
 
 from django.http import HttpResponse, JsonResponse, response
 from django.shortcuts import redirect, render
@@ -24,15 +25,22 @@ def login(request):
                 request.session["nombredelusuario"]=getattr(datos_usuario, "nombre_usuario")
                 request.session["nombre_completo_usuario"]=getattr(datos_usuario, "nombre_completo_usuario")
                 request.session["tipo_usuario"]=getattr(datos_usuario, "tipo_usuario")
-                return redirect("inicio")
+                return redirect("port")
             else:
                 return render(request, 'login.html', {"mensaje_error":"Contraseña ingresada es incorrecta."})
         else:
             return render(request, 'login.html', {"mensaje_error":"Usuario ingresado no existe."})
 
-def inicio(request):
+def index(request):
     if request.session.get("codigo_usuario"):
         return validar(request, 'index.html', {"nombre_usuario": request.session.get("nombre_completo_usuario")})
+    else:
+        return redirect('login')
+
+def port(request):
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        return validar(request, 'port.html', {"listatabla":listatabla,"nombre_usuario": request.session.get("nombre_completo_usuario")})
     else:
         return redirect('login')
 
@@ -409,83 +417,76 @@ def validar(request, pageSuccess, parameters={}):
     else:
         return render(request, 'login.html')
 
-def fondos(request):     
-    if request.session.get("codigo_usuario"):
-        listacaja = Caja.objects.all() 
-        return validar(request, "fondos.html", {"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
-    else:
-        return redirect("login")
-
-def abrir_caja(request, caja_actual=0):
-    if request.session.get("codigo_usuario"):
-        listacaja = Caja.objects.all()
-        if request.method=="GET":
-            return validar(request, "abrir_caja.html", {"nombre_completo":request.session.get("nombredelusuario"), "caja_actual":caja_actual,"listacaja":listacaja})
-        if request.method=="POST":
-            if caja_actual==0:
-                    caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-                    motivo_caja=request.POST.get('motivo_caja'),
-                    fecha_caja=request.POST.get('fecha'),
-                    hora_caja=request.POST.get('hora_caja'),
-                    entrada_caja=request.POST.get('entrada_caja'),
-                    tipo_mov=request.POST.get('tipo_mov'),
-                    salida_caja=request.POST.get('salida_caja'),
-                    total_caja=request.POST.get('entrada_caja'),
-                    codigo_usuario=request.session.get("codigo_usuario"),
-                    nombre_usuario=request.session.get("nombre_completo_usuario"))
-                    caja_nuevo.save()
-                    
-        return redirect("../movimiento_caja")
-    else:
-        return redirect("login")
-
-def retirar_caja(request, caja_actual=0):
-    if request.session.get("codigo_usuario"):
-        listacaja=Caja.objects.all()
-        if request.method=="GET":
-            return validar(request,'retirar_caja.html',{"nombre_completo":request.session.get("nombredelusuario"),"listacaja":listacaja})
-        if request.method=="POST":
-            if caja_actual==0:
-                caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-                motivo_caja=request.POST.get('motivo_caja'),
-                fecha_caja=request.POST.get('fecha'),
-                hora_caja=request.POST.get('hora_caja'),
-                entrada_caja=request.POST.get('entrada_caja'),
-                tipo_mov=request.POST.get('tipo_mov'),
-                salida_caja=request.POST.get('salida_caja'),
-                total_caja=request.POST.get('total_caja'),
-                codigo_usuario=request.session.get("codigo_usuario"),
-                nombre_usuario=request.session.get("nombre_completo_usuario"))
-                caja_nuevo.save()
+# def cerrar_caja(request,caja_actual=0):
+#     if request.session.get("codigo_usuario"):
+#         listacaja=Caja.objects.all()
+#         if request.method=="GET":
+#             return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
+#         if request.method == "POST":
+#             if caja_actual==0:
+#                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+#                 motivo_caja=request.POST.get('motivo_caja'),
+#                 fecha_caja=request.POST.get('fecha'),
+#                 hora_caja=request.POST.get('hora_caja'),
+#                 entrada_caja=request.POST.get('entrada_caja'),
+#                 tipo_mov=request.POST.get('tipo_mov'),
+#                 salida_caja=request.POST.get('salida_caja'),
+#                 codigo_usuario=request.session.get("codigo_usuario"),
+#                 nombre_usuario=request.session.get("nombre_completo_usuario"),
+#                 total_caja=request.POST.get('total_caja'))
+#                 caja_nuevo.save()
                 
-        return redirect("../movimiento_caja")
-    else:
-        return redirect("login")
-
-
-def cerrar_caja(request,caja_actual=0):
+                
+#         return redirect("../movimiento_caja")
+#     else:
+#         return redirect("login")
+def fondos(request, caja_actual=0):
     if request.session.get("codigo_usuario"):
-        listacaja=Caja.objects.all()
+        listatabla=Caja.objects.all()
+        listaventa=Sale.objects.all()
+        listausuario=Usuariosid.objects.all()
         if request.method=="GET":
-            return validar(request,'movimiento_caja.html',{"listacaja":listacaja})
-        if request.method == "POST":
-            if caja_actual==0:
+            datos_caja=cajaDinero.objects.filter(codigo_caja_dinero=1).first()
+            total=datos_caja.total_caja
+
+            return validar(request, 'fondos.html',
+                {"nombre_completo":request.session.get("nombredelusuario"),"datos_act":datos_caja, "caja_actual":caja_actual, "titulo":"Editar Usuario","listatabla":listatabla,"listausuario":listausuario,"listaventa":listaventa,"total":total})
+
+        if request.method=="POST":
+            
+            datos_caja=cajaDinero.objects.filter(codigo_caja_dinero=1).first()
+            aux2=float(datos_caja.total_caja)
+            nuevo=float(request.POST.get('total'))
+            if nuevo>datos_caja.total_caja:
                 caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
-                motivo_caja=request.POST.get('motivo_caja'),
-                fecha_caja=request.POST.get('fecha'),
-                hora_caja=request.POST.get('hora_caja'),
-                entrada_caja=request.POST.get('entrada_caja'),
-                tipo_mov=request.POST.get('tipo_mov'),
-                salida_caja=request.POST.get('salida_caja'),
                 codigo_usuario=request.session.get("codigo_usuario"),
                 nombre_usuario=request.session.get("nombre_completo_usuario"),
-                total_caja=request.POST.get('total_caja'))
+                estado_caja=request.POST.get('tipo_mov'),
+                motivo_caja=request.POST.get('Motivo'),
+                fecha_caja=date.today(),
+                hora_caja=datetime.now(),
+                monto_caja=nuevo-aux2)
                 caja_nuevo.save()
-                
-                
-        return redirect("../movimiento_caja")
+                datos_caja.total_caja=request.POST.get('total')
+                datos_caja.save()
+            else:
+                if nuevo<datos_caja.total_caja:
+                    caja_nuevo=Caja(codigo_caja=request.POST.get('codigo_caja'),
+                    codigo_usuario=request.session.get("codigo_usuario"),
+                    nombre_usuario=request.session.get("nombre_completo_usuario"),
+                    estado_caja=request.POST.get('tipo_mov'),
+                    motivo_caja=request.POST.get('Motivo'),
+                    fecha_caja=date.today(),
+                    hora_caja=datetime.now(),
+                    monto_caja=float(datos_caja.total_caja)-float(request.POST.get('total')))
+                    caja_nuevo.save()
+                    datos_caja.total_caja=request.POST.get('total')
+                    datos_caja.save()
+                return redirect(fondos,1)
+
+            return redirect("../fondos/1")   
     else:
-        return redirect("login")
+            return redirect('login')
         
 def audirep(request):
     if request.session.get("codigo_usuario"):

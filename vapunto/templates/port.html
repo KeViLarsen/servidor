@@ -1,0 +1,96 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<div class="card mt-3">
+  <div class="card-content">
+    <div class="row row-group m-0">
+      <div class="col-12 col-lg-6 col-xl-4 border-light">
+        <div class="card-body">
+          <h5 class="card-title">Productos
+            <a href="{%url 'product'  %}">
+              <i class="fab fa-sistrix"></i>
+            </a>
+          </h5>
+          <p class="text-subtitle text-muted">Se pueden observar los productos disponibles en Stock</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-4 border-light">
+        <div class="card-body">
+          <h5 class="card-title">Clientes
+            <a href="{%url 'vercliente'  %}">
+              <i class="fab fa-sistrix"></i>
+            </a>
+          </h5>
+          <p class="text-subtitle text-muted">Se pueden observar los clientes ya registrados</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 col-xl-4 border-light">
+        <div class="card-body">
+          <h5 class="card-title">Clientes
+            <a href="{%url 'r_venta'  %}">
+              <i class="fab fa-sistrix"></i>
+            </a>
+          </h5>
+          <p class="text-subtitle text-muted">Se pueden ver las ventas echas </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Stock
+        </h5>
+        <div class="table-responsive">
+          <table class="table" id="prod">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lista in parameters.listatabla %}
+              <tr>
+                <td>{{ lista.codigo_productos }}</td>
+                <td>{{ lista.nombre_productos }}</td>
+                <td>{{ lista.cantidad_productos }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%endblock%}
+
+  {%block extra%}
+  <script>
+    $(document).ready(function () {
+      $('#prod').DataTable({
+        "language": {
+          "emptyTable": "No existen registros a exponer.",
+          "info": false,
+          "infoEmpty": "",
+          "infoFiltered": "",
+          "infoPostFix": "",
+          "thousands": ".",
+          "lengthMenu": "Registros a mostrar _MENU_",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": false,
+          "zeroRecords": "No se obtuvo ninguna coincidencia",
+          oPaginate:
+            false
+        }
+      });
+    });
+  </script>
+  {%endblock%}
