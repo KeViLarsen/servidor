@@ -1,0 +1,102 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="card-title">{{titulo_f}}</div>
+
+
+      <body class="bg-theme bg-theme1">
+        <form action="{% url 'modcompra' parameters.prod_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+          {% csrf_token %}
+
+
+          <div class="forma">
+            <label for="ingresar-nombre">Nombre del producto</label>
+            <input type="text" class="form-control" id="ingresar-nombre" name='nombre'
+              value="{{ parameters.datos_act.nombre_productos }}" required>
+
+            <label for="ingresar-codigo">Codigo del producto</label>
+            <input type="text" class="form-control" id="ingresar-codigo" name='codigo'
+              value="{{ parameters.datos_act.codigo_productos }}"  required>
+
+            <label for="ingresar-precio-compra">Precio de compra</label>
+            <input type="number" class="form-control" id="ingresar-precio-compra" name='costo'
+              value="{{ parameters.datos_act.preciocompra_productos }}"  required>
+
+            <label for="ingresar-precio-compra">Precio de venta</label>
+            <input type="number" class="form-control" id="ingresar-precio-compra" name='venta'
+              value="{{ parameters.datos_act.precioventa_productos }}"  required  >
+
+            <label for="ingresar-categoria">Categoria</label>
+            <input type="text" class="form-control" id="ingresar-categoria" name='categoria'
+              value="{{ parameters.datos_act.categoria_productos }}"  required>
+
+            <label for="ingresar-cantidad">Cantidad</label>
+            <input type="number" class="form-control" id="ingresar-cantidad" name='cantidad'
+              value="{{ parameters.datos_act.cantidad_productos }} " required>
+
+              <label for="Seleccionar-Nacionalidad">Seleccionar Proveedor</label>
+              <select class="custom-select custom-select-sm form-control form-control-sm" name='proveedor'>
+                {%for prov in parameters.listaproveedor%}
+                <option value="{{prov.codigo_proveedor}}" {%if parameters.datos_act.nombre_proveedor_id == prov.codigo_proveedor %} selected {%endif%} >
+                  {{prov.nombre_proveedor}}
+                </option>
+                {%endfor%}
+              </select>
+
+          
+                <input type="date"  id="fecha" name="fecha" class="form-control" value="{{parameters.datos_act.fecha_productos}}" style="display: none;">
+           
+
+          </div>
+
+          <div class="clearfix mb-12 text-muted" style="display: flex;justify-content: end;padding: 1em 0;">
+
+            <button class="btn-guardar" style="margin-right: 5px; margin-top: -1px;" type="submit">
+              Guardar
+            </button>
+            <a href="{% url 'product' %}">
+              <span>Volver</span>
+            </a>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+ 
+
+<script>
+  var inputFecha = "fecha"  //COLOCAR ID DEL INPUT DE FECHA
+  window.onload = completarHoraInicio(document.getElementById(inputFecha))
+
+  function completarHoraInicio(event){
+      var fecha = new Date(); //Fecha actual
+      var mes = fecha.getMonth()+1; //obteniendo mes
+      var dia = fecha.getDate(); //obteniendo dia
+      var ano = fecha.getFullYear(); //obteniendo año
+      if(dia<10)
+        dia='0'+dia; //agrega cero si el menor de 10
+      if(mes<10)
+        mes='0'+mes //agrega cero si el menor de 10
+      event.value=ano+"-"+mes+"-"+dia;
+  }
+</script>
+
+
+
+{%endblock%}
+{%block extra%}
+
+<script>
+  document.getElementById("btnCarga").addEventListener("click", () => validarFormularioEdicion(validacion, "item-documento"))
+</script>
+
+{%endblock%}

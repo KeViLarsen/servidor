@@ -1,22 +1,22 @@
 {% load static %}
 {% block menu_admin %}
 
+
 <li>
 
   <a href="{%url 'port' %}">
+    <i class="fas fa-home"></i>
     <span>Inicio</span>
   </a>
 </li>
 
 <li>
   <a href="{% url 'vercliente' %}">
-    <i class="fas fa-user"></i>
-    <span>clientes</span>
+  <i class="fas fa-wind"></i>
+  <span>Cliente</span>
   </a>
 </li>
 
-
-</ul>
 
 <li>
   <a href="{%url 'product'%}">
@@ -24,19 +24,33 @@
     <span>Producto</span>
   </a>
 </li>
+
 <li>
-  <a href="{% url 'movimiento_caja' %}">
+  <a href="{%url 'compras'  %}">
+    <i class="fas fa-truck-moving"></i>
+    <span>Compras</span>
+  </a>
+</li>
+
+<li>
+  <a href="{%url 'venta' %}">
+    <i class="fas fa-cart-arrow-down"></i>
+    <span>Venta</span>
+  </a>
+</li>
+<li>
+  <a href="{%url 'r_venta' %}">
+    <i class="fas fa-file-alt"></i>
+    <span>Registros de Ventas</span>
+  </a>
+</li>
+
+<li>
+  <a href="{% url 'fondos' 1 %}">
     <i class="fas fa-money-bill-wave"></i>
     <span>Fondos</span>
   </a>
 </li>
-<li>
-  <a href="{%url 'venta' %}">
-    <i class="fas fa-cart-arrow-down"></i>
-    <span>Ventas</span>
-  </a>
-</li>
-
 
 
 

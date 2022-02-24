@@ -1,0 +1,100 @@
+{%extends "index.html"%}
+
+{%block formulario%}
+
+{%load static%}
+
+<!--End topbar header-->
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Lista De Productos
+        <h5 class="card-title">Lista De Productos
+            <a href="{%url 'modproducto' 0 %}" class="guardar-producto">
+              <i class="fas fa-plus-square"></i>
+            </a>
+      </h5>
+      <div class="table-responsive">
+        <table class="table" id="datos">
+          <thead>
+            <tr>
+              <th>Codigo</th>
+              <th>Nombre</th>
+              <th>Precio/compra</th>
+              <th>Categoria</th>
+              <th>Cantidad</th>
+              <th>Proveedor</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lista in parameters.listatabla %}
+            <tr>
+              <td>{{ lista.codigo_productos }}</td>
+              <td>{{ lista.nombre_productos }}</td>
+              <td>{{ lista.preciocompra_productos }}</td>
+              <td>{{ lista.categoria_productos }}</td>
+              <td>{{ lista.cantidad_productos }}</td>
+              {% for prov in parameters.listaproveedor %}
+              {% if prov.codigo_proveedor == lista.nombre_proveedor_id %}
+              <td>{{ prov.nombre_proveedor }}</td>
+              {%endif%}
+              {%endfor%}
+              <td>{{ lista.fecha_productos }}</td>
+              <td data-sortable="" style="width:11.125%;"><a href="{% url 'modcompra' lista.codigo_productos %}"
+                  data-toggle="tooltip" data-original-title="Comprar producto">
+                  <i class="fas fa-plus-square"></i>
+                </a>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="{% static 'assets/js/sweetalert2.all.min.js' %}"></script>
+
+<script>
+  function alerta() {
+    if (sessionStorage.getItem('1') == 1) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Aviso',
+        text: 'Registro guardado existosamente.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+      })
+      sessionStorage.setItem('1', 0)
+    }
+  }
+  window.onload = alerta()
+</script>
+
+
+</body>
+
+{%endblock%}
+
+{%block extra%}
+{% if deletconf %}
+<script>
+  Swal.fire({
+    icon: 'error',
+    title: 'Aviso',
+    text: 'Registro Eliminado existosamente.',
+    showConfirmButton: false,
+    timer: 2000
+  }).then(() => {
+    location.href = '{% url 'product' %}'
+  })
+</script>
+{% endif %}
+{%endblock%}

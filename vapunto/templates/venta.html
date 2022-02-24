@@ -9,7 +9,13 @@
 <div class="comtainer-fluid">
   <div class="col-12 col-lg-12 col-xl-12">
     <div class="card">
-        <div class="card-header">Cliente
+      <div class="card-body">
+        <h5 class="card-title">Cliente
+          <a href="{%url 'modcliente' 0 %}" class="guardar-producto" data-toggle="tooltip"
+          data-original-title="Nuevo cliente">
+            <i class="fas fa-plus-square"></i>
+          </a>
+        </h5>
           <div class="forma">
             <div>
               <label for="ingresar-nombre">RUC de cliente </label>
@@ -209,7 +215,7 @@
     }
 
     if (!flag) {
-      nCliente.innerHTML = "Nombre del Cliente: No existe ese cliente"//si coincide se muestra el mensaje en el label
+      nCliente.innerHTML = "Nombre del Cliente: Creear el nuevo Cliente"//si coincide se muestra el mensaje en el label
     }
     {% endfor %}
 

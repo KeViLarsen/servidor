@@ -9,6 +9,7 @@ from vapunto.models import *
 from vapunto.models import Caja, producto
 
 
+
 def login(request):
     if request.method == "GET":
         if request.session.get("codigo_usuario"):
@@ -82,6 +83,7 @@ def modproducto(request, prod_actual = 0):
                     precioventa_productos=request.POST.get("venta"),
                     categoria_productos=request.POST.get("categoria"),
                     fecha_productos=request.POST.get('fecha'),
+                    
                     nombre_proveedor_id=request.POST.get("proveedor")      
                     )
                     producto_nuevo.save()
@@ -125,6 +127,75 @@ def borrproducto(request, prod_actual):
         listatabla=producto.objects.all()
         producto.objects.filter(codigo_productos=prod_actual).delete() 
         return render(request,"produ/product.html",{"listatabla":listatabla ,"deletconf":"eliminado"})
+
+def compras(request):
+    if request.session.get("codigo_usuario"):
+        listatabla=producto.objects.all()
+        listaproveedor=Proveedor.objects.all()
+        return validar(request,"produ/compras.html",{"listatabla":listatabla,"listaproveedor":listaproveedor})
+    else:
+         return redirect("login")
+
+def modcompra(request, prod_actual = 0):
+    listaproveedor=Proveedor.objects.all()
+    listatabla=producto.objects.all()
+    if request.session.get("codigo_usuario"):
+            if request.method=="GET":
+                producto_actual=producto.objects.filter(codigo_productos=prod_actual).exists()
+                if producto_actual:
+                    datos_producto=producto.objects.filter(codigo_productos=prod_actual).first()
+                    datos_producto.fecha_productos=str(datos_producto.fecha_productos)
+                    return validar(request, 'produ/modcompra.html',
+                    {"datos_act":datos_producto, "prod_actual":prod_actual, "titulo_f":"Editar un Producto","listaproveedor":listaproveedor,"listatabla":listatabla})
+                else:
+                    return validar(request, "produ/modcompra.html", {"titulo_f":"Nuevo Producto","prod_actual": prod_actual,"listaproveedor":listaproveedor,"listatabla":listatabla})
+
+            if request.method=="POST":
+                if prod_actual==0:
+                    producto_nuevo=producto(codigo_productos=request.POST.get('codigo'),
+                    nombre_productos=request.POST.get("nombre"),
+                    preciocompra_productos=request.POST.get("costo"),
+                    precioventa_productos=request.POST.get("venta"),
+                    categoria_productos=request.POST.get("categoria"),
+                    fecha_productos=request.POST.get('fecha'),
+                    
+                    nombre_proveedor_id=request.POST.get("proveedor")      
+                    )
+                    producto_nuevo.save()
+                    stock_act=producto.objects.get(codigo_productos=prod_actual)
+                    stock_act.cantidad_productos = int(request.POST.get('cantidad'))+stock_act.cantidad_productos
+                    stock_act.save()
+                else:
+                    datos_usuario=producto.objects.filter(codigo_productos=prod_actual).first()
+                    producto_nueva=producto2(nombre_productos = datos_usuario.nombre_productos,
+                    preciocompra_productos=datos_usuario.preciocompra_productos,
+                    codigo_usuario=request.session.get("codigo_usuario"),
+                    nombre_usuario=request.session.get("nombre_completo_usuario"),
+                    precioventa_productos=datos_usuario.precioventa_productos,
+                    categoria_productos=datos_usuario.categoria_productos,
+                    cantidad_productos=datos_usuario.cantidad_productos,
+                    codigo_productos=datos_usuario.codigo_productos,
+                    nombre_proveedor_id=datos_usuario.nombre_proveedor_id,
+                    fecha_productos=request.POST.get('fecha'))
+                    producto_nueva.save()
+
+                    producto_actual=producto.objects.get(codigo_productos=prod_actual)
+                    producto_actual.nombre_productos=request.POST.get("nombre")
+                    producto_actual.preciocompra_productos=request.POST.get("costo")
+                    producto_actual.precioventa_productos=request.POST.get("venta")
+                    producto_actual.categoria_productos=request.POST.get("categoria")
+                    producto_actual.fecha_productos=request.POST.get('fecha')
+                    producto_actual.nombre_proveedor_id=request.POST.get("proveedor")
+                    producto_actual.save()
+
+                    stock_act=producto.objects.get(codigo_productos=prod_actual)
+                    stock_act.cantidad_productos = int(request.POST.get('cantidad'))+stock_act.cantidad_productos
+                    stock_act.save()
+
+            
+            return redirect("../product")
+    else:
+         return redirect("login")
 
 def registrar(request):
     return render(request,'register.html')
@@ -411,12 +482,15 @@ def borciudad(request, ciu_actual):
 
 def validar(request, pageSuccess, parameters={}):
     if request.session.get("codigo_usuario"):
-        if (request.session.get("tipo_usuario") == 2) and ((pageSuccess == 'user/verusuario.html') or (pageSuccess == 'prov/proveedor.html') or (pageSuccess == 'direccion/pais.html') or (pageSuccess == 'direccion/ciudad.html')):
-            return render(request, "index.html", {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "mensaje": "Este usuario no cuenta con los privilegios suficientes"})
+        if (request.session.get("tipo_usuario") == 2) and ((pageSuccess == 'user/verusuario.html') or (pageSuccess == 'Auditoria.html') or (pageSuccess == 'prov/proveedor.html') or (pageSuccess == 'direccion/pais.html') or (pageSuccess == 'direccion/ciudad.html')):
+            return render(request, "error_403.html", {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "mensaje": "Este usuario no cuenta con los privilegios suficientes"})
         else: 
             return render(request, pageSuccess, {"nombre_usuario": request.session.get("nombre_completo_usuario"),"tipo_usuario": request.session.get("tipo_usuario"), "parameters": parameters})
     else:
         return render(request, 'login.html')
+
+def error_403(request):
+     return render(request, 'error_403.html', {"nombre_completo":request.session.get("nombre_completo"), "titulo_f":"Inicio", "subtitulo_f":"Sistema de prueba desarrollado en el framework Django con Python"})
 
 # def cerrar_caja(request,caja_actual=0):
 #     if request.session.get("codigo_usuario"):
@@ -479,7 +553,7 @@ def fondos(request, caja_actual=0):
                     estado_caja=request.POST.get('tipo_mov'),
                     motivo_caja=request.POST.get('Motivo'),
                     fecha_caja=date.today(),
-                    hora_caja=datetime.now(),
+                    hora_caja=time.now(),
                     salida_caja=float(datos_caja.total_caja)-float(request.POST.get('total')),
                     total_caja=request.POST.get('total'))
                     caja_nuevo.save()
@@ -523,10 +597,6 @@ def venta(request):
             iva=request.POST.get('iva10_factura_venta'),
             pay_id=request.POST.get('jsid'))
             factura_venta_nueva.save()
-            
-            Total_act=Caja.objects.get(codigo_caja=request.POST.get('sale_id'))
-            Total_act.total_caja = Total_act.total_caja + int(request.POST.get('total_factura_venta'))
-            Total_act.save()
         
         error = 'No hay error!'
         response = JsonResponse({'error':error})
@@ -580,4 +650,5 @@ def detailprod(request, sale_id):
                     {"tempvar":tempvar})
     else:
          return redirect("login")
+
 
