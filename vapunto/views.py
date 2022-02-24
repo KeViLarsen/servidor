@@ -112,6 +112,7 @@ def modproducto(request, prod_actual = 0):
     else:
          return redirect("login")
 
+
 def borrproducto(request, prod_actual):
         listatabla=producto.objects.all()
         producto.objects.filter(codigo_productos=prod_actual).delete() 
@@ -554,7 +555,7 @@ def venta_detalle(request):
     else:
         return redirect("login")
 
-def registro(request):
+def registro(request,r_actual):
     if request.session.get("codigo_usuario"):
         listasale=Sale.objects.all()
         listacliente=Clientes.objects.all()
@@ -562,7 +563,20 @@ def registro(request):
         listaprod=producto.objects.all()
         listameto=MethodPay.objects.all()
         listaciu=Ciudad.objects.all()
-        return validar(request,'r_venta.html',{"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
+        codigo_actual=Sale.objects.filter(sale_id=r_actual).exists()
+
+        return validar(request,'r_venta.html',{"codigo_actual":codigo_actual,"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
     else:
         return redirect("login")     
 
+def detalle(request, sale_id):
+    venda = DetSale.objects.raw(sale_id=sale_id)("SELECT * FROM vapunto_sale  WHERE sale_id = "+ sale_id )
+    detvenda = DetSale.objects.raw(sale_id=sale_id)("SELECT * FROM vapunto_detsale WHERE sale_id = "+ sale_id)
+    if request.session.get("codigo_usuario"):
+        listacliente=Clientes.objects.all()
+        listaprod=producto.objects.all()
+        listadet=DetSale.objects.all()
+
+        return validar(request,'det_venta.html',{"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"venda":venda,"detvenda":detvenda})
+    else:
+        return redirect("login")

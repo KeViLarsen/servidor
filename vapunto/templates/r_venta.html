@@ -53,67 +53,69 @@
               {%endif%}
               {%endfor%}
               <td>
-              <div class="container">
-                <div class="modal" tabindex="-1"  id="ventas">
-                  <div class="modal-dialog modal-sm modal-lg" >
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        Detalle Ventas
-                      </div>
-                      <div class="modal-body">
-                        <div class="col-lg-12">
-                          <div class="card">
-                            <div class="card-body">
-                              <h5 class="card-title">
-                                Cliente
-                              </h5>
-                              <div class="table-responsive">
-                                <table class="table" id="ventas">
-                                  <thead>
-                                    <tr>
-                                      <th>ID cliente</th>
-                                      <th>Nombre</th>
-                                      <th>Apellido</th>
-                                      <th>Ruc||CI</th>
-                                      <th>Direccion</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for sale in parameters.listasale %}
-                                    <tr>
-                                      {% for cli in parameters.listacliente %}
-                                      {% if cli.codigo_cliente == sale.cli_id %}
-                                      <td>{{ cli.codigo_cliente }}</td>
-                                      <td>{{ cli.nombre_cliente}} </td>
-                                      <td>{{cli.apellido_cliente }}</td>
-                                      <td>{{ cli.ruc_cliente }}</td>
-                                      {% for ciu in parameters.listaciu %}
-                                      {% if ciu.codigo_ciudad == cli.ciudad_id %}
-                                      <td>{{ ciu.ciudad }}</td>
-                                      {%endif%}
+                <div class="container">
+                  <div class="modal" tabindex="-1"  id="ventas" >
+                    <div class="modal-dialog modal-sm modal-lg" >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          Detalle Ventas
+                        </div>
+                        <div class="modal-body">
+                          <div class="col-lg-12">
+                            <div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">
+                                  Cliente
+                                </h5>
+                                <div class="table-responsive">
+                                  <table class="table" id="ventas">
+                                    <thead>
+                                      <tr>
+                                        <th>ID cliente</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Ruc||CI</th>
+                                        <th>Direccion</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for sale in parameters.listasale %}
+                                      <tr>
+                                        {% for cli in parameters.listacliente %}
+                                        {% if cli.codigo_cliente == sale.cli_id %}
+                                        <td>{{ cli.codigo_cliente }}</td>
+                                        <td>{{ cli.nombre_cliente}} </td>
+                                        <td>{{cli.apellido_cliente }}</td>
+                                        <td>{{ cli.ruc_cliente }}</td>
+                                        {% for ciu in parameters.listaciu %}
+                                        {% if ciu.codigo_ciudad == cli.ciudad_id %}
+                                        <td>{{ ciu.ciudad }}</td>
+                                        {%endif%}
+                                        {%endfor%}
+                                        {%endif%}
+                                        {%endfor%}
+                                      </tr>
                                       {%endfor%}
-                                      {%endif%}
-                                      {%endfor%}
-                                    </tr>
-                                    {%endfor%}
-                                    </tbody>
-                                  </table>
+                                      </tbody>
+                                    </table>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>                
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ventas">
-                  <i class="fas fa-file-alt"></i>
-              </button></td>
-           
+                <form action="{% url 'modproducto' parameters.prod_actual %}" method="POST" onsubmit="sessionStorage.setItem('1', 1);">
+                  <button action="{% url 'r_venta' lista.sale_id %}" method="GET" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ventas">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+                </form>           
+          </td>
             </tr>
           {% endfor %}
           </tbody>
@@ -122,7 +124,6 @@
     </div>
   </div>
 </div>
-
 
 
 
