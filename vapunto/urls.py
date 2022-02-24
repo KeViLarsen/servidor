@@ -1,3 +1,4 @@
+from mimetypes import init
 from django.urls import path
 
 from vapunto import views
@@ -25,11 +26,10 @@ urlpatterns = [
     path('ciudad', views.ciudad, name='ciudad'),
     path('modciudad/<int:ciu_actual>', views.modciudad, name="modciudad"),
     path('borciudad/<int:ciu_actual>', views.borciudad, name="borciudad"),
-    path('fondos<int:caja_actual>', views.fondos, name='fondos'),
+    path('fondos/<int:caja_actual>', views.fondos, name='fondos'),
     path('Auditoria', views.audirep, name='Auditoria'),
     path('venta', views.venta, name='venta'),
     path('venta_detalle', views.venta_detalle, name='venta_detalle'),
     path('r_venta', views.registro, name='r_venta'),
     path(r'registro/<int:sale_id>', views.detailprod, name='detailprod')
-
 ]

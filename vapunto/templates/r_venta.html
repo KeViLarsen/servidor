@@ -13,7 +13,7 @@
         </a>
       </h5>
       <div class="table-responsive">
-        <table class="table" id="data" cellspacing="0" width="100%">
+        <table class="table" id="tabla" cellspacing="0" width="100%">
           <thead>
             <tr>
               <th>Nro</th>
@@ -222,4 +222,81 @@ $('#ventas').modal(show)
 {%endblock%}
 
 {%block extra%}
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+<script src="{% static 'js/alerts.js' %}"></script>
+<script src="{% static 'js/functions.js'%}"></script>
+<script src="{% static 'js/DataTables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/DataTables/js/dataTables.bootstrap5.min.js' %}"></script>
+<script src="{% static 'js/DataTables/js/dataTables.responsive.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/JSZip-2.5.0/jszip.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Buttons-2.2.2/js/dataTables.buttons.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Buttons-2.2.2/js/buttons.bootstrap5.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Buttons-2.2.2/js/buttons.html5.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Buttons-2.2.2/js/buttons.print.min.js' %}"></script>
+<script type="text/javascript">
+  
+    $(document).ready(function() {    
+        $('#tabla').DataTable({        
+            "language": {
+                "emptyTable":     "La tabla se encuentra vacia.",
+                "info":           "Mostrando _END_ de _MAX_ registros",
+                "infoEmpty":      "",
+                "infoFiltered":   "",
+                "infoPostFix":    "",
+                "thousands":      ",",
+                "lengthMenu":     "Mostrar _MENU_ registros",
+                "loadingRecords": "Cargando...",
+                "processing":     "Procesando...",
+                "search":         "",
+                "zeroRecords":    "No se obtuvo ninguna coincidencia",
+                oPaginate: {
+                    sNext: '<i class="fa fa-forward"></i>',
+                    sPrevious: '<i class="fa fa-backward"></i>',
+                    sFirst: '<i class="fa fa-step-backward"></i>',
+                    sLast: '<i class="fa fa-step-forward"></i>'
+                }
+            },
+            //para usar los botones   
+            responsive: "true",
+            dom: 'Bfrtilp',       
+            buttons:[ 
+          {
+            extend:    'excelHtml5',
+            text:      '<i class="fas fa-file-excel"></i> ',
+            titleAttr: 'Exportar a Excel',
+            className: 'btn btn-success'
+          },
+          {
+            extend:    'pdfHtml5',
+            text:      '<i class="fas fa-file-pdf"></i> ',
+            titleAttr: 'Exportar a PDF',
+            className: 'btn btn-danger'
+          },
+          {
+            extend:    'print',
+            text:      '<i class="fa fa-print"></i> ',
+            titleAttr: 'Imprimir',
+            className: 'btn btn-info'
+          },
+        ]	        
+        });     
+    });
+
+    window.onload = function colorBoton() {
+        boton = document.getElementById("btnMostrarOcultar")
+        if(boton.innerHTML == 'Ver deshabilitados') {
+            boton.className = "btn btn-danger btn-sm"
+        } else {
+            boton.className = "btn btn-dark btn-sm"
+        }
+    }
+
+
+    formatText("documento") //formatear numeros
+
+</script>
 {%endblock%}

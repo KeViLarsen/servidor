@@ -1,8 +1,9 @@
 from datetime import date, time
 import datetime
 
-from django.http import HttpResponse, JsonResponse, response
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, response
 from django.shortcuts import redirect, render
+from django.views import View
 
 from vapunto.models import *
 from vapunto.models import Caja, producto
@@ -11,7 +12,7 @@ from vapunto.models import Caja, producto
 def login(request):
     if request.method == "GET":
         if request.session.get("codigo_usuario"):
-            return redirect("inicio")
+            return redirect("port")
         else: 
             return render(request, 'login.html')
     if request.method == "POST":
@@ -465,7 +466,8 @@ def fondos(request, caja_actual=0):
                 motivo_caja=request.POST.get('Motivo'),
                 fecha_caja=date.today(),
                 hora_caja=datetime.now(),
-                monto_caja=nuevo-aux2)
+                entrada_caja=nuevo-aux2,
+                total_caja=request.POST.get('total'))
                 caja_nuevo.save()
                 datos_caja.total_caja=request.POST.get('total')
                 datos_caja.save()
@@ -478,15 +480,16 @@ def fondos(request, caja_actual=0):
                     motivo_caja=request.POST.get('Motivo'),
                     fecha_caja=date.today(),
                     hora_caja=datetime.now(),
-                    monto_caja=float(datos_caja.total_caja)-float(request.POST.get('total')))
+                    salida_caja=float(datos_caja.total_caja)-float(request.POST.get('total')),
+                    total_caja=request.POST.get('total'))
                     caja_nuevo.save()
                     datos_caja.total_caja=request.POST.get('total')
                     datos_caja.save()
-                return redirect(fondos,1)
+                return redirect(fondos, 1)
 
-            return redirect("../fondos/1")   
+        return redirect("../fondos/1")   
     else:
-            return redirect('login')
+        return redirect('login')
         
 def audirep(request):
     if request.session.get("codigo_usuario"):
@@ -520,6 +523,10 @@ def venta(request):
             iva=request.POST.get('iva10_factura_venta'),
             pay_id=request.POST.get('jsid'))
             factura_venta_nueva.save()
+            
+            Total_act=Caja.objects.get(codigo_caja=request.POST.get('sale_id'))
+            Total_act.total_caja = Total_act.total_caja + int(request.POST.get('total_factura_venta'))
+            Total_act.save()
         
         error = 'No hay error!'
         response = JsonResponse({'error':error})

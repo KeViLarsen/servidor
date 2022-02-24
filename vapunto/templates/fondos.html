@@ -13,7 +13,7 @@
         <div class="card-header card-header-info">
           <p>
           <h4 class="card-title "> Dinero en caja  </h4>
-          <h4 class="card-title "> {{total}}  </h4>
+          <h4 class="card-title "> {{parameters.total}}  </h4>
           </p>
     <form action="{% url 'fondos' 1 %}" method="POST">
         {% csrf_token %} 
@@ -23,7 +23,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label class="bmd-label-floating">Deuda Actual</label>
-                <input type="number" id="resultado" class="form-control" name="total" required value="{{total}}">
+                <input type="number" id="resultado" class="form-control" name="total" required value="{{parameters.total}}">
             </div>
         </div>
         <div class="col-md-3">
@@ -64,29 +64,21 @@
        
         <div class="card-body" style="overflow-y:auto;">
 
-            <table class="table table-striped dataTable-table" id="tabla" style="width:100%">
+            <table class="table table-striped dataTable-table" id="datos" style="width:100%">
                 <thead>
                     <tr>
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Usuario</a>
-                        </th>
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Fecha</a>
-                        </th>
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Hora</a></th>
-
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Motivo</a>
-                        </th>
-                        </th>
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Entrada</a>
-                        </th>
-                        <th data-sortable="" style="width: 23.2012%;"><a href="#" class="dataTable-sorter">Salida</a>
-                        </th>
-                       
+                        <th>Usuario</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Motivo</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
                     </tr>
                 </thead>
-                {%for lista in listatabla %}
+                {%for lista in parameters.listatabla %}
                     <tr>
                         
-                        {%for usuario in listausuario %}
+                        {%for usuario in parameters.listausuario %}
                         {%if usuario.codigo_usuario == lista.codigo_usuario%}
                         <td>{{usuario.nombre_usuario}}</td>
                         {%endif%}
@@ -98,15 +90,15 @@
                         {% else %}
                         <td>{{lista.motivo_caja}}</td>
                         {% endif %}
-                        {% if lista.monto_caja == none %}
+                        {% if lista.entrada_caja == none %}
                         <td>0</td>
                         {% else %}
-                        <td id="entrada_caja1">{{lista.monto_caja}}</td>
+                        <td id="entrada_caja1">{{lista.entrada_caja}}</td>
                         {% endif %}
-                        {% if lista.monto_caja == null %}
+                        {% if lista.salida_caja == null %}
                         <td>0</td>
                         {% else %}
-                        <td id="salida_caja1" >-{{lista.monto_caja}}</td>
+                        <td id="salida_caja1">{{lista.salida_caja}}</td>
                         {% endif %}
                     </tr> 
 

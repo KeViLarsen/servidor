@@ -107,6 +107,7 @@ class Caja(models.Model):
     estado_caja = models.IntegerField(null=True)
     codigo_usuario = models.IntegerField()
     nombre_usuario = models.CharField(max_length = 50)
+    total_caja=models.IntegerField()
 
 class cajaDinero(models.Model):
     codigo_caja_dinero=models.AutoField(primary_key=True)
