@@ -1,4 +1,5 @@
 from django.urls import path
+
 from vapunto import views
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('Auditoria', views.audirep, name='Auditoria'),
     path('venta', views.venta, name='venta'),
     path('venta_detalle', views.venta_detalle, name='venta_detalle'),
-    path('r_venta', views.registro, name='r_venta')
+    path('r_venta', views.registro, name='r_venta'),
+    path(r'registro/<int:sale_id>', views.detailprod, name='detailprod')
 
 ]

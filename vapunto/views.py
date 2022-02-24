@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from vapunto.models import *
-from vapunto.models import producto
-from vapunto.models import Caja
 from datetime import date
+
 from django.http import HttpResponse, JsonResponse, response
+from django.shortcuts import redirect, render
+
+from vapunto.models import *
+from vapunto.models import Caja, producto
 
 
 def login(request):
@@ -72,12 +73,11 @@ def modproducto(request, prod_actual = 0):
                     precioventa_productos=request.POST.get("venta"),
                     categoria_productos=request.POST.get("categoria"),
                     fecha_productos=request.POST.get('fecha'),
-                    cantidad_productos=request.POST.get("cantidad"),
                     nombre_proveedor_id=request.POST.get("proveedor")      
                     )
                     producto_nuevo.save()
-                    stock_act=producto.objects.get(codigo_productos=request.POST.get('codigo'))
-                    stock_act.cantidad_productos = stock_act.cantidad_productos + int(request.POST.get('cantidad'))
+                    stock_act=producto.objects.get(codigo_productos=prod_actual)
+                    stock_act.cantidad_productos = int(request.POST.get('cantidad'))+stock_act.cantidad_productos
                     stock_act.save()
                 else:
                     datos_usuario=producto.objects.filter(codigo_productos=prod_actual).first()
@@ -99,12 +99,11 @@ def modproducto(request, prod_actual = 0):
                     producto_actual.precioventa_productos=request.POST.get("venta")
                     producto_actual.categoria_productos=request.POST.get("categoria")
                     producto_actual.fecha_productos=request.POST.get('fecha')
-                    producto_actual.cantidad_productos=request.POST.get("cantidad")
                     producto_actual.nombre_proveedor_id=request.POST.get("proveedor")
                     producto_actual.save()
 
                     stock_act=producto.objects.get(codigo_productos=prod_actual)
-                    stock_act.cantidad_productos = stock_act.cantidad_productos + int(request.POST.get('cantidad'))
+                    stock_act.cantidad_productos = int(request.POST.get('cantidad'))+stock_act.cantidad_productos
                     stock_act.save()
 
             
@@ -342,10 +341,7 @@ def modpais(request, pai_actual = 0):
                 pais_actual=Nacionalidad.objects.get(codigo_nacionalidad=pai_actual)
                 pais_actual.nacionalidad=request.POST.get("nombre")            
                 
-                pais_actual.save()
-
-               
-            
+                pais_actual.save()            
         return redirect("../pais")
     else:
         return redirect("login")
@@ -555,7 +551,7 @@ def venta_detalle(request):
     else:
         return redirect("login")
 
-def registro(request,r_actual):
+def registro(request):
     if request.session.get("codigo_usuario"):
         listasale=Sale.objects.all()
         listacliente=Clientes.objects.all()
@@ -563,20 +559,17 @@ def registro(request,r_actual):
         listaprod=producto.objects.all()
         listameto=MethodPay.objects.all()
         listaciu=Ciudad.objects.all()
-        codigo_actual=Sale.objects.filter(sale_id=r_actual).exists()
 
-        return validar(request,'r_venta.html',{"codigo_actual":codigo_actual,"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
-    else:
-        return redirect("login")     
-
-def detalle(request, sale_id):
-    venda = DetSale.objects.raw(sale_id=sale_id)("SELECT * FROM vapunto_sale  WHERE sale_id = "+ sale_id )
-    detvenda = DetSale.objects.raw(sale_id=sale_id)("SELECT * FROM vapunto_detsale WHERE sale_id = "+ sale_id)
-    if request.session.get("codigo_usuario"):
-        listacliente=Clientes.objects.all()
-        listaprod=producto.objects.all()
-        listadet=DetSale.objects.all()
-
-        return validar(request,'det_venta.html',{"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"venda":venda,"detvenda":detvenda})
+        return validar(request,'r_venta.html',{"listasale":listasale,"listacliente":listacliente,"listadet":listadet,"listaprod":listaprod,"listameto":listameto,"listaciu":listaciu})
     else:
         return redirect("login")
+
+def detailprod(request, sale_id):
+    if request.session.get("codigo_usuario"):
+            if request.method=="GET":
+                tempvar = Sale.objects.filter(sale_id=sale_id)
+            return validar(request, 'r_venta.html',
+                    {"tempvar":tempvar})
+    else:
+         return redirect("login")
+
